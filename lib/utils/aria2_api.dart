@@ -17,7 +17,6 @@ class Aria2Client extends Aria2c {
   List<Aria2Task> _waittingTasks = [];
   List<Aria2Task> _completedTasks = [];
   Aria2GlobalStat _globalStatus = Aria2GlobalStat();
-  // List<String> pausingGids = [];
   late List<String> _downloadingGids;
   late Timer? periodicTimer = null;
   late Timer? periodicTimerInner = null;
@@ -84,7 +83,6 @@ class Aria2Client extends Aria2c {
       for (var i = 0; i < _downloadingTasks.length; i++) {
         if (state.opratingGids.contains(_downloadingTasks[i].gid)) {
           if (_downloadingTasks[i].status == 'active') {
-            _downloadingTasks[i].status = 'paused';
             _downloadingTasks.add(_downloadingTasks.removeAt(i));
           } else {
             state.removeOpratingGids([_downloadingTasks[i].gid ?? ""]);
@@ -116,6 +114,16 @@ class Aria2Client extends Aria2c {
 
     try {
       List<Aria2Task> wt = await _getWT(0, size, []);
+      for (var i = 0; i < wt.length; i++) {
+        if (wt[i].status == 'waiting' &&
+            !(_downloadingGids.contains(wt[i].gid))) {
+          _downloadingGids.add(wt[i].gid!);
+        }
+        if (state.opratingGids.contains(wt[i].gid) &&
+            ['paused', 'waiting'].contains(wt[i].status)) {
+          state.removeOpratingGids([wt[i].gid ?? ""]);
+        }
+      }
       _waittingTasks = wt;
     } on Exception catch (e) {
       return {"status": 0, "error": e};
@@ -124,10 +132,9 @@ class Aria2Client extends Aria2c {
 
   pauseTask(String gid) async {
     try {
-      await pause(gid);
       state.addOpratingGids([gid]);
       _downloadingGids.remove(gid);
-      return {"status": 1, gid: gid};
+      await pause(gid);
     } on Exception catch (e) {
       return {"status": 0, "gid": gid, "error": e};
     }
@@ -135,10 +142,9 @@ class Aria2Client extends Aria2c {
 
   unPauseTask(String gid) async {
     try {
+      state.removeOpratingGids([gid]);
       await unpause(gid);
       await getInfos();
-      state.removeOpratingGids([gid]);
-      return {"status": 1, gid: gid};
     } on Exception catch (e) {
       return {"status": 0, "gid": gid, "error": e};
     }
@@ -146,9 +152,8 @@ class Aria2Client extends Aria2c {
 
   pauseAllTask() async {
     try {
-      await pauseAll();
       state.addOpratingGids(_downloadingGids);
-      return {"status": 1, "pausedCount": _downloadingGids.length};
+      await pauseAll();
     } on Exception catch (e) {
       return {"status": 0, "error": e};
     }
@@ -158,7 +163,14 @@ class Aria2Client extends Aria2c {
     try {
       await unpauseAll();
       await getInfos();
-      return {"status": 1, "pausedCount": _downloadingGids.length};
+    } on Exception catch (e) {
+      return {"status": 0, "error": e};
+    }
+  }
+
+  startWaitingTask(gid) async {
+    try {
+      await changePosition(gid, 0, 'POS_SET');
     } on Exception catch (e) {
       return {"status": 0, "error": e};
     }

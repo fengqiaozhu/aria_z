@@ -11,32 +11,36 @@ List<Widget> taskListTileWidget(BuildContext context, AppState app,
     switch (status) {
       case 'active':
         w = IconButton(
-          icon: const Icon(Icons.pause),
-          onPressed: aria2States.opratingGids.contains(gid)
-              ? null
-              : () async {
-                  print('Pausing $gid');
-                  if (gid != "") {
-                    await app.aria2?.pauseTask(gid);
-                  }
-                },
-        );
+            color: Colors.redAccent,
+            icon: const Icon(Icons.pause),
+            onPressed: () async {
+              if (gid != "") {
+                await app.aria2?.pauseTask(gid);
+              }
+            });
         break;
       case 'paused':
         w = IconButton(
+          color: Colors.lightGreen,
           icon: const Icon(Icons.play_arrow),
-          onPressed: aria2States.opratingGids.contains(gid)
-              ? null
-              : () async {
-                print('Unpausing $gid');
-                  if (gid != "") {
-                    await app.aria2?.unPauseTask(gid);
-                  }
-                },
+          onPressed: () async {
+            if (gid != "") {
+              await app.aria2?.unPauseTask(gid);
+            }
+          },
         );
         break;
       case 'waiting':
+        w = const Text("队列中");
+        break;
+      case 'pausing':
+        w = const Text("正在暂停");
+        break;
+      case 'unparsing':
+        w = const Text("正在启动");
+        break;
       case 'complete':
+        w = const Text("已完成");
         break;
     }
     return w;
@@ -60,7 +64,12 @@ List<Widget> taskListTileWidget(BuildContext context, AppState app,
                         .pushNamed('/task_detail', arguments: ts);
                   }
                 },
-                title: Text(task.bittorrent?["info"]["name"]),
+                title: Text(
+                  task.bittorrent?["info"]["name"],
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 2,
+                  // softWrap: false,
+                ),
                 trailing: trailingOption(task.gid ?? '', task.status ?? '')),
             Row(
               mainAxisAlignment: MainAxisAlignment.end,

@@ -15,7 +15,21 @@ class Aria2States extends ChangeNotifier {
   Aria2States();
 
   List<Aria2Task> get taskListOfNotComplete {
-    return [...downloadingTasks, ...waittingTasks];
+    List<Aria2Task> list = [...downloadingTasks, ...waittingTasks];
+    list = list.map((t){
+      if(_opratingGids.contains(t.gid)){
+        switch(t.status){
+          case 'active':
+          t.status = 'pausing';
+          break;
+          case 'paused':
+          t.status = 'unparsing';
+          break;
+        }
+      }
+      return t;
+    }).toList();
+    return list;
   }
 
   List<String> get opratingGids => _opratingGids;
@@ -41,20 +55,20 @@ class Aria2States extends ChangeNotifier {
   }
 
   addOpratingGids(List<String> gids) {
-    gids.map((gid) {
+    for (var gid in gids) {
       if (!(_opratingGids.contains(gid))) {
         _opratingGids.add(gid);
       }
-    });
+    }
     notifyListeners();
   }
 
   removeOpratingGids(List<String> gids) {
-    gids.map((gid) {
+    for (var gid in gids) {
       if (_opratingGids.contains(gid)) {
         _opratingGids.remove(gid);
       }
-    });
+    }
     notifyListeners();
   }
 }
