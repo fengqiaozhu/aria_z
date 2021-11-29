@@ -62,54 +62,6 @@ class _MainContainerState extends State<MainContainer> {
     });
   }
 
-  // Future<void> addNewTask(BuildContext context, Aria2TaskType taskType) async {
-  //   late Widget taskInputWidget;
-  //   switch (taskType.taskType) {
-  //     case TaskType.torrent:
-  //       taskInputWidget = Text(taskType.desc);
-  //       break;
-  //     case TaskType.magnet:
-  //       taskInputWidget = Text(taskType.desc);
-  //       break;
-  //     case TaskType.url:
-  //       taskInputWidget = Text(taskType.desc);
-  //       break;
-  //     case TaskType.metaLink:
-  //       taskInputWidget = Text(taskType.desc);
-  //       break;
-  //   }
-
-  //   return showDialog<void>(
-  //     context: context,
-  //     builder: (BuildContext context) {
-  //       return AlertDialog(
-  //         title: Text(taskType.name),
-  //         content: SingleChildScrollView(
-  //           child: ListBody(
-  //             children: <Widget>[
-  //               taskInputWidget,
-  //               const TextField(
-  //                 decoration: InputDecoration(
-  //                     border: OutlineInputBorder(),
-  //                     labelText: '下载路径',
-  //                     contentPadding: EdgeInsets.all(8)),
-  //               )
-  //             ],
-  //           ),
-  //         ),
-  //         actions: <Widget>[
-  //           TextButton(
-  //             child: const Text('添加'),
-  //             onPressed: () {
-  //               Navigator.of(context).pop();
-  //             },
-  //           ),
-  //         ],
-  //       );
-  //     },
-  //   );
-  // }
-
   void _addNewTask(context) {
     showModalBottomSheet(
         context: context,
@@ -141,21 +93,6 @@ class _MainContainerState extends State<MainContainer> {
     aria2States = Provider.of<Aria2States>(context, listen: false);
     app = Provider.of<AppState>(context, listen: false);
     app.bindAria2States(aria2States);
-
-    // app.aria2?.getInfosInterval(_sencond);
-    // Duration timeout = Duration(seconds: _sencond);
-    // Future.delayed(timeout, () {
-    //   app.addAria2ConnectConfig(
-    //       Aria2ConnectConfig(
-    //           protocol: 'https',
-    //           host: 'aria2.fengtech.top',
-    //           port: '60000',
-    //           path: '/jsonrpc',
-    //           type: 'http',
-    //           secret: 'fgqcvu'),
-    //       aria2States);
-    //   app.aria2?.getInfosInterval(_sencond);
-    // });
   }
 
   @override
@@ -178,12 +115,6 @@ class _MainContainerState extends State<MainContainer> {
       },
       home: Scaffold(
         appBar: AppBar(
-          // leading: IconButton(
-          //   icon: const Icon(Icons.menu),
-          //   tooltip: 'Settings',
-          //   onPressed: () {},
-          // ),
-          // title: const Text("AriaZ"),
           title: Text(
               "${bitToUnit(Provider.of<Aria2States>(context).globalStatus.downloadSpeed ?? 0)}/s"),
           actions: [

@@ -2,7 +2,6 @@
 
 import 'dart:async';
 import 'package:aria2/aria2.dart';
-import '../states/app.dart' show TaskType;
 import '../states/aria2.dart';
 
 class Aria2Client extends Aria2c {
@@ -191,8 +190,14 @@ class Aria2Client extends Aria2c {
           }).toList());
           break;
         case TaskType.magnet:
+          await multicall(taskOption.params.map((p) {
+            return Method('aria2.addUri', [p]);
+          }).toList());
           break;
         case TaskType.url:
+          await multicall(taskOption.params.map((p) {
+            return Method('aria2.addUri', [p]);
+          }).toList());
           break;
       }
     } on Exception catch (e) {

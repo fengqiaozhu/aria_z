@@ -1,4 +1,4 @@
-// ignore_for_file: must_be_immutable
+// ignore_for_file: must_be_immutable, must_call_super
 
 import 'dart:convert';
 
@@ -11,6 +11,7 @@ import '../states/aria2.dart' show TaskType, NewTaskOption;
 import '../components/custom_snack_bar.dart';
 
 GlobalKey<_NewTaskCreaterState> newTaskCreaterKey = GlobalKey();
+GlobalKey<_SubmitActionWidgtState> submitActionKey = GlobalKey();
 
 class _DownloadSourceFile2Base64 {
   String content2Base64;
@@ -38,13 +39,7 @@ class _TaskConfig {
   _TaskConfig(this.downloadPath, this.speedLimit);
 }
 
-class AddNewAria2Task extends StatefulWidget {
-  const AddNewAria2Task({Key? key}) : super(key: key);
-  @override
-  State<StatefulWidget> createState() => _AddNewAria2TaskState();
-}
-
-class _AddNewAria2TaskState extends State<AddNewAria2Task> {
+class AddNewAria2Task extends StatelessWidget {
   static const List<Tab> tabs = <Tab>[
     Tab(text: '添加'),
     Tab(text: '选项'),
@@ -52,18 +47,7 @@ class _AddNewAria2TaskState extends State<AddNewAria2Task> {
 
   late Aria2TaskType taskType;
 
-  _submitNewTask(BuildContext context) async {
-    List<String>? source = newTaskCreaterKey.currentState?.getNewTaskSource();
-    if (source != null && source.isNotEmpty) {
-      await Provider.of<AppState>(context, listen: false)
-          .aria2
-          ?.addNewTask(NewTaskOption(taskType.taskType, source));
-      showCustomSnackBar(context, 1, const Text('添加任务成功'));
-      Navigator.pop(context);
-    } else {
-      showCustomSnackBar(context, 2, const Text('请检查下载源是否添加正确！'));
-    }
-  }
+  AddNewAria2Task({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -85,10 +69,7 @@ class _AddNewAria2TaskState extends State<AddNewAria2Task> {
                 title: Text('添加${taskType.name}任务'),
                 bottom: const TabBar(tabs: tabs),
                 actions: [
-                  IconButton(
-                      icon: const Icon(Icons.done),
-                      tooltip: '提交',
-                      onPressed: () => _submitNewTask(context))
+                  SubmitActionWidgt(key: submitActionKey, taskType: taskType)
                 ],
               ),
               body: TabBarView(children: [
@@ -101,6 +82,39 @@ class _AddNewAria2TaskState extends State<AddNewAria2Task> {
   }
 }
 
+class SubmitActionWidgt extends StatefulWidget {
+  Aria2TaskType taskType;
+
+  SubmitActionWidgt({Key? key, required this.taskType}) : super(key: key);
+
+  @override
+  State<StatefulWidget> createState() => _SubmitActionWidgtState();
+}
+
+class _SubmitActionWidgtState extends State<SubmitActionWidgt> {
+  _submitNewTask(BuildContext context) async {
+    List<String>? source = newTaskCreaterKey.currentState?.getNewTaskSource();
+    if (source != null && source.isNotEmpty) {
+      await Provider.of<AppState>(context, listen: false)
+          .aria2
+          ?.addNewTask(NewTaskOption(widget.taskType.taskType, source));
+      showCustomSnackBar(context, 1, const Text('添加任务成功'));
+      Navigator.pop(context);
+    } else {
+      showCustomSnackBar(context, 2, const Text('请检查下载源是否添加正确！'));
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+        icon: const Icon(Icons.done),
+        tooltip: '提交',
+        onPressed: () => _submitNewTask(context));
+  }
+}
+
+/// 新任务源编辑器
 class NewTaskCreater extends StatefulWidget {
   Aria2TaskType taskType;
 
@@ -110,22 +124,21 @@ class NewTaskCreater extends StatefulWidget {
   _NewTaskCreaterState createState() => _NewTaskCreaterState();
 }
 
-class _NewTaskCreaterState extends State<NewTaskCreater> {
+class _NewTaskCreaterState extends State<NewTaskCreater>
+    with AutomaticKeepAliveClientMixin<NewTaskCreater> {
   late List<_DownloadSourceFile2Base64> torrentFiles;
   late List<_DownloadSourceFile2Base64> metalinkFiles;
-  late List<String> downloadUrl;
-  late List<String> magnetLink;
+  late List<String> downloadUrls;
+  late List<String> magnetLinks;
 
+  ///读取种子文件或metalink文件
   void readDownloadSourceFileToBase64({bool addMore = false}) async {
     FilePickerResult? result =
         // await FilePicker.platform.pickFiles(allowMultiple: true, type: FileType.custom, allowedExtensions: ['torrent','zip']);
         await FilePicker.platform
             .pickFiles(type: FileType.any, allowMultiple: true, withData: true);
     if (result != null) {
-      List<_DownloadSourceFile2Base64> files =
-          widget.taskType.taskType == TaskType.metaLink
-              ? metalinkFiles
-              : torrentFiles;
+      /// 需要校验选择的文件，文件扩展名校验
       List<_DownloadSourceFile2Base64> b64 = result.names
           .asMap()
           .keys
@@ -142,6 +155,60 @@ class _NewTaskCreaterState extends State<NewTaskCreater> {
     }
   }
 
+  /// 链接地址校验
+  String? linkValidator() {}
+
+  /// 弹出链接输入dialog模态框
+  void _showInputLink() {
+    String inputUrl = '';
+    showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('输入链接地址'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                TextFormField(
+                  controller: TextEditingController(text: inputUrl),
+                  maxLines: 4,
+                  onChanged: (v) => inputUrl = v,
+                  validator: (v) => linkValidator(),
+                  decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                      labelText: '链接地址',
+                      contentPadding: EdgeInsets.all(8)),
+                )
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('添加并开始下载'),
+              onPressed: () {
+                widget.taskType.taskType == TaskType.magnet
+                    ? magnetLinks.add(inputUrl)
+                    : downloadUrls.add(inputUrl);
+                Navigator.of(context).pop();
+                submitActionKey.currentState?._submitNewTask(context);
+              },
+            ),
+            TextButton(
+              child: const Text('添加'),
+              onPressed: () {
+                widget.taskType.taskType == TaskType.magnet
+                    ? magnetLinks.add(inputUrl)
+                    : downloadUrls.add(inputUrl);
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  /// 返回下载源数据
   List<String>? getNewTaskSource() {
     switch (widget.taskType.taskType) {
       case TaskType.torrent:
@@ -149,12 +216,13 @@ class _NewTaskCreaterState extends State<NewTaskCreater> {
       case TaskType.metaLink:
         return metalinkFiles.map((tf) => tf.content2Base64).toList();
       case TaskType.url:
-        return downloadUrl;
+        return downloadUrls;
       case TaskType.magnet:
-        return magnetLink;
+        return magnetLinks;
     }
   }
 
+  ///根据新任务的类型显示不同的添加控件
   Widget showAddWidgetByTaskType() {
     late Widget w;
     switch (widget.taskType.taskType) {
@@ -171,7 +239,7 @@ class _NewTaskCreaterState extends State<NewTaskCreater> {
             ? '支持种子文件格式 ".torrent" '
             : '支持Metalink文件格式 ".metalink, .meta4"';
         w = Column(
-            mainAxisAlignment: torrentFiles.isEmpty
+            mainAxisAlignment: files.isEmpty
                 ? MainAxisAlignment.center
                 : MainAxisAlignment.start,
             children: [
@@ -208,18 +276,57 @@ class _NewTaskCreaterState extends State<NewTaskCreater> {
         break;
       case TaskType.magnet:
       case TaskType.url:
+        List<String> links = widget.taskType.taskType == TaskType.magnet
+            ? magnetLinks
+            : downloadUrls;
+        String btnText =
+            widget.taskType.taskType == TaskType.url ? 'URL' : '磁力链';
+        String fileChooseTip = widget.taskType.taskType == TaskType.url
+            ? '支持协议类型包括 HTTP/FTP/SFTP/BitTorrent'
+            : '支持"magnet:?"磁力链';
+        w = Column(
+            mainAxisAlignment: links.isEmpty
+                ? MainAxisAlignment.center
+                : MainAxisAlignment.start,
+            children: <Widget>[
+              ElevatedButton(
+                child: Text('添加$btnText地址'),
+                onPressed: _showInputLink,
+              ),
+              links.isEmpty ? Text(fileChooseTip) : const SizedBox(height: 0),
+              ListView.builder(
+                shrinkWrap: true,
+                itemCount: links.length,
+                itemBuilder: (context, idx) => ListTile(
+                  title: Text(
+                    links[idx],
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 2,
+                    softWrap: false,
+                  ),
+                  trailing: IconButton(
+                    color: Colors.red,
+                    icon: const Icon(Icons.close),
+                    onPressed: () => links.removeAt(idx),
+                  ),
+                ),
+              ),
+            ]);
         break;
     }
     return w;
   }
 
   @override
+  bool get wantKeepAlive => true;
+
+  @override
   void initState() {
     super.initState();
     torrentFiles = [];
     metalinkFiles = [];
-    downloadUrl = [];
-    magnetLink = [];
+    downloadUrls = [];
+    magnetLinks = [];
   }
 
   @override
@@ -229,6 +336,7 @@ class _NewTaskCreaterState extends State<NewTaskCreater> {
   }
 }
 
+/// 新任务配置编辑器
 class NewTaskConfig extends StatefulWidget {
   const NewTaskConfig({Key? key}) : super(key: key);
 
@@ -236,8 +344,13 @@ class NewTaskConfig extends StatefulWidget {
   State<StatefulWidget> createState() => _NewTaskConfigState();
 }
 
-class _NewTaskConfigState extends State<NewTaskConfig> {
+class _NewTaskConfigState extends State<NewTaskConfig>
+    with AutomaticKeepAliveClientMixin<NewTaskConfig> {
   late _TaskConfig taskConfig;
+
+  @override
+  bool get wantKeepAlive => true;
+
   @override
   void initState() {
     super.initState();
