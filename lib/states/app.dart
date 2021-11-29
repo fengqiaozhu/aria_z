@@ -6,8 +6,6 @@ import 'package:hive_flutter/adapters.dart';
 import '../utils/aria2_api.dart';
 import 'aria2.dart';
 
-enum TaskType { torrent, magnet, url, metaLink }
-
 class Aria2ConnectConfig {
   String host;
 

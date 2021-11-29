@@ -1,6 +1,17 @@
 import 'package:aria2/aria2.dart';
 import 'package:flutter/widgets.dart';
 
+enum TaskType { torrent, magnet, url, metaLink }
+
+class NewTaskOption {
+  List<String> params;
+
+  TaskType taskType;
+
+  NewTaskOption(this.taskType, this.params);
+}
+
+
 class Aria2States extends ChangeNotifier {
   List<Aria2Task> completedTasks = [];
 

@@ -200,7 +200,8 @@ class _MainContainerState extends State<MainContainer> {
                 return IconButton(
                     icon: const Icon(Icons.add),
                     tooltip: '添加新任务',
-                    onPressed: () => _addNewTask(context));
+                    onPressed:
+                        app.aria2 == null ? null : () => _addNewTask(context));
               },
             )
           ],

@@ -2,6 +2,7 @@
 
 import 'dart:async';
 import 'package:aria2/aria2.dart';
+import '../states/app.dart' show TaskType;
 import '../states/aria2.dart';
 
 class Aria2Client extends Aria2c {
@@ -171,6 +172,29 @@ class Aria2Client extends Aria2c {
   startWaitingTask(gid) async {
     try {
       await changePosition(gid, 0, 'POS_SET');
+    } on Exception catch (e) {
+      return {"status": 0, "error": e};
+    }
+  }
+
+  addNewTask(NewTaskOption taskOption) async {
+    try {
+      switch (taskOption.taskType) {
+        case TaskType.torrent:
+          await multicall(taskOption.params.map((p) {
+            return Method('aria2.addTorrent', [p]);
+          }).toList());
+          break;
+        case TaskType.metaLink:
+          await multicall(taskOption.params.map((p) {
+            return Method('aria2.addMetalink', [p]);
+          }).toList());
+          break;
+        case TaskType.magnet:
+          break;
+        case TaskType.url:
+          break;
+      }
     } on Exception catch (e) {
       return {"status": 0, "error": e};
     }
