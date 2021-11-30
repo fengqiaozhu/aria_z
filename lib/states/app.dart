@@ -115,6 +115,8 @@ class AppState extends ChangeNotifier {
     }
     _client?.clearGIInterval();
     _client = Aria2Client(url, type, secret, states);
+    _client?.getAria2GlobalOption();
+    _client?.getVersionInfo();
     _client?.getInfosInterval(2);
     notifyListeners();
   }

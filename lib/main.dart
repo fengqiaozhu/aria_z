@@ -116,7 +116,7 @@ class _MainContainerState extends State<MainContainer> {
       home: Scaffold(
         appBar: AppBar(
           title: Text(
-              "${bitToUnit(Provider.of<Aria2States>(context).globalStatus.downloadSpeed ?? 0)}/s"),
+              formatSpeed(Provider.of<Aria2States>(context).globalStatus.downloadSpeed ?? 0)),
           actions: [
             TextButton(
                 child: const Text("下载中"),

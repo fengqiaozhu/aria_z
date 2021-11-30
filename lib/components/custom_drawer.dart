@@ -1,3 +1,4 @@
+import 'package:aria2/aria2.dart';
 import 'package:aria2/models/aria2GlobalStat.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -49,10 +50,11 @@ Widget customDrawer(context) {
           padding: EdgeInsets.zero,
           children: <Widget>[
             Builder(builder: (context) {
-              return Selector<Aria2States, Aria2GlobalStat>(
+              return Selector<Aria2States,
+                      Tuple2<Aria2GlobalStat, Aria2Version?>>(
                   selector: (BuildContext context, Aria2States aria2State) =>
-                      aria2State.globalStatus,
-                  builder: (context, Aria2GlobalStat gStatus, _) {
+                      Tuple2(aria2State.globalStatus, aria2State.versionInfo),
+                  builder: (context, serverInfo, _) {
                     return DrawerHeader(
                         decoration: BoxDecoration(
                             color: Theme.of(context).primaryColor),
@@ -70,8 +72,14 @@ Widget customDrawer(context) {
                                       : '未连接到任何服务器...',
                                   style: const TextStyle(
                                       color: Colors.white, fontSize: 16)),
+                              serverInfo.item2 != null
+                                  ? Text(
+                                      "aria2版本: ${serverInfo.item2?.version ?? ''}",
+                                      style: const TextStyle(
+                                          color: Colors.white, fontSize: 16))
+                                  : const SizedBox(),
                               Text(
-                                  "全局下载速度: ${bitToUnit(gStatus.downloadSpeed ?? 0)}/s",
+                                  "全局下载速度: ${formatSpeed(serverInfo.item1.downloadSpeed ?? 0)}",
                                   style: const TextStyle(
                                       color: Colors.white, fontSize: 16))
                             ],

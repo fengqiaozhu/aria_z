@@ -64,7 +64,7 @@ class TaskInfo extends StatelessWidget {
             const Text("已下载："),
             Flexible(
                 child: Text(
-                    "${bitToUnit(info.completedLength ?? 0)}/${bitToUnit(info.totalLength ?? 0)}"))
+                    "${formatFileSize(info.completedLength ?? 0)}/${formatFileSize(info.totalLength ?? 0)}"))
           ],
         )
       ]),

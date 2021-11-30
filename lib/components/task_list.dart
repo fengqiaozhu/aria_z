@@ -76,12 +76,12 @@ List<Widget> taskListTileWidget(BuildContext context, AppState app,
               children: <Widget>[
                 Row(children: <Widget>[
                   const Icon(Icons.upload),
-                  Text(bitToUnit(task.uploadSpeed ?? 0) + '/S')
+                  Text(formatSpeed(task.uploadSpeed ?? 0))
                 ]),
                 const SizedBox(width: 8),
                 Row(children: <Widget>[
                   const Icon(Icons.download),
-                  Text(bitToUnit(task.downloadSpeed ?? 0) + '/S')
+                  Text(formatSpeed(task.downloadSpeed ?? 0))
                 ])
               ],
             ),

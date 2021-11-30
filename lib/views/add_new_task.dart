@@ -2,6 +2,8 @@
 
 import 'dart:convert';
 
+import 'package:aria2/aria2.dart';
+import 'package:aria_z/main.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -9,9 +11,13 @@ import 'package:provider/provider.dart';
 import '../states/app.dart';
 import '../states/aria2.dart' show TaskType, NewTaskOption;
 import '../components/custom_snack_bar.dart';
+import '../utils/tools.dart';
 
 GlobalKey<_NewTaskCreaterState> newTaskCreaterKey = GlobalKey();
+GlobalKey<_NewTaskConfigState> newTaskConfigKey = GlobalKey();
 GlobalKey<_SubmitActionWidgtState> submitActionKey = GlobalKey();
+
+final GlobalKey optionFormKey = GlobalKey<FormState>();
 
 class _DownloadSourceFile2Base64 {
   String content2Base64;
@@ -23,20 +29,12 @@ class _DownloadSourceFile2Base64 {
   _DownloadSourceFile2Base64(this.name, this.path, this.content2Base64);
 }
 
-class _TaskSpeed {
-  double speedNumber;
-
-  String speedUnit;
-
-  _TaskSpeed(this.speedNumber, this.speedUnit);
-}
-
 class _TaskConfig {
   String downloadPath;
 
-  _TaskSpeed speedLimit;
+  BitUnit speedLimit;
 
-  _TaskConfig(this.downloadPath, this.speedLimit);
+  _TaskConfig({required this.downloadPath, required this.speedLimit});
 }
 
 class AddNewAria2Task extends StatelessWidget {
@@ -74,7 +72,7 @@ class AddNewAria2Task extends StatelessWidget {
               ),
               body: TabBarView(children: [
                 NewTaskCreater(key: newTaskCreaterKey, taskType: taskType),
-                const NewTaskConfig()
+                NewTaskConfig(key: newTaskConfigKey)
               ]),
             );
           },
@@ -92,14 +90,23 @@ class SubmitActionWidgt extends StatefulWidget {
 }
 
 class _SubmitActionWidgtState extends State<SubmitActionWidgt> {
+  /// 提交新增的任务
   _submitNewTask(BuildContext context) async {
     List<String>? source = newTaskCreaterKey.currentState?.getNewTaskSource();
     if (source != null && source.isNotEmpty) {
-      await Provider.of<AppState>(context, listen: false)
-          .aria2
-          ?.addNewTask(NewTaskOption(widget.taskType.taskType, source));
-      showCustomSnackBar(context, 1, const Text('添加任务成功'));
-      Navigator.pop(context);
+      if (optionFormKey.currentState == null ||
+          (optionFormKey.currentState as FormState).validate()) {
+        final Aria2Option option =
+            newTaskConfigKey.currentState?.getTaskOption() ?? Aria2Option();
+
+        await Provider.of<AppState>(context, listen: false).aria2?.addNewTask(
+            NewTaskOption(widget.taskType.taskType, source, option));
+
+        showCustomSnackBar(context, 1, const Text('添加任务成功'));
+        Navigator.pop(context);
+      } else {
+        showCustomSnackBar(context, 2, const Text('请检查任务选项输入！'));
+      }
     } else {
       showCustomSnackBar(context, 2, const Text('请检查下载源是否添加正确！'));
     }
@@ -354,46 +361,94 @@ class _NewTaskConfigState extends State<NewTaskConfig>
   @override
   void initState() {
     super.initState();
-    taskConfig = _TaskConfig('/download', _TaskSpeed(0, 'K'));
+    taskConfig = _TaskConfig(
+        downloadPath: aria2States.globalOption.dir ?? '',
+        speedLimit: bitToUnit(aria2States.globalOption.maxDownloadLimit ?? 0));
+  }
+
+  Aria2Option getTaskOption() {
+    return Aria2Option.fromJson({
+      'dir': taskConfig.downloadPath == aria2States.globalOption.dir
+          ? null
+          : taskConfig.downloadPath,
+      'max-download-limit': taskConfig.speedLimit.bit == '0'
+          ? null
+          : (taskConfig.speedLimit.bit + taskConfig.speedLimit.unit),
+    });
+  }
+
+  /// 验证下载路径是否合法
+  dirValidator(String dir) {
+    if (dir.isEmpty) {
+      return '请输入下载目录';
+    }
+    if (dir.startsWith(aria2States.globalOption.dir ?? '/download')) {
+      return null;
+    }
+    return '文件必须在保存在全局下载目录"${aria2States.globalOption.dir ?? '/download'}"下';
+  }
+
+  /// 验证下载速度是否合法
+  speedLimitInputValidator(String number) {
+    if (number.isEmpty) {
+      return '请输入速度限制';
+    }
+    if (number.length > 1 && number.startsWith('0')) {
+      return '速度限制不能以0开头';
+    }
+    return double.tryParse(number) == null ? '请输入合法数字' : null;
   }
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-        padding: const EdgeInsets.fromLTRB(10, 30, 10, 30),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            const SizedBox(height: 16),
-            const TextField(
-              decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: '下载路径',
-                  contentPadding: EdgeInsets.all(8)),
-            ),
-            const SizedBox(height: 10),
-            TextField(
-              decoration: InputDecoration(
-                  border: const OutlineInputBorder(),
-                  labelText: '限速',
-                  contentPadding: const EdgeInsets.all(8),
-                  suffix: DropdownButton(
-                    value: taskConfig.speedLimit.speedUnit,
-                    onChanged: (String? newVal) {
-                      setState(() {
-                        taskConfig.speedLimit.speedUnit = newVal!;
-                      });
-                    },
-                    items: <String>["K", "M"]
-                        .map<DropdownMenuItem<String>>((String value) {
-                      return DropdownMenuItem<String>(
-                        value: value,
-                        child: Text(value + 'B/s'),
-                      );
-                    }).toList(),
-                  )),
-            )
-          ],
-        ));
+    return Form(
+        key: optionFormKey,
+        autovalidateMode: AutovalidateMode.onUserInteraction,
+        child: Padding(
+            padding: const EdgeInsets.fromLTRB(10, 30, 10, 30),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                const SizedBox(height: 16),
+                TextFormField(
+                  controller:
+                      TextEditingController(text: taskConfig.downloadPath),
+                  onChanged: (v) => taskConfig.downloadPath = v,
+                  validator: (v) => dirValidator(v ?? ''),
+                  decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                      labelText: '下载路径',
+                      contentPadding: EdgeInsets.all(8)),
+                ),
+                const SizedBox(height: 10),
+                TextFormField(
+                  controller:
+                      TextEditingController(text: taskConfig.speedLimit.bit),
+                  onChanged: (v) => taskConfig.speedLimit.bit = v,
+                  validator: (v) => speedLimitInputValidator(v ?? ''),
+                  decoration: InputDecoration(
+                      border: const OutlineInputBorder(),
+                      labelText: '限速',
+                      contentPadding: const EdgeInsets.all(8),
+                      suffix: DropdownButton(
+                        value: taskConfig.speedLimit.unit == ''
+                            ? 'K'
+                            : taskConfig.speedLimit.unit,
+                        onChanged: (String? newVal) {
+                          setState(() {
+                            taskConfig.speedLimit.unit = newVal!;
+                          });
+                        },
+                        items: <String>["K", "M"]
+                            .map<DropdownMenuItem<String>>((String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(value + 'B/s'),
+                          );
+                        }).toList(),
+                      )),
+                )
+              ],
+            )));
   }
 }

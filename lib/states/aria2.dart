@@ -8,9 +8,10 @@ class NewTaskOption {
 
   TaskType taskType;
 
-  NewTaskOption(this.taskType, this.params);
-}
+  Aria2Option option;
 
+  NewTaskOption(this.taskType, this.params, this.option);
+}
 
 class Aria2States extends ChangeNotifier {
   List<Aria2Task> completedTasks = [];
@@ -21,21 +22,25 @@ class Aria2States extends ChangeNotifier {
 
   Aria2GlobalStat globalStatus = Aria2GlobalStat();
 
+  Aria2Option globalOption = Aria2Option();
+
+  Aria2Version? versionInfo;
+
   final List<String> _opratingGids = [];
 
   Aria2States();
 
   List<Aria2Task> get taskListOfNotComplete {
     List<Aria2Task> list = [...downloadingTasks, ...waittingTasks];
-    list = list.map((t){
-      if(_opratingGids.contains(t.gid)){
-        switch(t.status){
+    list = list.map((t) {
+      if (_opratingGids.contains(t.gid)) {
+        switch (t.status) {
           case 'active':
-          t.status = 'pausing';
-          break;
+            t.status = 'pausing';
+            break;
           case 'paused':
-          t.status = 'unparsing';
-          break;
+            t.status = 'unparsing';
+            break;
         }
       }
       return t;
@@ -80,6 +85,16 @@ class Aria2States extends ChangeNotifier {
         _opratingGids.remove(gid);
       }
     }
+    notifyListeners();
+  }
+
+  updateGlobalOption(options) {
+    globalOption = options;
+    notifyListeners();
+  }
+
+  updateVersion(version) {
+    versionInfo = version;
     notifyListeners();
   }
 }

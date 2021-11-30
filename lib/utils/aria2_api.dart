@@ -177,29 +177,55 @@ class Aria2Client extends Aria2c {
   }
 
   addNewTask(NewTaskOption taskOption) async {
+    Map<String, dynamic> option = taskOption.option.toJson();
     try {
       switch (taskOption.taskType) {
         case TaskType.torrent:
           await multicall(taskOption.params.map((p) {
-            return Method('aria2.addTorrent', [p]);
+            return Method('aria2.addTorrent', [p, [], option]);
           }).toList());
           break;
         case TaskType.metaLink:
           await multicall(taskOption.params.map((p) {
-            return Method('aria2.addMetalink', [p]);
+            return Method('aria2.addMetalink', [p, option]);
           }).toList());
           break;
         case TaskType.magnet:
           await multicall(taskOption.params.map((p) {
-            return Method('aria2.addUri', [p]);
+            return Method('aria2.addUri', [
+              [p],
+              option
+            ]);
           }).toList());
           break;
         case TaskType.url:
           await multicall(taskOption.params.map((p) {
-            return Method('aria2.addUri', [p]);
+            return Method('aria2.addUri', [
+              [p],
+              option
+            ]);
           }).toList());
           break;
       }
+    } on Exception catch (e) {
+      return {"status": 0, "error": e};
+    }
+  }
+
+  /// 获取全局配置
+  getAria2GlobalOption() async {
+    try {
+      var option = await getGlobalOption();
+      state.updateGlobalOption(option);
+    } on Exception catch (e) {
+      return {"status": 0, "error": e};
+    }
+  }
+
+  getVersionInfo() async {
+    try {
+      Aria2Version version = await getVersion();
+      state.updateVersion(version);
     } on Exception catch (e) {
       return {"status": 0, "error": e};
     }
