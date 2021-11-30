@@ -1,5 +1,3 @@
-// ignore_for_file: must_be_immutable, must_call_super
-
 import 'dart:convert';
 
 import 'package:aria2/aria2.dart';
@@ -42,14 +40,12 @@ class AddNewAria2Task extends StatelessWidget {
     Tab(text: '添加'),
     Tab(text: '选项'),
   ];
-
-  late Aria2TaskType taskType;
-
-  AddNewAria2Task({Key? key}) : super(key: key);
+  const AddNewAria2Task({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    taskType = ModalRoute.of(context)?.settings.arguments as Aria2TaskType;
+    Aria2TaskType taskType =
+        ModalRoute.of(context)?.settings.arguments as Aria2TaskType;
     return DefaultTabController(
         length: tabs.length,
         child: Builder(
@@ -81,9 +77,9 @@ class AddNewAria2Task extends StatelessWidget {
 }
 
 class SubmitActionWidgt extends StatefulWidget {
-  Aria2TaskType taskType;
+  final Aria2TaskType taskType;
 
-  SubmitActionWidgt({Key? key, required this.taskType}) : super(key: key);
+  const SubmitActionWidgt({Key? key, required this.taskType}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _SubmitActionWidgtState();
@@ -123,9 +119,9 @@ class _SubmitActionWidgtState extends State<SubmitActionWidgt> {
 
 /// 新任务源编辑器
 class NewTaskCreater extends StatefulWidget {
-  Aria2TaskType taskType;
+  final Aria2TaskType taskType;
 
-  NewTaskCreater({Key? key, required this.taskType}) : super(key: key);
+  const NewTaskCreater({Key? key, required this.taskType}) : super(key: key);
 
   @override
   _NewTaskCreaterState createState() => _NewTaskCreaterState();
@@ -338,6 +334,7 @@ class _NewTaskCreaterState extends State<NewTaskCreater>
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Container(
         padding: const EdgeInsets.all(8), child: showAddWidgetByTaskType());
   }
@@ -401,6 +398,7 @@ class _NewTaskConfigState extends State<NewTaskConfig>
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Form(
         key: optionFormKey,
         autovalidateMode: AutovalidateMode.onUserInteraction,

@@ -115,8 +115,9 @@ class _MainContainerState extends State<MainContainer> {
       },
       home: Scaffold(
         appBar: AppBar(
-          title: Text(
-              formatSpeed(Provider.of<Aria2States>(context).globalStatus.downloadSpeed ?? 0)),
+          title: Text(formatSpeed(
+              Provider.of<Aria2States>(context).globalStatus.downloadSpeed ??
+                  0)),
           actions: [
             TextButton(
                 child: const Text("下载中"),
@@ -171,14 +172,15 @@ class _BodyWidgetState extends State<BodyWidget> {
   @override
   Widget build(BuildContext context) {
     return Consumer<Aria2States>(builder: (context, aria2State, _) {
-      return ListView(
-        children: taskListTileWidget(
-            context,
-            app,
-            aria2States,
-            widget.showDownloaded
-                ? aria2State.completedTasks
-                : aria2States.taskListOfNotComplete),
+      List<Aria2Task> taskList = widget.showDownloaded
+          ? aria2State.completedTasks
+          : aria2States.taskListOfNotComplete;
+      return taskList.isEmpty?
+      Center(
+        child: Text('无${widget.showDownloaded?"已完成":"下载中"}任务'),
+      )
+      : ListView(
+        children: taskListTileWidget(context, app, aria2States, taskList),
       );
     });
   }
