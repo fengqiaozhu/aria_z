@@ -121,24 +121,24 @@ class _MainContainerState extends State<MainContainer> {
       },
       home: Scaffold(
         appBar: AppBar(
-          title: Text.rich(TextSpan(
-            children: [
-              TextSpan(
-                text: dlSpeedWithUnit.bit,
-                style: TextStyle(
-                    fontFamily: 'Coda',
-                    fontSize: 28,
-                    fontWeight: FontWeight.w600,
-                    color: Theme.of(context).colorScheme.onPrimary),
-              ),
-              TextSpan(
-                  text: ' ${dlSpeedWithUnit.unit}b/s',
-                  style: TextStyle(
-                      fontFamily: 'Coda',
-                      fontSize: 14,
-                      color: Theme.of(context).colorScheme.onPrimary))
-            ],
-          )),
+          title: DefaultTextStyle(
+              style: TextStyle(color: Theme.of(context).colorScheme.onPrimary),
+              child: Text.rich(TextSpan(
+                children: [
+                  TextSpan(
+                      text: dlSpeedWithUnit.bit,
+                      style: const TextStyle(
+                          fontFamily: 'Coda',
+                          fontSize: 28,
+                          fontWeight: FontWeight.w600)),
+                  TextSpan(
+                      text: ' ${dlSpeedWithUnit.unit}b/s',
+                      style: const TextStyle(
+                        fontFamily: 'Coda',
+                        fontSize: 14,
+                      ))
+                ],
+              ))),
           actions: [
             TextButton(
                 child: const Text("下载中"),
@@ -152,6 +152,7 @@ class _MainContainerState extends State<MainContainer> {
               builder: (context) {
                 return IconButton(
                     icon: const Icon(Icons.add),
+                    iconSize: 32,
                     tooltip: '添加新任务',
                     onPressed:
                         app.aria2 == null ? null : () => _addNewTask(context));
