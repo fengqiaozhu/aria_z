@@ -41,6 +41,7 @@ dependencies:
   tuple: ^2.0.0
   toggle_switch: ^1.3.0
   file_picker: ^4.2.4
+  shared_preferences: ^2.0.9
 
 dev_dependencies:
   flutter_test:
@@ -80,12 +81,12 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  # fonts:
-  #   - family: Schyler
-  #     fonts:
-  #       - asset: fonts/Schyler-Regular.ttf
-  #       - asset: fonts/Schyler-Italic.ttf
-  #         style: italic
+  fonts:
+    - family: Coda
+      fonts:
+        - asset: lib/fonts/Coda-Regular.ttf
+        - asset: lib/fonts/Coda-ExtraBold.ttf
+          weight: 800
   #   - family: Trajan Pro
   #     fonts:
   #       - asset: fonts/TrajanPro.ttf
