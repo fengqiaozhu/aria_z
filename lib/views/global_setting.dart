@@ -1,9 +1,13 @@
 // ignore_for_file: must_be_immutable
 
+import 'package:aria2/aria2.dart' show Aria2Option;
+import 'package:aria_z/states/aria2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:provider/provider.dart';
 import 'app_setting.dart';
 import 'aria2_global_option.dart';
+import '../components/custom_snack_bar.dart';
 
 class GlobalSetting extends StatelessWidget {
   const GlobalSetting({Key? key}) : super(key: key);
@@ -14,6 +18,7 @@ class GlobalSetting extends StatelessWidget {
   ];
   @override
   Widget build(BuildContext context) {
+    Aria2Option? _globalOption = Provider.of<Aria2States>(context).globalOption;
     return DefaultTabController(
         length: tabs.length,
         child: Builder(
@@ -21,9 +26,12 @@ class GlobalSetting extends StatelessWidget {
             final TabController tabController =
                 DefaultTabController.of(context)!;
             tabController.addListener(() {
-              if (!tabController.indexIsChanging) {
-                // Your code goes here.
-                // To get index of current tab use tabController.index
+              if (tabController.indexIsChanging &&
+                  tabController.index == 1 &&
+                  _globalOption == null) {
+                tabController.index = 0;
+                showCustomSnackBar(
+                    context, 3, const Text('请连接到 Aria2 服务器再行配置...'));
               }
             });
             return Scaffold(
@@ -31,10 +39,14 @@ class GlobalSetting extends StatelessWidget {
                 title: const Text('设置'),
                 bottom: const TabBar(tabs: tabs),
               ),
-              body: const TabBarView(children: [
-                AppSettingsWidgets(),
-                Aria2GlobalOptionsWidgets()
-              ]),
+              body: TabBarView(
+                  physics: _globalOption == null
+                      ? const NeverScrollableScrollPhysics()
+                      : const AlwaysScrollableScrollPhysics(),
+                  children: const <Widget>[
+                    AppSettingsWidgets(),
+                    Aria2GlobalOptionsWidgets()
+                  ]),
             );
           },
         ));

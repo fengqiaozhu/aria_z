@@ -22,7 +22,7 @@ class Aria2States extends ChangeNotifier {
 
   Aria2GlobalStat globalStatus = Aria2GlobalStat();
 
-  Aria2Option globalOption = Aria2Option();
+  Aria2Option? globalOption;
 
   Aria2Version? versionInfo;
 

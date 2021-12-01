@@ -359,13 +359,13 @@ class _NewTaskConfigState extends State<NewTaskConfig>
   void initState() {
     super.initState();
     taskConfig = _TaskConfig(
-        downloadPath: aria2States.globalOption.dir ?? '',
-        speedLimit: bitToUnit(aria2States.globalOption.maxDownloadLimit ?? 0));
+        downloadPath: aria2States.globalOption?.dir ?? '',
+        speedLimit: bitToUnit(aria2States.globalOption?.maxDownloadLimit ?? 0));
   }
 
   Aria2Option getTaskOption() {
     return Aria2Option.fromJson({
-      'dir': taskConfig.downloadPath == aria2States.globalOption.dir
+      'dir': taskConfig.downloadPath == aria2States.globalOption?.dir
           ? null
           : taskConfig.downloadPath,
       'max-download-limit': taskConfig.speedLimit.bit == '0'
@@ -379,10 +379,10 @@ class _NewTaskConfigState extends State<NewTaskConfig>
     if (dir.isEmpty) {
       return '请输入下载目录';
     }
-    if (dir.startsWith(aria2States.globalOption.dir ?? '/download')) {
+    if (dir.startsWith(aria2States.globalOption?.dir ?? '/download')) {
       return null;
     }
-    return '文件必须在保存在全局下载目录"${aria2States.globalOption.dir ?? '/download'}"下';
+    return '文件必须在保存在全局下载目录"${aria2States.globalOption?.dir ?? '/download'}"下';
   }
 
   /// 验证下载速度是否合法

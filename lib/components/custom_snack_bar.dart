@@ -18,6 +18,7 @@ void showCustomSnackBar(BuildContext context, int level, Widget content) {
 
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
+      duration: const Duration(seconds: 1),
       content: content,
       backgroundColor: bg,
     ),

@@ -68,6 +68,16 @@ class Aria2TaskType {
   Aria2TaskType(this.name, this.desc, this.icon, this.taskType);
 }
 
+class CustomMateriaColor {
+  MaterialColor color;
+
+  String desc;
+
+  String name;
+
+  CustomMateriaColor(this.name, this.color, this.desc);
+}
+
 class AppState extends ChangeNotifier {
   late Aria2ConnectConfig? _selectedAria2ConnectConfig = null;
 
@@ -79,7 +89,27 @@ class AppState extends ChangeNotifier {
 
   late final Aria2States states;
 
+  String _appUsingColorName = 'green';
+
+  int intervalSecond = 3;
+
   //getters
+
+  String get appUsingColorName => _appUsingColorName;
+
+  ThemeData get brightTheme => ThemeData(
+      primarySwatch: appThemeColors
+          .where((_color) => _color.name == _appUsingColorName)
+          .first
+          .color,
+      brightness: Brightness.light);
+  ThemeData get darkTheme => ThemeData(
+      primarySwatch: appThemeColors
+          .where((_color) => _color.name == _appUsingColorName)
+          .first
+          .color,
+      brightness: Brightness.dark);
+
   Aria2Client? get aria2 => _client;
 
   Aria2ConnectConfig? get selectedAria2ConnectConfig =>
@@ -102,6 +132,14 @@ class AppState extends ChangeNotifier {
         Aria2TaskType(
             "元数据下载", "输入Metalink下载...", Icons.all_inclusive, TaskType.metaLink),
       ];
+
+  List<CustomMateriaColor> get appThemeColors => [
+        CustomMateriaColor('blue', Colors.blue, "蓝色"),
+        CustomMateriaColor('red', Colors.red, "红色"),
+        CustomMateriaColor('green', Colors.green, "绿色"),
+        CustomMateriaColor('orange', Colors.orange, "橙色"),
+        CustomMateriaColor('purple', Colors.purple, "紫色"),
+      ];
   //*********************************************************************************************//
 
   void bindAria2States(Aria2States state) {
@@ -117,7 +155,7 @@ class AppState extends ChangeNotifier {
     _client = Aria2Client(url, type, secret, states);
     _client?.getAria2GlobalOption();
     _client?.getVersionInfo();
-    _client?.getInfosInterval(2);
+    _client?.getInfosInterval(intervalSecond);
     notifyListeners();
   }
 
@@ -166,5 +204,18 @@ class AppState extends ChangeNotifier {
       _selectedAria2ConnectConfig = config;
       notifyListeners();
     }
+  }
+
+  changeTheme(String _colorName) {
+    _appUsingColorName = _colorName;
+    notifyListeners();
+  }
+
+  /// 更新刷新aria2服务访问频率
+  void updateIntervalSecond(String second) {
+    intervalSecond = int.parse(second);
+    _client?.clearGIInterval();
+    _client?.getInfosInterval(intervalSecond);
+    notifyListeners();
   }
 }

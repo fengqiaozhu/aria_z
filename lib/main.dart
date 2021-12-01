@@ -103,9 +103,10 @@ class _MainContainerState extends State<MainContainer> {
     final ButtonStyle downloadedStyle = TextButton.styleFrom(
         primary: Theme.of(context).colorScheme.onPrimary,
         textStyle: TextStyle(fontSize: this.showDownloaded ? 24 : 16));
-
     return MaterialApp(
-      theme: ThemeData(primarySwatch: Colors.deepPurple),
+      theme: Provider.of<AppState>(context).brightTheme,
+      darkTheme: Provider.of<AppState>(context).darkTheme,
+      themeMode: ThemeMode.system,
       routes: {
         '/global_setting': (context) => GlobalSetting(),
         '/task_detail': (context) => TaskDetail(),
@@ -175,13 +176,13 @@ class _BodyWidgetState extends State<BodyWidget> {
       List<Aria2Task> taskList = widget.showDownloaded
           ? aria2State.completedTasks
           : aria2States.taskListOfNotComplete;
-      return taskList.isEmpty?
-      Center(
-        child: Text('无${widget.showDownloaded?"已完成":"下载中"}任务'),
-      )
-      : ListView(
-        children: taskListTileWidget(context, app, aria2States, taskList),
-      );
+      return taskList.isEmpty
+          ? Center(
+              child: Text('无${widget.showDownloaded ? "已完成" : "下载中"}任务'),
+            )
+          : ListView(
+              children: taskListTileWidget(context, app, aria2States, taskList),
+            );
     });
   }
 }
