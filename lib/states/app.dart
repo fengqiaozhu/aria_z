@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:hive_flutter/adapters.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../utils/aria2_api.dart';
 import 'aria2.dart';
@@ -79,33 +80,34 @@ class CustomMateriaColor {
 }
 
 class AppState extends ChangeNotifier {
+  /// hiveBox容器
+  Box aria2ConnectConfigBox;
+
+  /// shared_preferences容器
+  SharedPreferences prefs;
+
   late Aria2ConnectConfig? _selectedAria2ConnectConfig = null;
 
   Aria2Client? _client = null;
 
-  Box aria2ConnectConfigBox;
-
-  AppState(this.aria2ConnectConfigBox);
+  AppState(this.aria2ConnectConfigBox, this.prefs);
 
   late final Aria2States states;
 
-  String _appUsingColorName = 'green';
-
-  int intervalSecond = 3;
-
   //getters
 
-  String get appUsingColorName => _appUsingColorName;
+  String get appUsingColorName => prefs.getString('primaryColor') ?? 'green';
+  int get intervalSecond => prefs.getInt('intervalSecond') ?? 3;
 
   ThemeData get brightTheme => ThemeData(
       primarySwatch: appThemeColors
-          .where((_color) => _color.name == _appUsingColorName)
+          .where((_color) => _color.name == appUsingColorName)
           .first
           .color,
       brightness: Brightness.light);
   ThemeData get darkTheme => ThemeData(
       primarySwatch: appThemeColors
-          .where((_color) => _color.name == _appUsingColorName)
+          .where((_color) => _color.name == appUsingColorName)
           .first
           .color,
       brightness: Brightness.dark);
@@ -207,15 +209,16 @@ class AppState extends ChangeNotifier {
   }
 
   changeTheme(String _colorName) {
-    _appUsingColorName = _colorName;
+    prefs.setString('primaryColor', _colorName);
     notifyListeners();
   }
 
   /// 更新刷新aria2服务访问频率
   void updateIntervalSecond(String second) {
-    intervalSecond = int.parse(second);
+    int _intervalSecond = int.parse(second);
     _client?.clearGIInterval();
-    _client?.getInfosInterval(intervalSecond);
+    _client?.getInfosInterval(_intervalSecond);
+    prefs.setInt('intervalSecond', _intervalSecond);
     notifyListeners();
   }
 }

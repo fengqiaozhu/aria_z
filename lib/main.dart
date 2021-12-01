@@ -5,6 +5,7 @@ import 'package:aria2/aria2.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'utils/tools.dart';
 import 'states/aria2.dart';
@@ -21,9 +22,11 @@ late final Aria2States aria2States;
 void main(List<String> args) async {
   await Hive.initFlutter();
   Box aria2ConnectConfigBox = await Hive.openBox('aria2ConnectConfig');
+  SharedPreferences prefs = await SharedPreferences.getInstance();
   runApp(MultiProvider(
     providers: [
-      ChangeNotifierProvider(create: (_) => AppState(aria2ConnectConfigBox)),
+      ChangeNotifierProvider(
+          create: (_) => AppState(aria2ConnectConfigBox, prefs)),
       ChangeNotifierProvider(create: (_) => Aria2States()),
     ],
     child: const App(),
@@ -103,22 +106,39 @@ class _MainContainerState extends State<MainContainer> {
     final ButtonStyle downloadedStyle = TextButton.styleFrom(
         primary: Theme.of(context).colorScheme.onPrimary,
         textStyle: TextStyle(fontSize: this.showDownloaded ? 24 : 16));
+    BitUnit dlSpeedWithUnit = bitToUnit(
+        Provider.of<Aria2States>(context).globalStatus.downloadSpeed ?? 0);
     return MaterialApp(
       theme: Provider.of<AppState>(context).brightTheme,
       darkTheme: Provider.of<AppState>(context).darkTheme,
       themeMode: ThemeMode.system,
       routes: {
-        '/global_setting': (context) => GlobalSetting(),
+        '/global_setting': (context) => const GlobalSetting(),
         '/task_detail': (context) => TaskDetail(),
-        '/add_new_task': (context) => AddNewAria2Task(),
+        '/add_new_task': (context) => const AddNewAria2Task(),
         '/add_new_aria2_server': (context) => const Aria2ServerEditor(),
         '/update_aria2_server': (context) => const Aria2ServerEditor(),
       },
       home: Scaffold(
         appBar: AppBar(
-          title: Text(formatSpeed(
-              Provider.of<Aria2States>(context).globalStatus.downloadSpeed ??
-                  0)),
+          title: Text.rich(TextSpan(
+            children: [
+              TextSpan(
+                text: dlSpeedWithUnit.bit,
+                style: TextStyle(
+                    fontFamily: 'Coda',
+                    fontSize: 28,
+                    fontWeight: FontWeight.w600,
+                    color: Theme.of(context).colorScheme.onPrimary),
+              ),
+              TextSpan(
+                  text: ' ${dlSpeedWithUnit.unit}b/s',
+                  style: TextStyle(
+                      fontFamily: 'Coda',
+                      fontSize: 14,
+                      color: Theme.of(context).colorScheme.onPrimary))
+            ],
+          )),
           actions: [
             TextButton(
                 child: const Text("下载中"),
