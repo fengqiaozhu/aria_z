@@ -428,7 +428,10 @@ class _NewTaskConfigState extends State<NewTaskConfig>
                       border: const OutlineInputBorder(),
                       labelText: '限速',
                       contentPadding: const EdgeInsets.all(8),
-                      suffix: DropdownButton(
+                      suffix: DropdownButtonHideUnderline(
+                          child: DropdownButton(
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(8)),
                         value: taskConfig.speedLimit.unit == ''
                             ? 'K'
                             : taskConfig.speedLimit.unit,
@@ -444,7 +447,7 @@ class _NewTaskConfigState extends State<NewTaskConfig>
                             child: Text(value + 'B/s'),
                           );
                         }).toList(),
-                      )),
+                      ))),
                 )
               ],
             )));

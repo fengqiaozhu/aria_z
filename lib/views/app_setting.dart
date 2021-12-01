@@ -66,6 +66,7 @@ class _AppSettingsStates extends State<AppSettingsWidgets>
                             isExpanded: true,
                             value: language,
                             hint: const Text('选择语言'),
+                            borderRadius: const BorderRadius.all(Radius.circular(8)),
                             onChanged: (String? newValue) {
                               setState(() {
                                 language = newValue ?? '';
@@ -96,6 +97,7 @@ class _AppSettingsStates extends State<AppSettingsWidgets>
                           child: DropdownButton<String>(
                             isExpanded: true,
                             value: appState.appUsingColorName,
+                            borderRadius: const BorderRadius.all(Radius.circular(8)),
                             hint: const Text('选择主题'),
                             onChanged: (String? newValue) {
                               setState(() {
@@ -116,7 +118,7 @@ class _AppSettingsStates extends State<AppSettingsWidgets>
                                     const SizedBox(width: 8),
                                     Container(
                                       width: 80,
-                                      height: 20,
+                                      height: 16,
                                       decoration: BoxDecoration(
                                           color: _theme.color,
                                           borderRadius: const BorderRadius.all(
@@ -147,6 +149,7 @@ class _AppSettingsStates extends State<AppSettingsWidgets>
                       flex: 3,
                       child: DropdownButtonHideUnderline(
                         child: DropdownButton<String>(
+                          borderRadius: const BorderRadius.all(Radius.circular(8)),
                           isExpanded: true,
                           value: appState.intervalSecond.toString(),
                           hint: const Text('时间间隔'),
