@@ -1,0 +1,17 @@
+{
+  "@@last_modified": "2021-12-02T14:53:48.783884",
+  "downloadingBtnText": "Downloading",
+  "@downloadingBtnText": {
+    "description": "Downloading button text",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "completedBtnText": "Completed",
+  "@completedBtnText": {
+    "description": "Completed button text",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  }
+}

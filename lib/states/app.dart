@@ -79,24 +79,42 @@ class CustomMateriaColor {
   CustomMateriaColor(this.name, this.color, this.desc);
 }
 
+class LocaleItem {
+  String label;
+
+  Locale locale;
+
+  LocaleItem(this.locale, this.label);
+}
+
 class AppState extends ChangeNotifier {
+  AppState(this.aria2ConnectConfigBox, this.prefs);
+
   /// hiveBox容器
   Box aria2ConnectConfigBox;
 
   /// shared_preferences容器
   SharedPreferences prefs;
 
+  /// 选择连接的服务器配置
   late Aria2ConnectConfig? _selectedAria2ConnectConfig = null;
 
+  /// aria2连接实例化
   Aria2Client? _client = null;
 
-  AppState(this.aria2ConnectConfigBox, this.prefs);
-
+  /// aria2 请求结构缓存状态
   late final Aria2States states;
 
   //getters
+  /// 本地化
+  Locale get locale {
+    List<String> languageTag =
+        (prefs.getString('localeLanguageTag') ?? 'en-US').split('-');
+    return Locale(languageTag[0], languageTag[1]);
+  }
 
   String get appUsingColorName => prefs.getString('primaryColor') ?? 'green';
+
   int get intervalSecond => prefs.getInt('intervalSecond') ?? 3;
 
   ThemeData get brightTheme => ThemeData(
@@ -141,6 +159,11 @@ class AppState extends ChangeNotifier {
         CustomMateriaColor('green', Colors.green, "绿色"),
         CustomMateriaColor('orange', Colors.orange, "橙色"),
         CustomMateriaColor('purple', Colors.purple, "紫色"),
+      ];
+
+  List<LocaleItem> get localeItems => [
+        LocaleItem(const Locale('en', 'US'), 'English'),
+        LocaleItem(const Locale('zh', 'CN'), '简体中文')
       ];
   //*********************************************************************************************//
 
@@ -219,6 +242,11 @@ class AppState extends ChangeNotifier {
     _client?.clearGIInterval();
     _client?.getInfosInterval(_intervalSecond);
     prefs.setInt('intervalSecond', _intervalSecond);
+    notifyListeners();
+  }
+
+  void changeLocale(String languageCode) {
+    prefs.setString('localeLanguageTag', languageCode);
     notifyListeners();
   }
 }

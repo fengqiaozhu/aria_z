@@ -1,13 +1,12 @@
 import 'dart:convert';
 
 import 'package:aria2/aria2.dart';
-import 'package:aria_z/main.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import '../states/app.dart';
-import '../states/aria2.dart' show TaskType, NewTaskOption;
+import '../states/aria2.dart' show Aria2States, NewTaskOption, TaskType;
 import '../components/custom_snack_bar.dart';
 import '../utils/tools.dart';
 
@@ -351,6 +350,7 @@ class NewTaskConfig extends StatefulWidget {
 class _NewTaskConfigState extends State<NewTaskConfig>
     with AutomaticKeepAliveClientMixin<NewTaskConfig> {
   late _TaskConfig taskConfig;
+  late Aria2States aria2States;
 
   @override
   bool get wantKeepAlive => true;
@@ -358,6 +358,7 @@ class _NewTaskConfigState extends State<NewTaskConfig>
   @override
   void initState() {
     super.initState();
+    aria2States = Provider.of<Aria2States>(context,listen: false);
     taskConfig = _TaskConfig(
         downloadPath: aria2States.globalOption?.dir ?? '',
         speedLimit: bitToUnit(aria2States.globalOption?.maxDownloadLimit ?? 0));

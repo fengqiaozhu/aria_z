@@ -64,19 +64,18 @@ class _AppSettingsStates extends State<AppSettingsWidgets>
                         child: DropdownButtonHideUnderline(
                           child: DropdownButton<String>(
                             isExpanded: true,
-                            value: language,
+                            value: appState.locale.toLanguageTag(),
                             hint: const Text('选择语言'),
-                            borderRadius: const BorderRadius.all(Radius.circular(8)),
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(8)),
                             onChanged: (String? newValue) {
-                              setState(() {
-                                language = newValue ?? '';
-                              });
+                              appState.changeLocale(newValue!);
                             },
-                            items: <String>['简体中文', 'English']
-                                .map<DropdownMenuItem<String>>((String value) {
+                            items: appState.localeItems
+                                .map<DropdownMenuItem<String>>((LocaleItem lc) {
                               return DropdownMenuItem<String>(
-                                value: value,
-                                child: Text(value),
+                                value: lc.locale.toLanguageTag(),
+                                child: Text(lc.label),
                               );
                             }).toList(),
                           ),
@@ -97,7 +96,8 @@ class _AppSettingsStates extends State<AppSettingsWidgets>
                           child: DropdownButton<String>(
                             isExpanded: true,
                             value: appState.appUsingColorName,
-                            borderRadius: const BorderRadius.all(Radius.circular(8)),
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(8)),
                             hint: const Text('选择主题'),
                             onChanged: (String? newValue) {
                               setState(() {
@@ -149,7 +149,8 @@ class _AppSettingsStates extends State<AppSettingsWidgets>
                       flex: 3,
                       child: DropdownButtonHideUnderline(
                         child: DropdownButton<String>(
-                          borderRadius: const BorderRadius.all(Radius.circular(8)),
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(8)),
                           isExpanded: true,
                           value: appState.intervalSecond.toString(),
                           hint: const Text('时间间隔'),
