@@ -62,7 +62,8 @@ class Aria2Client extends Aria2c {
   getCompletedTasks(int offset, int limmit) async {
     try {
       _completedTasks = await tellStopped(offset, limmit);
-      state.updateCompletedTasks(_completedTasks);
+      state.updateCompletedTasks(
+          _completedTasks.where((ct) => ct.status != 'removed').toList());
     } on Exception catch (e) {
       return {"status": 0, "error": e};
     }
@@ -226,6 +227,18 @@ class Aria2Client extends Aria2c {
     try {
       Aria2Version version = await getVersion();
       state.updateVersion(version);
+    } on Exception catch (e) {
+      return {"status": 0, "error": e};
+    }
+  }
+
+  /// 删除任务
+  /// [gid] 任务gid
+
+  removeTask(String gid) async {
+    try {
+      await remove(gid);
+      await getInfos();
     } on Exception catch (e) {
       return {"status": 0, "error": e};
     }

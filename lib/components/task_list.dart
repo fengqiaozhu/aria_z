@@ -1,5 +1,7 @@
 import 'package:aria2/models/aria2Task.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
+
 import '../states/app.dart' show AppState;
 import '../states/aria2.dart' show Aria2States;
 import '../utils/tools.dart';
@@ -55,22 +57,37 @@ List<Widget> taskListTileWidget(BuildContext context, AppState app,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            ListTile(
-                onTap: () async {
-                  var gid = task.gid ?? '';
-                  if (gid != "") {
-                    Aria2Task? ts = await app.aria2?.tellStatus(gid);
-                    Navigator.of(context)
-                        .pushNamed('/task_detail', arguments: ts);
-                  }
-                },
-                title: Text(
-                  task.bittorrent?["info"]["name"],
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 2,
-                  // softWrap: false,
+            Slidable(
+                startActionPane: ActionPane(
+                  motion: const ScrollMotion(),
+                  children: [
+                    SlidableAction(
+                      onPressed: (BuildContext context) =>
+                          app.aria2?.removeTask(task.gid!),
+                      backgroundColor: const Color(0xFFFE4A49),
+                      foregroundColor: Colors.white,
+                      icon: Icons.delete,
+                      label: 'Delete',
+                    ),
+                  ],
                 ),
-                trailing: trailingOption(task.gid ?? '', task.status ?? '')),
+                child: ListTile(
+                    onTap: () async {
+                      var gid = task.gid ?? '';
+                      if (gid != "") {
+                        Aria2Task? ts = await app.aria2?.tellStatus(gid);
+                        Navigator.of(context)
+                            .pushNamed('/task_detail', arguments: ts);
+                      }
+                    },
+                    title: Text(
+                      task.bittorrent?["info"]["name"],
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 2,
+                      // softWrap: false,
+                    ),
+                    trailing:
+                        trailingOption(task.gid ?? '', task.status ?? ''))),
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: <Widget>[
