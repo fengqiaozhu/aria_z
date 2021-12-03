@@ -124,7 +124,7 @@ class BodyWidgetState extends State<BodyWidget> {
   Widget build(BuildContext context) {
     return Form(
         key: _formKey,
-        autovalidateMode: AutovalidateMode.onUserInteraction,
+        // autovalidateMode: AutovalidateMode.onUserInteraction,
         child: Padding(
             padding: const EdgeInsets.all(10.0),
             child: Column(

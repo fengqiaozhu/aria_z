@@ -15,7 +15,6 @@ class AriazLocalizations {
   }
 
   static AriazLocalizations of(BuildContext context) {
-    print(Localizations.localeOf(context));
     return Localizations.of<AriazLocalizations>(context, AriazLocalizations) ??
         AriazLocalizations();
   }
@@ -32,9 +31,9 @@ class AriazLocalizationsDelegate
     extends LocalizationsDelegate<AriazLocalizations> {
   const AriazLocalizationsDelegate();
 
-  //是否支持某个Local
+  // 因为将app locale设置提前到material app中，所以这里可以直接置为true
   @override
-  bool isSupported(Locale locale) => ['en', 'zh'].contains(locale.languageCode);
+  bool isSupported(Locale locale) => true;
 
   // Flutter会调用此类加载相应的Locale资源类
   @override

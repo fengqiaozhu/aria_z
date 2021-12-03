@@ -82,7 +82,7 @@ class CustomMateriaColor {
 class LocaleItem {
   String label;
 
-  Locale locale;
+  Locale? locale;
 
   LocaleItem(this.locale, this.label);
 }
@@ -105,12 +105,19 @@ class AppState extends ChangeNotifier {
   /// aria2 请求结构缓存状态
   late final Aria2States states;
 
+  late Locale? deviceLocale;
+
   //getters
   /// 本地化
-  Locale get locale {
-    List<String> languageTag =
-        (prefs.getString('localeLanguageTag') ?? 'en-US').split('-');
-    return Locale(languageTag[0], languageTag[1]);
+  Locale? get selectedLocale {
+    String? _l = prefs.getString('userSelectedLocaleLanguageTag');
+    if (_l != null) {
+      List<String> languageTag = _l.split('-');
+      return Locale.fromSubtags(
+          languageCode: languageTag.first,
+          scriptCode: languageTag.length == 3 ? languageTag[1] : null,
+          countryCode: languageTag.last);
+    }
   }
 
   String get appUsingColorName => prefs.getString('primaryColor') ?? 'green';
@@ -162,8 +169,12 @@ class AppState extends ChangeNotifier {
       ];
 
   List<LocaleItem> get localeItems => [
+        LocaleItem(null, "系统语言"),
         LocaleItem(const Locale('en', 'US'), 'English'),
-        LocaleItem(const Locale('zh', 'CN'), '简体中文')
+        LocaleItem(
+            const Locale.fromSubtags(
+                languageCode: 'zh', scriptCode: 'Hans', countryCode: 'CN'),
+            '简体中文')
       ];
   //*********************************************************************************************//
 
@@ -246,7 +257,11 @@ class AppState extends ChangeNotifier {
   }
 
   void changeLocale(String languageCode) {
-    prefs.setString('localeLanguageTag', languageCode);
+    if (languageCode.isEmpty) {
+      prefs.remove('userSelectedLocaleLanguageTag');
+    }else{
+      prefs.setString('userSelectedLocaleLanguageTag', languageCode);
+    }
     notifyListeners();
   }
 }

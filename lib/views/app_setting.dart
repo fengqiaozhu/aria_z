@@ -64,17 +64,17 @@ class _AppSettingsStates extends State<AppSettingsWidgets>
                         child: DropdownButtonHideUnderline(
                           child: DropdownButton<String>(
                             isExpanded: true,
-                            value: appState.locale.toLanguageTag(),
+                            value: appState.selectedLocale?.toLanguageTag(),
                             hint: const Text('选择语言'),
                             borderRadius:
                                 const BorderRadius.all(Radius.circular(8)),
                             onChanged: (String? newValue) {
-                              appState.changeLocale(newValue!);
+                              appState.changeLocale(newValue ?? '');
                             },
                             items: appState.localeItems
                                 .map<DropdownMenuItem<String>>((LocaleItem lc) {
                               return DropdownMenuItem<String>(
-                                value: lc.locale.toLanguageTag(),
+                                value: lc.locale?.toLanguageTag(),
                                 child: Text(lc.label),
                               );
                             }).toList(),

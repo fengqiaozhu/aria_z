@@ -28,43 +28,79 @@ void main(List<String> args) async {
           create: (_) => AppState(aria2ConnectConfigBox, prefs)),
       ChangeNotifierProvider(create: (_) => Aria2States()),
     ],
-    child: const App(),
+    child: App(),
   ));
 }
 
 class App extends StatelessWidget {
-  const App({Key? key}) : super(key: key);
+  App({Key? key}) : super(key: key);
 
-  Locale? localeListResolutionCallback(
+  bool localeListResolutionCallbackEmited = false;
+
+  Locale? localeListResolutionCallback(Locale? selectedLocale,
       List<Locale>? locales, Iterable<Locale> supportedLocales) {
-    print(locales);
-    print(supportedLocales.toList());
+    if (!localeListResolutionCallbackEmited) {
+      Locale? deviceLocale = selectedLocale ?? locales?[0];
+      if (deviceLocale != null) {
+        String localeTag = deviceLocale.toString();
+        if (!supportedLocales
+            .map<String>((sl) => sl.toString())
+            .contains(localeTag)) {
+          Locale? _tmp = const Locale('en', 'US');
+          for (var _sl in supportedLocales) {
+            if (_sl.languageCode == deviceLocale.languageCode) {
+              _tmp = _sl;
+              break;
+            }
+          }
+          return _tmp;
+        } else {
+          return deviceLocale;
+        }
+      }
+      return const Locale('en', 'US');
+    }
+    localeListResolutionCallbackEmited = !localeListResolutionCallbackEmited;
   }
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: Provider.of<AppState>(context).brightTheme,
-      darkTheme: Provider.of<AppState>(context).darkTheme,
-      themeMode: ThemeMode.system,
-      localizationsDelegates: const [
-        AriazLocalizationsDelegate(),
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate
-      ],
-      supportedLocales: Provider.of<AppState>(context, listen: false)
-          .localeItems
-          .map((lc) => lc.locale),
-      localeListResolutionCallback: localeListResolutionCallback,
-      locale: Provider.of<AppState>(context).locale,
-      routes: {
-        '/global_setting': (context) => const GlobalSetting(),
-        '/task_detail': (context) => TaskDetail(),
-        '/add_new_task': (context) => const AddNewAria2Task(),
-        '/add_new_aria2_server': (context) => const Aria2ServerEditor(),
-        '/update_aria2_server': (context) => const Aria2ServerEditor(),
+    return GestureDetector(
+      onTap: () {
+        FocusScopeNode currentFocus = FocusScope.of(context);
+        if (!currentFocus.hasPrimaryFocus) {
+          currentFocus.unfocus();
+        }
       },
-      home: const HomeView(),
+      child: MaterialApp(
+        theme: Provider.of<AppState>(context).brightTheme,
+        darkTheme: Provider.of<AppState>(context).darkTheme,
+        themeMode: ThemeMode.system,
+        localizationsDelegates: const [
+          AriazLocalizationsDelegate(),
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate
+        ],
+        localeListResolutionCallback:
+            (List<Locale>? locales, Iterable<Locale> supportedLocales) =>
+                localeListResolutionCallback(
+                    Provider.of<AppState>(context).selectedLocale,
+                    locales,
+                    supportedLocales),
+        supportedLocales: Provider.of<AppState>(context, listen: false)
+            .localeItems
+            .where((lc) => lc.locale != null)
+            .map((lc) => lc.locale!),
+        locale: Provider.of<AppState>(context).selectedLocale,
+        routes: {
+          '/global_setting': (context) => const GlobalSetting(),
+          '/task_detail': (context) => TaskDetail(),
+          '/add_new_task': (context) => const AddNewAria2Task(),
+          '/add_new_aria2_server': (context) => const Aria2ServerEditor(),
+          '/update_aria2_server': (context) => const Aria2ServerEditor(),
+        },
+        home: const HomeView(),
+      ),
     );
   }
 }
@@ -154,6 +190,11 @@ class _HomeViewState extends State<HomeView> {
                     ))
               ],
             ))),
+        // bottom: PreferredSize(
+        //     child: TaskRetrieval(
+        //       showDownloaded: showDownloaded,
+        //     ),
+        //     preferredSize: const Size.fromHeight(64)),
         actions: [
           TextButton(
               child: Text(AriazLocalizations.of(context).downloadingBtnText),
@@ -163,6 +204,11 @@ class _HomeViewState extends State<HomeView> {
               child: Text(AriazLocalizations.of(context).completedBtnText),
               style: downloadedStyle,
               onPressed: () => _switchDownloadShowType(true)),
+          // IconButton(
+          //     icon: const Icon(Icons.search),
+          //     iconSize: 24,
+          //     tooltip: '添加新任务',
+          //     onPressed: () => _switchDownloadShowType(true)),
           Builder(
             builder: (context) {
               return IconButton(
@@ -184,6 +230,50 @@ class _HomeViewState extends State<HomeView> {
     );
   }
 }
+
+// class TaskRetrieval extends StatefulWidget {
+//   final bool showDownloaded;
+
+//   const TaskRetrieval({Key? key, required this.showDownloaded})
+//       : super(key: key);
+
+//   @override
+//   State<StatefulWidget> createState() => _TaskRetrievalState();
+// }
+
+// class _TaskRetrievalState extends State<TaskRetrieval> {
+//   late String searchInput;
+
+//   @override
+//   void initState() {
+//     super.initState();
+//     searchInput = '';
+//   }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Padding(
+//         padding: const EdgeInsets.all(8),
+//         child: Flex(
+//           direction: Axis.horizontal,
+//           children: [
+//             Expanded(
+//               child: TextField(
+//                 autofocus: false,
+//                 controller: TextEditingController(text: searchInput),
+//                 onChanged: (v) => searchInput = v,
+//                 decoration: InputDecoration(
+//                     filled: true,
+//                     fillColor: Theme.of(context).colorScheme.surface,
+//                     border: const OutlineInputBorder(
+//                         borderRadius: BorderRadius.all(Radius.circular(24))),
+//                     contentPadding: const EdgeInsets.all(8)),
+//               ),
+//             )
+//           ],
+//         ));
+//   }
+// }
 
 ///******************Body渲染 */
 
