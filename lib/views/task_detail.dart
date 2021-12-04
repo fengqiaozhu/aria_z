@@ -10,6 +10,7 @@ const List<Tab> tabs = <Tab>[
   Tab(text: '文件列表'),
 ];
 
+// ignore: must_be_immutable
 class TaskDetail extends StatelessWidget {
   TaskDetail({Key? key}) : super(key: key);
   Aria2Task taskInfo = Aria2Task();

@@ -19,10 +19,10 @@ class AriazLocalizations {
         AriazLocalizations();
   }
 
-  String get downloadingBtnText => Intl.message('Downloading',
+  String get downloadingBtnText => Intl.message('Download',
       name: 'downloadingBtnText', desc: 'Downloading button text');
 
-  String get completedBtnText => Intl.message('Completed',
+  String get completedBtnText => Intl.message('Complete',
       name: 'completedBtnText', desc: 'Completed button text');
 }
 
