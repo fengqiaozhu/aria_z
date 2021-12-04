@@ -23,6 +23,25 @@ BitUnit bitToUnit(int bitNum) {
   return result;
 }
 
+double unitToBit(BitUnit ub) {
+  int _u = 1;
+  switch (ub.unit) {
+    case 'K':
+      _u = 1024;
+      break;
+    case 'M':
+      _u = 1024 * 1024;
+      break;
+    case 'G':
+      _u = 1024 * 1024 * 1024;
+      break;
+    case 'T':
+      _u = 1024 * 1024 * 1024 * 1024;
+      break;
+  }
+  return double.parse(ub.bit) * _u;
+}
+
 String formatFileSize(bitSpeed) {
   BitUnit bitUnit = bitToUnit(bitSpeed);
   return "${bitUnit.bit}${bitUnit.unit}B";
