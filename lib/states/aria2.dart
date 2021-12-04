@@ -20,7 +20,7 @@ class Aria2States extends ChangeNotifier {
 
   List<Aria2Task> waittingTasks = [];
 
-  Aria2GlobalStat globalStatus = Aria2GlobalStat();
+  Aria2GlobalStat? globalStatus;
 
   Aria2Option? globalOption;
 
@@ -95,6 +95,17 @@ class Aria2States extends ChangeNotifier {
 
   updateVersion(version) {
     versionInfo = version;
+    notifyListeners();
+  }
+
+  clearStates() {
+    completedTasks = [];
+    downloadingTasks = [];
+    waittingTasks = [];
+    globalStatus = null;
+    globalOption = null;
+    versionInfo = null;
+    _opratingGids.removeRange(0, _opratingGids.length);
     notifyListeners();
   }
 }

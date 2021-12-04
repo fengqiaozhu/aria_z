@@ -1,5 +1,6 @@
 import 'package:aria2/aria2.dart';
 import 'package:aria2/models/aria2GlobalStat.dart';
+import 'package:aria_z/components/custom_snack_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
@@ -12,7 +13,7 @@ import '../states/app.dart';
 import '../views/edit_aria2_server_config.dart'
     show Aria2ConnectConfigArguments;
 
-Widget customDrawer(context) {
+Widget customDrawer(BuildContext _parentContext) {
   _deleteServerConfig(BuildContext context, Aria2ConnectConfig config) {
     showDialog(
       context: context,
@@ -51,7 +52,7 @@ Widget customDrawer(context) {
         children: [
           Builder(builder: (context) {
             return Selector<Aria2States,
-                    Tuple2<Aria2GlobalStat, Aria2Version?>>(
+                    Tuple2<Aria2GlobalStat?, Aria2Version?>>(
                 selector: (BuildContext context, Aria2States aria2State) =>
                     Tuple2(aria2State.globalStatus, aria2State.versionInfo),
                 builder: (context, serverInfo, _) {
@@ -81,7 +82,7 @@ Widget customDrawer(context) {
                                         style: const TextStyle(fontSize: 16))
                                     : const SizedBox(),
                                 Text(
-                                    "全局下载速度: ${formatSpeed(serverInfo.item1.downloadSpeed ?? 0)}",
+                                    "全局下载速度: ${formatSpeed(serverInfo.item1?.downloadSpeed ?? 0)}",
                                     style: const TextStyle(fontSize: 16))
                               ],
                             ),
@@ -148,9 +149,8 @@ Widget customDrawer(context) {
                         selected: acc.toJson().toString() ==
                             app.item2?.toJson().toString(),
                         onTap: () {
-                          Provider.of<AppState>(context, listen: false)
-                              .useAria2ConnectConfig(acc);
                           Navigator.pop(context);
+                          checkAndUseConfig(_parentContext, acc);
                         },
                       );
                     })),

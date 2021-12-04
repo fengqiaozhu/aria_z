@@ -105,7 +105,8 @@ class AppState extends ChangeNotifier {
   /// aria2 请求结构缓存状态
   late final Aria2States states;
 
-  late Locale? deviceLocale;
+  /// 是否正在检查服务器配置
+  bool checkingConfig = false;
 
   //getters
   /// 本地化
@@ -164,7 +165,6 @@ class AppState extends ChangeNotifier {
         CustomMateriaColor('blue', Colors.blue, "蓝色"),
         CustomMateriaColor('red', Colors.red, "红色"),
         CustomMateriaColor('green', Colors.green, "绿色"),
-        CustomMateriaColor('orange', Colors.orange, "橙色"),
         CustomMateriaColor('purple', Colors.purple, "紫色"),
       ];
 
@@ -183,20 +183,24 @@ class AppState extends ChangeNotifier {
   }
 
   ///连接到aria2服务器
-  connectToAria2Server(url, type, secret) {
-    if (url == null || url.isEmpty) {
-      return;
+  connectToAria2Server(Aria2Client? newClient) async {
+    _client = newClient;
+    if (_client != null) {
+      _client?.getAria2GlobalOption();
+      _client?.getVersionInfo();
+      _client?.getInfosInterval(intervalSecond);
     }
-    _client?.clearGIInterval();
-    _client = Aria2Client(url, type, secret, states);
-    _client?.getAria2GlobalOption();
-    _client?.getVersionInfo();
-    _client?.getInfosInterval(intervalSecond);
     notifyListeners();
   }
 
+  // 清理当前服务器所有的状态
+  clearCurrentServerAllState() {
+    _client?.clearGIInterval();
+    states.clearStates();
+  }
+
   /// 添加连接配置
-  addAria2ConnectConfig(Aria2ConnectConfig config) {
+  bool addAria2ConnectConfig(Aria2ConnectConfig config) {
     bool isExist = false;
     aria2ConnectConfigBox.toMap().forEach((key, value) {
       if (value['configName'] == config.configName) {
@@ -204,10 +208,27 @@ class AppState extends ChangeNotifier {
       }
     });
     if (isExist) {
-      throw Exception('已存在同名连接配置');
+      return false;
     }
     aria2ConnectConfigBox.add(config.toJson());
-    useAria2ConnectConfig(config);
+    return true;
+  }
+
+  Future<Aria2Response<Aria2Client>> checkAria2ConnectConfig(
+      Aria2ConnectConfig config) async {
+    _selectedAria2ConnectConfig = config;
+    checkingConfig = true;
+    notifyListeners();
+    Aria2Client __client = Aria2Client(
+        '${config.protocol}://${config.host}:${config.port}${config.path}',
+        config.type,
+        config.secret,
+        states);
+    Aria2Response<Aria2Client> checkResult =
+        await __client.checkServerConnection();
+    checkingConfig = false;    
+    notifyListeners();
+    return checkResult;
   }
 
   /// 删除连接配置
@@ -230,18 +251,6 @@ class AppState extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// 使用连接配置
-  useAria2ConnectConfig(Aria2ConnectConfig config) {
-    if (config.configName != selectedAria2ConnectConfig?.configName) {
-      connectToAria2Server(
-          '${config.protocol}://${config.host}:${config.port}${config.path}',
-          config.type,
-          config.secret);
-      _selectedAria2ConnectConfig = config;
-      notifyListeners();
-    }
-  }
-
   changeTheme(String _colorName) {
     prefs.setString('primaryColor', _colorName);
     notifyListeners();
@@ -259,7 +268,7 @@ class AppState extends ChangeNotifier {
   void changeLocale(String languageCode) {
     if (languageCode.isEmpty) {
       prefs.remove('userSelectedLocaleLanguageTag');
-    }else{
+    } else {
       prefs.setString('userSelectedLocaleLanguageTag', languageCode);
     }
     notifyListeners();

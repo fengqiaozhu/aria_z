@@ -1,4 +1,5 @@
 // ignore_for_file: must_be_immutable
+
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
@@ -103,20 +104,22 @@ class BodyWidgetState extends State<BodyWidget> {
     if ((_formKey.currentState as FormState).validate()) {
       AppState app = Provider.of<AppState>(context, listen: false);
       String msg = '';
-      try {
-        if (oldIndex == null) {
-          app.addAria2ConnectConfig(Aria2ConnectConfig.fromJson(serverConfig));
-          msg = '添加服务配置成功';
+      Aria2ConnectConfig newConfig = Aria2ConnectConfig.fromJson(serverConfig);
+      if (oldIndex == null) {
+        bool isNotExist = app.addAria2ConnectConfig(newConfig);
+        if (isNotExist) {
+          checkAndUseConfig(context, newConfig);
         } else {
-          app.updateAria2ConnectConfig(
-              Aria2ConnectConfig.fromJson(serverConfig), oldIndex!);
-          msg = '修改服务配置成功';
+          showCustomSnackBar(context, 2, const Text('配置名称已存在!'));
         }
-        Navigator.pop(context, serverConfig);
-        showCustomSnackBar(context, 1, Text(msg));
-      } on Exception catch (e) {
-        showCustomSnackBar(context, 2, Text(e.toString()));
+        msg = '添加服务配置成功';
+      } else {
+        app.updateAria2ConnectConfig(newConfig, oldIndex!);
+        checkAndUseConfig(context, newConfig);
+        msg = '修改服务配置成功';
       }
+      Navigator.pop(context, serverConfig);
+      showCustomSnackBar(context, 1, Text(msg));
     }
   }
 
