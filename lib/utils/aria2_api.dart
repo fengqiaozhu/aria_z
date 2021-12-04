@@ -3,14 +3,30 @@
 import 'dart:async';
 import 'package:aria2/aria2.dart';
 import '../states/aria2.dart';
+import 'package:dio/dio.dart';
+import 'dart:convert';
+
+enum Aria2ResponseErrorType { connectionRefused, unauthorized, timeout, other }
+
+enum Aria2ResponseStatus { success, error }
+
+class Aria2Response<T> {
+  T? data;
+
+  Aria2ResponseErrorType? error;
+
+  Aria2ResponseStatus status;
+
+  String message;
+
+  Aria2Response(
+      {required this.status,
+      required this.data,
+      required this.error,
+      required this.message});
+}
 
 class Aria2Client extends Aria2c {
-  String protocol;
-
-  String rpcUrl;
-
-  String secret;
-
   Aria2States state;
 
   List<Aria2Task> _downloadingTasks = [];
@@ -21,7 +37,7 @@ class Aria2Client extends Aria2c {
   late Timer? periodicTimer = null;
   late Timer? periodicTimerInner = null;
 
-  Aria2Client(this.rpcUrl, this.protocol, this.secret, this.state)
+  Aria2Client(rpcUrl, protocol, secret, this.state)
       : super(rpcUrl, protocol, secret);
 
   List<Aria2Task> get downloadingTasks {
@@ -223,6 +239,12 @@ class Aria2Client extends Aria2c {
     }
   }
 
+  Future<Aria2Response<String>> updateTheGlobalOption(Aria2Option option) async {
+    return _try2Request(() async {
+      return await changeGlobalOption(option);
+    });
+  }
+
   getVersionInfo() async {
     try {
       Aria2Version version = await getVersion();
@@ -241,6 +263,89 @@ class Aria2Client extends Aria2c {
       await getInfos();
     } on Exception catch (e) {
       return {"status": 0, "error": e};
+    }
+  }
+
+  Future<Aria2Response<Aria2Client>> checkServerConnection() async {
+    return _try2Request(() async {
+      await getVersion();
+      return this;
+    });
+  }
+
+  Future<Aria2Response<T>> _try2Request<T>(Function request) async {
+    try {
+      T data = await request();
+      return Aria2Response(
+          status: Aria2ResponseStatus.success,
+          data: data,
+          error: null,
+          message: 'OK');
+    } on DioError catch (e) {
+      String msg;
+      Aria2ResponseErrorType errorType;
+
+      switch (e.type) {
+        case DioErrorType.response:
+          String? dt = e.response?.data;
+          if (dt != null && dt.isNotEmpty) {
+            Map<String, dynamic> aria2Error = jsonDecode(dt);
+            int __errorCode = aria2Error['error']['code'];
+            switch (__errorCode) {
+              case 1:
+                errorType = Aria2ResponseErrorType.unauthorized;
+                msg = 'Aria2身份认证失败!';
+                break;
+              default:
+                errorType = Aria2ResponseErrorType.other;
+                msg = aria2Error['error']['message'];
+                break;
+            }
+          } else {
+            errorType = Aria2ResponseErrorType.other;
+            msg = 'Aria2服务器未知错误';
+          }
+          break;
+        case DioErrorType.connectTimeout:
+        case DioErrorType.sendTimeout:
+          errorType = Aria2ResponseErrorType.timeout;
+          msg = '连接服务器超时';
+          break;
+        case DioErrorType.other:
+          var __e = e.error;
+          if (__e.runtimeType.toString() == 'SocketException' &&
+              __e.osError.runtimeType.toString() == 'OSError') {
+            switch (__e.osError.errorCode) {
+              case 61:
+                errorType = Aria2ResponseErrorType.connectionRefused;
+                msg = '连接服务器被拒绝，请检查服务器配置';
+                break;
+              default:
+                errorType = Aria2ResponseErrorType.other;
+                msg = __e.osError.message;
+                break;
+            }
+          } else {
+            errorType = Aria2ResponseErrorType.other;
+            msg = e.message;
+          }
+          break;
+        default:
+          errorType = Aria2ResponseErrorType.other;
+          msg = e.message;
+          break;
+      }
+      return Aria2Response(
+          status: Aria2ResponseStatus.error,
+          data: null,
+          error: errorType,
+          message: msg);
+    } on Exception catch (e) {
+      return Aria2Response(
+          status: Aria2ResponseStatus.error,
+          data: null,
+          error: Aria2ResponseErrorType.other,
+          message: e.toString());
     }
   }
 }
