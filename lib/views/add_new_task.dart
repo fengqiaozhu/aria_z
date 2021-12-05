@@ -188,9 +188,11 @@ class _NewTaskCreaterState extends State<NewTaskCreater>
             TextButton(
               child: const Text('添加并开始下载'),
               onPressed: () {
-                widget.taskType.taskType == TaskType.magnet
-                    ? magnetLinks.add(inputUrl)
-                    : downloadUrls.add(inputUrl);
+                setState(() {
+                  widget.taskType.taskType == TaskType.magnet
+                      ? magnetLinks.add(inputUrl)
+                      : downloadUrls.add(inputUrl);
+                });
                 Navigator.of(context).pop();
                 submitActionKey.currentState?._submitNewTask(context);
               },
@@ -198,9 +200,11 @@ class _NewTaskCreaterState extends State<NewTaskCreater>
             TextButton(
               child: const Text('添加'),
               onPressed: () {
-                widget.taskType.taskType == TaskType.magnet
-                    ? magnetLinks.add(inputUrl)
-                    : downloadUrls.add(inputUrl);
+                setState(() {
+                  widget.taskType.taskType == TaskType.magnet
+                      ? magnetLinks.add(inputUrl)
+                      : downloadUrls.add(inputUrl);
+                });
                 Navigator.of(context).pop();
               },
             ),
@@ -309,7 +313,13 @@ class _NewTaskCreaterState extends State<NewTaskCreater>
                   trailing: IconButton(
                     color: Colors.red,
                     icon: const Icon(Icons.close),
-                    onPressed: () => links.removeAt(idx),
+                    onPressed: () => {
+                      setState(() {
+                        widget.taskType.taskType == TaskType.magnet
+                            ? magnetLinks.removeAt(idx)
+                            : downloadUrls.removeAt(idx);
+                      })
+                    },
                   ),
                 ),
               ),
@@ -358,7 +368,7 @@ class _NewTaskConfigState extends State<NewTaskConfig>
   @override
   void initState() {
     super.initState();
-    aria2States = Provider.of<Aria2States>(context,listen: false);
+    aria2States = Provider.of<Aria2States>(context, listen: false);
     taskConfig = _TaskConfig(
         downloadPath: aria2States.globalOption?.dir ?? '',
         speedLimit: bitToUnit(aria2States.globalOption?.maxDownloadLimit ?? 0));
