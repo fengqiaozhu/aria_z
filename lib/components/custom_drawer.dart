@@ -61,7 +61,8 @@ Widget customDrawer(BuildContext _parentContext) {
                           BoxDecoration(color: Theme.of(context).primaryColor),
                       child: DefaultTextStyle(
                           style: TextStyle(
-                              color: Theme.of(context).colorScheme.onPrimary),
+                              color: Theme.of(context).colorScheme.onPrimary,
+                              fontSize: 12),
                           child: Container(
                             alignment: Alignment.topLeft,
                             child: Column(
@@ -70,20 +71,83 @@ Widget customDrawer(BuildContext _parentContext) {
                                 const Text("AriaZ",
                                     style: TextStyle(
                                         fontFamily: 'Coda', fontSize: 32)),
-                                const SizedBox(height: 10),
+                                const SizedBox(height: 4),
                                 Text(
                                     app.item2 != null
                                         ? "已连接到: ${app.item2?.host}:${app.item2?.port}"
                                         : '未连接到任何服务器...',
-                                    style: const TextStyle(fontSize: 16)),
+                                    style: const TextStyle()),
                                 serverInfo.item2 != null
                                     ? Text(
                                         "aria2版本: ${serverInfo.item2?.version ?? ''}",
-                                        style: const TextStyle(fontSize: 16))
+                                        style: const TextStyle())
                                     : const SizedBox(),
-                                Text(
-                                    "全局下载速度: ${formatSpeed(serverInfo.item1?.downloadSpeed ?? 0)}",
-                                    style: const TextStyle(fontSize: 16))
+                                Chip(
+                                    backgroundColor:
+                                        Theme.of(context).backgroundColor,
+                                    avatar: const Icon(Icons.speed),
+                                    label: DefaultTextStyle(
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .onBackground,
+                                            fontSize: 12),
+                                        child: Text.rich(TextSpan(
+                                          children: [
+                                            TextSpan(
+                                                children: [
+                                                  const WidgetSpan(
+                                                      child: Icon(
+                                                    Icons
+                                                        .file_download_outlined,
+                                                    size: 18,
+                                                    color: Colors.green,
+                                                  )),
+                                                  TextSpan(
+                                                      text: formatSpeed(serverInfo
+                                                              .item1
+                                                              ?.downloadSpeed ??
+                                                          0)),
+                                                ],
+                                                style: const TextStyle(
+                                                  fontFamily: 'Coda',
+                                                  fontSize: 14,
+                                                )),
+                                            const WidgetSpan(
+                                                child: SizedBox(
+                                              height: 16,
+                                              child: VerticalDivider(
+                                                color: Colors.grey,
+                                                thickness: 2,
+                                                width: 20,
+                                              ),
+                                            )),
+                                            // const TextSpan(
+                                            //     text: '     ',
+                                            //     style: TextStyle(
+                                            //         fontWeight:
+                                            //             FontWeight.w800)),
+                                            TextSpan(
+                                                children: [
+                                                  const WidgetSpan(
+                                                      child: Icon(
+                                                    Icons.file_upload_outlined,
+                                                    size: 18,
+                                                    color: Colors.red,
+                                                  )),
+                                                  TextSpan(
+                                                      text: formatSpeed(serverInfo
+                                                              .item1
+                                                              ?.uploadSpeed ??
+                                                          0)),
+                                                ],
+                                                style: const TextStyle(
+                                                  fontFamily: 'Coda',
+                                                  fontSize: 14,
+                                                ))
+                                          ],
+                                        ))))
                               ],
                             ),
                           )));
@@ -150,7 +214,9 @@ Widget customDrawer(BuildContext _parentContext) {
                             app.item2?.toJson().toString(),
                         onTap: () {
                           Navigator.pop(context);
-                          checkAndUseConfig(_parentContext, acc);
+                          if (acc.configName != app.item2?.configName) {
+                            checkAndUseConfig(_parentContext, acc);
+                          }
                         },
                       );
                     })),

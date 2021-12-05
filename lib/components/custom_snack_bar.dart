@@ -33,12 +33,10 @@ void showCustomSnackBar(BuildContext context, int level, Widget content,
 
 checkAndUseConfig(BuildContext context, Aria2ConnectConfig config) async {
   AppState _appState = Provider.of<AppState>(context, listen: false);
-  if (_appState.selectedAria2ConnectConfig?.configName != config.configName) {
-    _appState.clearCurrentServerAllState();
+  _appState.clearCurrentServerAllState();
     Aria2Response checkResult = await _appState.checkAria2ConnectConfig(config);
     if (checkResult.status == Aria2ResponseStatus.error) {
       showCustomSnackBar(context, 2, Text(checkResult.message));
     }
     _appState.connectToAria2Server(checkResult.data);
-  }
 }
