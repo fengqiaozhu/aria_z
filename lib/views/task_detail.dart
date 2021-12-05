@@ -1,4 +1,5 @@
 import 'package:aria2/models/index.dart';
+import 'package:aria_z/states/aria2.dart';
 import 'package:flutter/material.dart';
 import '../utils/tools.dart';
 // import 'package:aria2/aria2.dart';
@@ -17,7 +18,10 @@ class TaskDetail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    taskInfo = ModalRoute.of(context)?.settings.arguments as Aria2Task;
+    List args = ModalRoute.of(context)?.settings.arguments as List;
+    taskInfo = args[0];
+    String _taskName = args[1];
+    TaskType _taskType = args[2];
     return DefaultTabController(
       length: tabs.length,
       child: Builder(builder: (BuildContext context) {
@@ -30,12 +34,13 @@ class TaskDetail extends StatelessWidget {
         });
         return Scaffold(
             appBar: AppBar(
-              title: Text(taskInfo.bittorrent?["info"]["name"]),
+              title: Text(_taskName),
               bottom: const TabBar(tabs: tabs),
             ),
             body: TabBarView(
               children: [
-                TaskInfo(info: taskInfo),
+                TaskInfo(
+                    info: taskInfo, taskName: _taskName, taskType: _taskType),
                 Connections(info: taskInfo),
                 FileList(info: taskInfo)
               ],
@@ -45,9 +50,23 @@ class TaskDetail extends StatelessWidget {
   }
 }
 
-class TaskInfo extends StatelessWidget {
-  const TaskInfo({Key? key, required this.info}) : super(key: key);
+class TaskInfo extends StatefulWidget {
+  final String taskName;
+
+  final TaskType taskType;
   final Aria2Task info;
+
+  const TaskInfo(
+      {Key? key,
+      required this.info,
+      required this.taskName,
+      required this.taskType})
+      : super(key: key);
+  @override
+  State<StatefulWidget> createState() => _TaskInfoState();
+}
+
+class _TaskInfoState extends State<TaskInfo> {
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -56,7 +75,7 @@ class TaskInfo extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
             const Text("任务名称："),
-            Flexible(child: Text(info.bittorrent?['info']['name']))
+            Flexible(child: Text(widget.taskName))
           ],
         ),
         Row(
@@ -65,7 +84,7 @@ class TaskInfo extends StatelessWidget {
             const Text("已下载："),
             Flexible(
                 child: Text(
-                    "${formatFileSize(info.completedLength ?? 0)}/${formatFileSize(info.totalLength ?? 0)}"))
+                    "${formatFileSize(widget.info.completedLength ?? 0)}/${formatFileSize(widget.info.totalLength ?? 0)}"))
           ],
         )
       ]),
