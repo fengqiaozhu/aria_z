@@ -86,6 +86,8 @@ class App extends StatelessWidget {
         localizationsDelegates: const [
           AriazLocalizationsDelegate(),
           GlobalMaterialLocalizations.delegate,
+          // 此处解决ios复制粘贴功能无法使用问题
+          GlobalCupertinoLocalizations.delegate,
           GlobalWidgetsLocalizations.delegate
         ],
         localeListResolutionCallback:
@@ -140,6 +142,7 @@ class _HomeViewState extends State<HomeView> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: const [
               Icon(Icons.speed),
               SizedBox(width: 8),
@@ -199,7 +202,7 @@ class _HomeViewState extends State<HomeView> {
   ButtonStyle downloadSwitchBtnStyle(bool _isDownloadingBtn) {
     return TextButton.styleFrom(
         primary: _isDownloadingBtn == showDownloaded
-            ? Theme.of(context).colorScheme.onSecondary
+            ? Theme.of(context).secondaryHeaderColor
             : Theme.of(context).colorScheme.onPrimary,
         textStyle: TextStyle(
             fontSize: _isDownloadingBtn == showDownloaded ? 16 : 18,
@@ -223,7 +226,7 @@ class _HomeViewState extends State<HomeView> {
 
     return Scaffold(
       appBar: AppBar(
-        leadingWidth: 40,
+        leadingWidth: 48,
         titleSpacing: 0,
         title: TextButton(
             onPressed: () =>
@@ -409,6 +412,7 @@ class _SpeedControlState extends State<SpeedControlWidgt> {
             decoration: InputDecoration(
                 border: const OutlineInputBorder(),
                 labelText: '最大下载速度',
+                helperText: '设置为0时表示不限速',
                 contentPadding: const EdgeInsets.all(8),
                 suffix: DropdownButtonHideUnderline(
                     child: DropdownButton(
@@ -436,6 +440,7 @@ class _SpeedControlState extends State<SpeedControlWidgt> {
             decoration: InputDecoration(
                 border: const OutlineInputBorder(),
                 labelText: '最大上传速度',
+                helperText: '设置为0时表示不限速',
                 contentPadding: const EdgeInsets.all(8),
                 suffix: DropdownButtonHideUnderline(
                     child: DropdownButton(
