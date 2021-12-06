@@ -88,7 +88,7 @@ class Aria2States extends ChangeNotifier {
     notifyListeners();
   }
 
-  updateGlobalOption(options) {
+  updateGlobalOption(Aria2Option options) {
     globalOption = options;
     notifyListeners();
   }

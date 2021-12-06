@@ -1,7 +1,6 @@
 // ignore_for_file: unnecessary_this
 import 'package:aria_z/components/custom_snack_bar.dart';
 import 'package:aria_z/components/task_list.dart';
-import 'package:aria_z/utils/aria2_api.dart' show Aria2Response,Aria2ResponseStatus;
 import 'package:provider/provider.dart';
 import 'package:aria2/aria2.dart';
 import 'package:flutter/material.dart';
@@ -125,15 +124,16 @@ class _HomeViewState extends State<HomeView> {
   late bool showDownloaded;
   late AppState app;
 
-  void _switchDownloadShowType(bool newType) {
-    setState(() {
-      if (this.showDownloaded != newType) {
+  void _switchDownloadShowType(bool newType) async {
+    if (this.showDownloaded != newType) {
+      setState(() {
         this.showDownloaded = !this.showDownloaded;
+      });
+      if (this.showDownloaded && app.aria2 != null) {
+        handleAria2ApiResponse(
+            context, await app.aria2!.getCompletedTasks(0, 50), null);
       }
-      if (this.showDownloaded) {
-        app.aria2?.getCompletedTasks(0, 50);
-      }
-    });
+    }
   }
 
   void _showSpeedLimitDialog(AppState app) {
@@ -156,16 +156,18 @@ class _HomeViewState extends State<HomeView> {
           actions: <Widget>[
             TextButton(
               child: const Text('应用'),
-              onPressed: () async{
-                if((speedLimitFormKey.currentState as FormState).validate()){
-                  Aria2Response updateResult = await app.aria2!.updateTheGlobalOption(speedControlKey.currentState!.speedOption);
-                  if(updateResult.status==Aria2ResponseStatus.error){
-                    showCustomSnackBar(context, 2, Text(updateResult.message));
-                  }else{
+              onPressed: () async {
+                if ((speedLimitFormKey.currentState as FormState).validate()) {
+                  handleAria2ApiResponse(
+                      context,
+                      await app.aria2!.updateTheGlobalOption(
+                          speedControlKey.currentState!.speedOption),
+                      (data) async {
                     showCustomSnackBar(context, 1, const Text("下载限速设置成功"));
-                    app.aria2!.getAria2GlobalOption();
+                    handleAria2ApiResponse(
+                        context, await app.aria2!.getAria2GlobalOption(), null);
                     Navigator.of(context).pop();
-                  }
+                  });
                 }
               },
             ),
@@ -389,15 +391,15 @@ class _SpeedControlState extends State<SpeedControlWidgt> {
   @override
   void initState() {
     super.initState();
-    _as = Provider.of<Aria2States>(context,listen: false);
+    _as = Provider.of<Aria2States>(context, listen: false);
     _maxDownloadSpeed = bitToUnit(_as.globalOption!.maxOverallDownloadLimit!);
     _maxUploadSpeed = bitToUnit(_as.globalOption!.maxOverallUploadLimit!);
   }
 
-  Aria2Option get speedOption =>Aria2Option.fromJson({
-    "max-overall-download-limit":unitToBit(_maxDownloadSpeed).round(),
-    "max-overall-upload-limit":unitToBit(_maxUploadSpeed).round()
-  });
+  Aria2Option get speedOption => Aria2Option.fromJson({
+        "max-overall-download-limit": unitToBit(_maxDownloadSpeed).round(),
+        "max-overall-upload-limit": unitToBit(_maxUploadSpeed).round()
+      });
 
   @override
   Widget build(BuildContext context) {

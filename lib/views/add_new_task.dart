@@ -93,12 +93,16 @@ class _SubmitActionWidgtState extends State<SubmitActionWidgt> {
           (optionFormKey.currentState as FormState).validate()) {
         final Aria2Option option =
             newTaskConfigKey.currentState?.getTaskOption() ?? Aria2Option();
-
-        await Provider.of<AppState>(context, listen: false).aria2?.addNewTask(
-            NewTaskOption(widget.taskType.taskType, source, option));
-
-        showCustomSnackBar(context, 1, const Text('添加任务成功'));
-        Navigator.pop(context);
+        handleAria2ApiResponse(
+            context,
+            await Provider.of<AppState>(context, listen: false)
+                .aria2!
+                .addNewTask(
+                    NewTaskOption(widget.taskType.taskType, source, option)),
+            (data) {
+          showCustomSnackBar(context, 1, const Text('添加任务成功'));
+          Navigator.pop(context);
+        });
       } else {
         showCustomSnackBar(context, 2, const Text('请检查任务选项输入！'));
       }
@@ -390,10 +394,10 @@ class _NewTaskConfigState extends State<NewTaskConfig>
     if (dir.isEmpty) {
       return '请输入下载目录';
     }
-    if (dir.startsWith(aria2States.globalOption?.dir ?? '/download')) {
+    if (dir.startsWith(aria2States.globalOption!.dir!)) {
       return null;
     }
-    return '文件必须在保存在全局下载目录"${aria2States.globalOption?.dir ?? '/download'}"下';
+    return '文件必须在保存在全局下载目录"${aria2States.globalOption!.dir!}"下';
   }
 
   /// 验证下载速度是否合法
@@ -419,16 +423,19 @@ class _NewTaskConfigState extends State<NewTaskConfig>
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 const SizedBox(height: 16),
-                TextFormField(
-                  controller:
-                      TextEditingController(text: taskConfig.downloadPath),
-                  onChanged: (v) => taskConfig.downloadPath = v,
-                  validator: (v) => dirValidator(v ?? ''),
-                  decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: '下载路径',
-                      contentPadding: EdgeInsets.all(8)),
-                ),
+                aria2States.globalOption != null &&
+                        aria2States.globalOption!.dir != null
+                    ? TextFormField(
+                        controller: TextEditingController(
+                            text: taskConfig.downloadPath),
+                        onChanged: (v) => taskConfig.downloadPath = v,
+                        validator: (v) => dirValidator(v ?? ''),
+                        decoration: const InputDecoration(
+                            border: OutlineInputBorder(),
+                            labelText: '下载路径',
+                            contentPadding: EdgeInsets.all(8)),
+                      )
+                    : const SizedBox(),
                 const SizedBox(height: 10),
                 TextFormField(
                   controller:
