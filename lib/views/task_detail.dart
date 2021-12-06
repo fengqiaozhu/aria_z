@@ -1,14 +1,17 @@
 import 'package:aria2/models/index.dart';
 import 'package:aria_z/states/aria2.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../utils/tools.dart';
 // import 'package:aria2/aria2.dart';
 // import 'dart:async';
 
+GlobalKey<_TabViewsBodyWidgtState> _tabViewBodyKey = GlobalKey();
+
 const List<Tab> tabs = <Tab>[
   Tab(text: '任务信息'),
-  Tab(text: '连接节点'),
   Tab(text: '文件列表'),
+  Tab(text: '连接节点'),
 ];
 
 // ignore: must_be_immutable
@@ -19,7 +22,7 @@ class TaskDetail extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List args = ModalRoute.of(context)?.settings.arguments as List;
-    taskInfo = args[0];
+    String _gid = args[0];
     String _taskName = args[1];
     TaskType _taskType = args[2];
     return DefaultTabController(
@@ -37,30 +40,62 @@ class TaskDetail extends StatelessWidget {
               title: Text(_taskName),
               bottom: const TabBar(tabs: tabs),
             ),
-            body: TabBarView(
-              children: [
-                TaskInfo(
-                    info: taskInfo, taskName: _taskName, taskType: _taskType),
-                Connections(info: taskInfo),
-                FileList(info: taskInfo)
-              ],
+            body: TabViewsBodyWidgt(
+              gid: _gid,
+              taskName: _taskName,
+              taskType: _taskType,
+              key: _tabViewBodyKey,
             ));
       }),
     );
   }
 }
 
-class TaskInfo extends StatefulWidget {
+class TabViewsBodyWidgt extends StatefulWidget {
+  final String gid;
+
   final String taskName;
 
   final TaskType taskType;
+
+  const TabViewsBodyWidgt({Key? key, required this.gid,required this.taskName,required this.taskType}) : super(key: key);
+
+  @override
+  State<StatefulWidget> createState() => _TabViewsBodyWidgtState();
+}
+
+class _TabViewsBodyWidgtState extends State<TabViewsBodyWidgt> {
+
+  String get taskName=>widget.taskName;
+  TaskType get taskType=>widget.taskType;
+  
+  @override
+  Widget build(BuildContext context) {
+    Aria2States _at = Provider.of<Aria2States>(context);
+    Aria2Task taskInfo = [
+      ..._at.downloadingTasks,
+      ..._at.waittingTasks,
+      ..._at.completedTasks
+    ].where((t) => t.gid == widget.gid).first;
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(10, 15, 10, 20),
+      child: TabBarView(
+        children: [
+          TaskInfo(info: taskInfo),
+          FileList(info: taskInfo),
+          Connections(info: taskInfo)
+        ],
+      ),
+    );
+  }
+}
+
+class TaskInfo extends StatefulWidget {
   final Aria2Task info;
 
   const TaskInfo(
       {Key? key,
-      required this.info,
-      required this.taskName,
-      required this.taskType})
+      required this.info})
       : super(key: key);
   @override
   State<StatefulWidget> createState() => _TaskInfoState();
@@ -75,7 +110,7 @@ class _TaskInfoState extends State<TaskInfo> {
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
             const Text("任务名称："),
-            Flexible(child: Text(widget.taskName))
+            Flexible(child: Text(_tabViewBodyKey.currentState?.taskName??''))
           ],
         ),
         Row(
@@ -106,6 +141,8 @@ class FileList extends StatelessWidget {
   final Aria2Task info;
   @override
   Widget build(BuildContext context) {
-    return const Text("文件列表");
+    return SingleChildScrollView(
+      child: Text(info.files.toString()),
+    );
   }
 }

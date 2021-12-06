@@ -93,12 +93,9 @@ List<Widget> taskListTileWidget(BuildContext context, AppState app,
                 ),
                 child: ListTile(
                     onTap: () async {
-                      var gid = task.gid ?? '';
-                      if (gid != "") {
-                        Aria2Task? ts = await app.aria2?.tellStatus(gid);
-                        Navigator.of(context).pushNamed('/task_detail',
-                            arguments: [ts, _taskName, _taskType]);
-                      }
+                      var gid = task.gid!;
+                      Navigator.of(context).pushNamed('/task_detail',
+                          arguments: [gid, _taskName, _taskType]);
                     },
                     leading: Icon(app.aria2TaskTypes
                         .where((att) => att.taskType == _taskType)
