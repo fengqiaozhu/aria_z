@@ -199,9 +199,9 @@ class Aria2Client extends Aria2c {
     });
   }
 
-  Future<Aria2Response> updateTheGlobalOption(Aria2Option option) async {
+  Future<Aria2Response<String>> updateTheGlobalOption(Aria2Option option) async {
     return _try2Request(() async {
-      await changeGlobalOption(option);
+      return await changeGlobalOption(option);
     });
   }
 
