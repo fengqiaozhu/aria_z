@@ -228,6 +228,12 @@ class Aria2Client extends Aria2c {
     });
   }
 
+  Future<Aria2Response<List<Aria2Peer>>> getAria2Peers(String gid) async {
+    return _try2Request(() async {
+      return await getPeers(gid);
+    });
+  }
+
   Future<Aria2Response<T>> _try2Request<T>(Function request) async {
     try {
       T? data = await request();
