@@ -153,6 +153,7 @@ class BodyWidgetState extends State<BodyWidget> {
                     const Text("协议类型"),
                     const SizedBox(width: 18),
                     ToggleSwitch(
+                      activeBgColor: [Theme.of(context).colorScheme.primary,Theme.of(context).colorScheme.secondary],
                       minWidth: 100,
                       initialLabelIndex: 0,
                       totalSwitches: 2,
