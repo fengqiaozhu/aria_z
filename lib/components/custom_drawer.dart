@@ -82,22 +82,24 @@ Widget customDrawer(BuildContext _parentContext) {
                                         "aria2版本: ${serverInfo.item2?.version ?? ''}",
                                         style: const TextStyle())
                                     : const SizedBox(),
-                                Chip(
-                                    backgroundColor:
-                                        Theme.of(context).backgroundColor,
-                                    avatar: const Icon(Icons.speed),
-                                    label: DefaultTextStyle(
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .onBackground,
-                                            fontSize: 12),
-                                        child: SpeedShower(
-                                            downloadSpeed:
-                                                serverInfo.item1?.downloadSpeed,
-                                            uploadSpeed:
-                                                serverInfo.item1?.uploadSpeed)))
+                                serverInfo.item1 == null
+                                    ? const SizedBox()
+                                    : Chip(
+                                        backgroundColor:
+                                            Theme.of(context).backgroundColor,
+                                        avatar: const Icon(Icons.speed),
+                                        label: DefaultTextStyle(
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .onBackground,
+                                                fontSize: 12),
+                                            child: SpeedShower(
+                                                downloadSpeed: serverInfo
+                                                    .item1!.downloadSpeed,
+                                                uploadSpeed: serverInfo
+                                                    .item1!.uploadSpeed)))
                               ],
                             ),
                           )));

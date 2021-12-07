@@ -14,7 +14,8 @@ class SpeedShower extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text.rich(TextSpan(children: [
+    return Text.rich(
+      TextSpan(children: [
       downloadSpeed == null
           ? const WidgetSpan(child: SizedBox())
           : TextSpan(
@@ -37,6 +38,8 @@ class SpeedShower extends StatelessWidget {
               child: SizedBox(
               height: 16,
               child: VerticalDivider(
+                indent: 1,
+                endIndent: 5,
                 color: Colors.grey,
                 thickness: 2,
                 width: 20,
