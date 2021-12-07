@@ -31,7 +31,12 @@ class _TaskConfig {
 
   BitUnit speedLimit;
 
-  _TaskConfig({required this.downloadPath, required this.speedLimit});
+  bool allowOverwrite;
+
+  _TaskConfig(
+      {required this.downloadPath,
+      required this.speedLimit,
+      required this.allowOverwrite});
 }
 
 class AddNewAria2Task extends StatelessWidget {
@@ -375,7 +380,8 @@ class _NewTaskConfigState extends State<NewTaskConfig>
     aria2States = Provider.of<Aria2States>(context, listen: false);
     taskConfig = _TaskConfig(
         downloadPath: aria2States.globalOption?.dir ?? '',
-        speedLimit: bitToUnit(aria2States.globalOption?.maxDownloadLimit ?? 0));
+        speedLimit: bitToUnit(aria2States.globalOption?.maxDownloadLimit ?? 0),
+        allowOverwrite: aria2States.globalOption?.allowOverwrite ?? true);
   }
 
   Aria2Option getTaskOption() {
@@ -386,6 +392,10 @@ class _NewTaskConfigState extends State<NewTaskConfig>
       'max-download-limit': taskConfig.speedLimit.bit == '0'
           ? null
           : (taskConfig.speedLimit.bit + taskConfig.speedLimit.unit),
+      'allow-overwrite':
+          taskConfig.allowOverwrite == aria2States.globalOption?.allowOverwrite
+              ? null
+              : taskConfig.allowOverwrite,
     });
   }
 
@@ -419,8 +429,7 @@ class _NewTaskConfigState extends State<NewTaskConfig>
         autovalidateMode: AutovalidateMode.onUserInteraction,
         child: Padding(
             padding: const EdgeInsets.fromLTRB(10, 30, 10, 30),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
+            child: ListView(
               children: <Widget>[
                 const SizedBox(height: 16),
                 aria2States.globalOption != null &&
@@ -466,7 +475,15 @@ class _NewTaskConfigState extends State<NewTaskConfig>
                           );
                         }).toList(),
                       ))),
-                )
+                ),
+                SwitchListTile(
+                    title: const Text("允许覆盖历史下载同名文件"),
+                    value: taskConfig.allowOverwrite,
+                    onChanged: (newVal) {
+                      setState(() {
+                        taskConfig.allowOverwrite = newVal;
+                      });
+                    })
               ],
             )));
   }
