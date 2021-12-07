@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:aria2/models/index.dart';
 import 'package:aria_z/components/custom_snack_bar.dart';
+import 'package:aria_z/components/speed_shower.dart';
 import 'package:aria_z/states/app.dart';
 import 'package:aria_z/states/aria2.dart';
 import 'package:flutter/material.dart';
@@ -224,13 +225,21 @@ class _TaskInfoState extends State<TaskInfo> {
           ],
         ),
         const SizedBox(height: 8),
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            itemTitle("下载目录："),
+            itemText(widget.info.dir ?? '')
+          ],
+        ),
+        const SizedBox(height: 8),
         Column(children: <Widget>[
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               itemTitle("区块信息："),
               itemText(
-                  '共${widget.info.numPieces ?? 0}个区块，${widget.info.pieceLength ?? 0}字节'),
+                  '共 ${widget.info.numPieces ?? 0} 个区块，${widget.info.pieceLength ?? 0} 字节'),
             ],
           ),
           const SizedBox(height: 8),
@@ -263,6 +272,33 @@ class _PeerListWidgtState extends State<PeerListWidgt> {
     });
   }
 
+  Widget _peersWidget() {
+    return ListView.builder(
+        padding: const EdgeInsets.fromLTRB(10, 15, 10, 20),
+        shrinkWrap: false,
+        itemCount: _peers.length,
+        itemBuilder: (BuildContext context, int index) {
+          Aria2Peer _p = _peers[index];
+          return Padding(
+            padding: const EdgeInsets.fromLTRB(0, 4, 0, 4),
+            child: Container(
+              color: Theme.of(context).cardColor,
+              child: ListTile(
+                title: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(_p.ip ?? ''),
+                    SpeedShower(
+                        downloadSpeed: _p.downloadSpeed,
+                        uploadSpeed: _p.uploadSpeed)
+                  ],
+                ),
+              ),
+            ),
+          );
+        });
+  }
+
   @override
   void initState() {
     super.initState();
@@ -282,7 +318,9 @@ class _PeerListWidgtState extends State<PeerListWidgt> {
 
   @override
   Widget build(BuildContext context) {
-    return Text(_peers.map((e) => e.toJson()).toString());
+    return SizedBox(
+        height: MediaQuery.of(context).size.height * 0.5,
+        child: _peersWidget());
   }
 }
 

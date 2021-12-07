@@ -1,4 +1,5 @@
 import 'package:aria2/models/aria2Task.dart';
+import 'package:aria_z/components/speed_shower.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
@@ -87,7 +88,7 @@ List<Widget> taskListTileWidget(BuildContext context, AppState app,
                       backgroundColor: const Color(0xFFFE4A49),
                       foregroundColor: Colors.white,
                       icon: Icons.delete,
-                      label: 'Delete',
+                      label: '删除',
                     ),
                   ],
                 ),
@@ -125,58 +126,20 @@ List<Widget> taskListTileWidget(BuildContext context, AppState app,
                     )),
                     Expanded(
                         flex: 1,
-                        child: DefaultTextStyle(
-                            textAlign: TextAlign.end,
-                            style: TextStyle(
-                                color: Theme.of(context).colorScheme.onSurface,
-                                fontSize: 14,
-                                fontFamily: 'Coda'),
-                            child: Text.rich(TextSpan(
-                              children: [
-                                task.status == 'paused'
-                                    ? const WidgetSpan(child: Text('已暂停'))
-                                    : TextSpan(children: [
-                                        const WidgetSpan(
-                                            child: Icon(
-                                          Icons.file_download_outlined,
-                                          size: 18,
-                                          color: Colors.green,
-                                        )),
-                                        TextSpan(
-                                            text: formatSpeed(
-                                                task.downloadSpeed ?? 0)),
-                                      ]),
-                                _taskType != TaskType.torrent
-                                    ? const WidgetSpan(child: SizedBox())
-                                    : const WidgetSpan(
-                                        child: SizedBox(
-                                        height: 16,
-                                        child: VerticalDivider(
-                                          color: Colors.grey,
-                                          thickness: 2,
-                                          width: 20,
-                                        ),
-                                      )),
-                                // const TextSpan(
-                                //     text: '     ',
-                                //     style: TextStyle(
-                                //         fontWeight:
-                                //             FontWeight.w800)),
-                                _taskType != TaskType.torrent
-                                    ? const WidgetSpan(child: SizedBox())
-                                    : TextSpan(children: [
-                                        const WidgetSpan(
-                                            child: Icon(
-                                          Icons.file_upload_outlined,
-                                          size: 18,
-                                          color: Colors.red,
-                                        )),
-                                        TextSpan(
-                                            text: formatSpeed(
-                                                task.uploadSpeed ?? 0)),
-                                      ])
-                              ],
-                            ))))
+                        child: task.status == 'paused'
+                            ? const Text('已暂停')
+                            : DefaultTextStyle(
+                                textAlign: TextAlign.end,
+                                style: TextStyle(
+                                    color:
+                                        Theme.of(context).colorScheme.onSurface,
+                                    fontSize: 14,
+                                    fontFamily: 'Coda'),
+                                child: SpeedShower(
+                                    downloadSpeed: task.downloadSpeed,
+                                    uploadSpeed: _taskType != TaskType.torrent
+                                        ? null
+                                        : task.uploadSpeed)))
                   ],
                 )),
             LinearProgressIndicator(

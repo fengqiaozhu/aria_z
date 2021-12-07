@@ -1,13 +1,13 @@
 import 'package:aria2/aria2.dart';
 import 'package:aria2/models/aria2GlobalStat.dart';
 import 'package:aria_z/components/custom_snack_bar.dart';
+import 'package:aria_z/components/speed_shower.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:tuple/tuple.dart';
 
-import '../utils/tools.dart';
 import '../states/aria2.dart';
 import '../states/app.dart';
 import '../views/edit_aria2_server_config.dart'
@@ -93,61 +93,11 @@ Widget customDrawer(BuildContext _parentContext) {
                                                 .colorScheme
                                                 .onBackground,
                                             fontSize: 12),
-                                        child: Text.rich(TextSpan(
-                                          children: [
-                                            TextSpan(
-                                                children: [
-                                                  const WidgetSpan(
-                                                      child: Icon(
-                                                    Icons
-                                                        .file_download_outlined,
-                                                    size: 18,
-                                                    color: Colors.green,
-                                                  )),
-                                                  TextSpan(
-                                                      text: formatSpeed(serverInfo
-                                                              .item1
-                                                              ?.downloadSpeed ??
-                                                          0)),
-                                                ],
-                                                style: const TextStyle(
-                                                  fontFamily: 'Coda',
-                                                  fontSize: 14,
-                                                )),
-                                            const WidgetSpan(
-                                                child: SizedBox(
-                                              height: 16,
-                                              child: VerticalDivider(
-                                                color: Colors.grey,
-                                                thickness: 2,
-                                                width: 20,
-                                              ),
-                                            )),
-                                            // const TextSpan(
-                                            //     text: '     ',
-                                            //     style: TextStyle(
-                                            //         fontWeight:
-                                            //             FontWeight.w800)),
-                                            TextSpan(
-                                                children: [
-                                                  const WidgetSpan(
-                                                      child: Icon(
-                                                    Icons.file_upload_outlined,
-                                                    size: 18,
-                                                    color: Colors.red,
-                                                  )),
-                                                  TextSpan(
-                                                      text: formatSpeed(serverInfo
-                                                              .item1
-                                                              ?.uploadSpeed ??
-                                                          0)),
-                                                ],
-                                                style: const TextStyle(
-                                                  fontFamily: 'Coda',
-                                                  fontSize: 14,
-                                                ))
-                                          ],
-                                        ))))
+                                        child: SpeedShower(
+                                            downloadSpeed:
+                                                serverInfo.item1?.downloadSpeed,
+                                            uploadSpeed:
+                                                serverInfo.item1?.uploadSpeed)))
                               ],
                             ),
                           )));
