@@ -116,10 +116,10 @@ class _Aria2GlobalOptionsStates extends State<Aria2GlobalOptionsWidgets>
                     validator: (v) {
                       v = v ?? '';
                       if (v.isEmpty) {
-                        return '请输入速度限制';
+                        return '请输入数量';
                       }
                       if (v.length > 1 && v.startsWith('0')) {
-                        return '速度限制不能以0开头';
+                        return '下载数不能以0开头';
                       }
 
                       if (int.tryParse(v) == null) {

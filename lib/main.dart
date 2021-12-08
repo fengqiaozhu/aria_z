@@ -207,7 +207,7 @@ class _HomeViewState extends State<HomeView> {
             ? Theme.of(context).secondaryHeaderColor
             : Theme.of(context).colorScheme.onPrimary,
         textStyle: TextStyle(
-            fontSize: _isDownloadingBtn == showDownloaded ? 14 : 16,
+            fontSize: _isDownloadingBtn == showDownloaded ? 16 : 18,
             fontWeight: _isDownloadingBtn == showDownloaded
                 ? FontWeight.w400
                 : FontWeight.w600));
@@ -228,7 +228,7 @@ class _HomeViewState extends State<HomeView> {
 
     return Scaffold(
       appBar: AppBar(
-        leadingWidth: 40,
+        leadingWidth: 48,
         titleSpacing: 0,
         title: TextButton(
             onPressed: () =>
@@ -246,7 +246,7 @@ class _HomeViewState extends State<HomeView> {
                             text: dlSpeedWithUnit.bit,
                             style: const TextStyle(
                                 fontFamily: 'Coda',
-                                fontSize: 24,
+                                fontSize: 28,
                                 fontWeight: FontWeight.w600)),
                         TextSpan(
                             text: ' ${dlSpeedWithUnit.unit}b/s',
