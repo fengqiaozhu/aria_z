@@ -2,6 +2,7 @@ import 'package:aria2/aria2.dart';
 import 'package:aria2/models/aria2GlobalStat.dart';
 import 'package:aria_z/components/custom_snack_bar.dart';
 import 'package:aria_z/components/speed_shower.dart';
+import 'package:aria_z/l10n/localization_intl.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
@@ -14,22 +15,23 @@ import '../views/edit_aria2_server_config.dart'
     show Aria2ConnectConfigArguments;
 
 Widget customDrawer(BuildContext _parentContext) {
+  AriazLocalizations _l10n = AriazLocalizations.of(_parentContext);
   _deleteServerConfig(BuildContext context, Aria2ConnectConfig config) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('删除服务器配置'),
-          content: const Text('确定删除当前服务器配置吗？'),
+          title:  Text(_l10n.deleteDialogTitle),
+          content:  Text(_l10n.deleteDialogContent),
           actions: <Widget>[
             TextButton(
-              child: const Text('取消'),
+              child: Text(_l10n.cancelBtnText),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
             TextButton(
-              child: const Text('确定'),
+              child: Text(_l10n.confirmBtnText),
               onPressed: () {
                 Provider.of<AppState>(context, listen: false)
                     .removeAria2ConnectConfig(config);
@@ -74,12 +76,12 @@ Widget customDrawer(BuildContext _parentContext) {
                                 const SizedBox(height: 4),
                                 Text(
                                     app.item2 != null
-                                        ? "已连接到: ${app.item2?.host}:${app.item2?.port}"
-                                        : '未连接到任何服务器...',
+                                        ? "${_l10n.connectedText}: ${app.item2?.host}:${app.item2?.port}"
+                                        : _l10n.notConnectTip,
                                     style: const TextStyle()),
                                 serverInfo.item2 != null
                                     ? Text(
-                                        "aria2版本: ${serverInfo.item2?.version ?? ''}",
+                                        "${_l10n.aria2VersionLabel}: ${serverInfo.item2?.version ?? ''}",
                                         style: const TextStyle())
                                     : const SizedBox(),
                                 serverInfo.item1 == null
@@ -141,13 +143,13 @@ Widget customDrawer(BuildContext _parentContext) {
                         trailing: PopupMenuButton(
                           child: const Icon(Icons.more_vert),
                           itemBuilder: (context) => [
-                            const PopupMenuItem(
+                             PopupMenuItem(
                               value: 'edit',
-                              child: Text('编辑'),
+                              child: Text(_l10n.aria2VersionLabel),
                             ),
-                            const PopupMenuItem(
+                             PopupMenuItem(
                               value: 'delete',
-                              child: Text('删除'),
+                              child: Text(_l10n.deleteText),
                             ),
                           ],
                           onSelected: (value) {
@@ -182,7 +184,7 @@ Widget customDrawer(BuildContext _parentContext) {
                 return ListTile(
                     minLeadingWidth: 10,
                     leading: const Icon(Icons.add),
-                    title: const Text('添加新的服务器地址'),
+                    title:  Text(_l10n.addNewServerConfig),
                     onTap: () => Navigator.of(context)
                         .popAndPushNamed("/add_new_aria2_server"));
               }),
@@ -190,7 +192,7 @@ Widget customDrawer(BuildContext _parentContext) {
                 return ListTile(
                   minLeadingWidth: 10,
                   leading: const Icon(Icons.settings),
-                  title: const Text('设置'),
+                  title:  Text(_l10n.setting),
                   onTap: () =>
                       Navigator.of(context).popAndPushNamed("/global_setting"),
                 );

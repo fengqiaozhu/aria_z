@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'messages_all.dart'; //1
@@ -51,16 +50,16 @@ class AriazLocalizations {
           desc: 'Speed limit input validatator text');
 
   String get maxDonwloadSpeedInputLabel =>
-      Intl.message('Max over all download limit',
+      Intl.message('Max over all download speed limit',
           name: 'maxDonwloadSpeedInputLabel',
           desc: 'Max donwload speed input label text');
 
-  String get maxUploadSpeedInputLabel => Intl.message('Max over all up limit',
+  String get maxUploadSpeedInputLabel => Intl.message('Max over all upload speed limit',
       name: 'maxUploadSpeedInputLabel',
       desc: 'Max upload speed input label text');
 
   String get maxSpeedInputHelper => Intl.message('Set to 0 means no limit',
-      name: 'maxDonwloadSpeedInputHelper', desc: 'Max speed input helper');
+      name: 'maxSpeedInputHelper', desc: 'Max speed input helper');
 
   String get connecttingTip => Intl.message('Trying to connect Aria2 server',
       name: 'connecttingTip', desc: 'Connectting aria2 server Tip');
@@ -87,14 +86,14 @@ class AriazLocalizations {
       Intl.message('task', name: 'taskText', desc: '"task" Text');
 
   String get deleteDialogTitle => Intl.message('Delete server config',
-      name: 'deleteDailogTitle', desc: 'delete dialog title');
+      name: 'deleteDialogTitle', desc: 'delete dialog title');
 
   String get deleteDialogContent =>
       Intl.message('Sure to delete current server config ?',
           name: 'deleteDialogContent', desc: 'delete dialog content');
 
   String get applyBtnText =>
-      Intl.message('Apply', name: 'applybtnText', desc: 'Apply button text');
+      Intl.message('Apply', name: 'applyBtnText', desc: 'Apply button text');
 
   String get confirmBtnText => Intl.message('Confirm',
       name: 'confirmBtnText', desc: 'Confirm button text');
@@ -102,7 +101,7 @@ class AriazLocalizations {
   String get cancelBtnText =>
       Intl.message('Cancel', name: 'cancelBtnText', desc: 'Cancel button text');
 
-  String get connectedText => Intl.message('Connected to ',
+  String get connectedText => Intl.message('Connected to: ',
       name: 'connectedText', desc: 'connected text');
   String get aria2VersionLabel => Intl.message('Aria2 version: ',
       name: 'aria2VersionLabel', desc: 'Aria2 version label text');
@@ -158,7 +157,7 @@ class AriazLocalizations {
           name: 'taskTypeDescTorrent', desc: 'task type decription of torrent');
   String get taskTypeDescMagnet =>
       Intl.message('Input magnet link to dwnload...',
-          name: 'taskTypeDescTorrent', desc: 'task type decription of magnet');
+          name: 'taskTypeDescMagnet', desc: 'task type decription of magnet');
   String get taskTypeDescUrl =>
       Intl.message('Input http,ftp or some other protocol url to download...',
           name: 'taskTypeDescUrl',
@@ -202,8 +201,8 @@ class AriazLocalizations {
       Intl.message('Some aria2 unknown error occured!',
           name: 'serverUnknownError', desc: 'server unknown error tip');
 
-  String get timeOutError => Intl.message('Connect timeout!',
-      name: 'authFailed', desc: 'timeOut error tip');
+  String get timeOutError => Intl.message('Connection timeout!',
+      name: 'timeOutError', desc: 'timeOut error tip');
 
   String get serverRefusedError => Intl.message(
       'Connection refused by server! Please check the server config...',

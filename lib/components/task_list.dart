@@ -1,5 +1,6 @@
 import 'package:aria2/models/aria2Task.dart';
 import 'package:aria_z/components/speed_shower.dart';
+import 'package:aria_z/l10n/localization_intl.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
@@ -9,6 +10,7 @@ import '../utils/tools.dart';
 
 List<Widget> taskListTileWidget(BuildContext context, AppState app,
     Aria2States aria2States, List<Aria2Task> taskList) {
+      AriazLocalizations _l10n = AriazLocalizations.of(context);
   Widget trailingOption(String gid, String status) {
     late Widget w = Text(status);
     switch (status) {
@@ -34,16 +36,16 @@ List<Widget> taskListTileWidget(BuildContext context, AppState app,
         );
         break;
       case 'waiting':
-        w = const Text("队列中");
+        w =  Text(_l10n.waiting);
         break;
       case 'pausing':
-        w = const Text("正在暂停");
+        w =  Text(_l10n.pausing);
         break;
       case 'unparsing':
-        w = const Text("正在启动");
+        w =  Text(_l10n.unparsing);
         break;
       case 'complete':
-        w = const Text("已完成");
+        w =  Text(_l10n.complete);
         break;
     }
     return w;
@@ -88,7 +90,7 @@ List<Widget> taskListTileWidget(BuildContext context, AppState app,
                       backgroundColor: const Color(0xFFFE4A49),
                       foregroundColor: Colors.white,
                       icon: Icons.delete,
-                      label: '删除',
+                      label: _l10n.deleteText,
                     ),
                   ],
                 ),
@@ -127,7 +129,7 @@ List<Widget> taskListTileWidget(BuildContext context, AppState app,
                     Expanded(
                         flex: 1,
                         child: task.status == 'paused'
-                            ? const Text('已暂停')
+                            ? Text(_l10n.paused)
                             : DefaultTextStyle(
                                 textAlign: TextAlign.end,
                                 style: TextStyle(

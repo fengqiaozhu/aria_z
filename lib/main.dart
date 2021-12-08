@@ -22,6 +22,7 @@ import 'l10n/localization_intl.dart';
 
 final GlobalKey speedLimitFormKey = GlobalKey<FormState>();
 GlobalKey<_SpeedControlState> speedControlKey = GlobalKey();
+GlobalKey<_HomeViewState> homeViewKey = GlobalKey();
 
 void main(List<String> args) async {
   await Hive.initFlutter();
@@ -107,7 +108,7 @@ class App extends StatelessWidget {
           '/add_new_aria2_server': (context) => const Aria2ServerEditor(),
           '/update_aria2_server': (context) => const Aria2ServerEditor(),
         },
-        home: const HomeView(),
+        home: HomeView(key: homeViewKey),
       ),
     );
   }
@@ -123,6 +124,7 @@ class HomeView extends StatefulWidget {
 class _HomeViewState extends State<HomeView> {
   late bool showDownloaded;
   late AppState app;
+  late AriazLocalizations _l10n;
 
   void _switchDownloadShowType(bool newType) async {
     if (this.showDownloaded != newType) {
@@ -143,10 +145,10 @@ class _HomeViewState extends State<HomeView> {
         return AlertDialog(
           title: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
-            children: const [
-              Icon(Icons.speed),
-              SizedBox(width: 8),
-              Text('设置限速')
+            children: [
+              const Icon(Icons.speed),
+              const SizedBox(width: 8),
+              Text(_l10n.setSpeedLimitTitle)
             ],
           ),
           content: SizedBox(
@@ -155,7 +157,7 @@ class _HomeViewState extends State<HomeView> {
           ),
           actions: <Widget>[
             TextButton(
-              child: const Text('应用'),
+              child: Text(_l10n.applyBtnText),
               onPressed: () async {
                 if ((speedLimitFormKey.currentState as FormState).validate()) {
                   handleAria2ApiResponse(
@@ -163,7 +165,8 @@ class _HomeViewState extends State<HomeView> {
                       await app.aria2!.updateTheGlobalOption(
                           speedControlKey.currentState!.speedOption),
                       (data) async {
-                    showCustomSnackBar(context, 1, const Text("下载限速设置成功"));
+                    showCustomSnackBar(
+                        context, 1, Text(_l10n.speedLimitSetSuccess));
                     handleAria2ApiResponse(
                         context, await app.aria2!.getAria2GlobalOption(), null);
                     Navigator.of(context).pop();
@@ -225,7 +228,7 @@ class _HomeViewState extends State<HomeView> {
   Widget build(BuildContext context) {
     Aria2States _as = Provider.of<Aria2States>(context);
     BitUnit dlSpeedWithUnit = bitToUnit(_as.globalStatus?.downloadSpeed ?? 0);
-
+    _l10n = AriazLocalizations.of(context);
     return Scaffold(
       appBar: AppBar(
         leadingWidth: 48,
@@ -286,11 +289,11 @@ class _HomeViewState extends State<HomeView> {
         //     preferredSize: const Size.fromHeight(64)),
         actions: [
           TextButton(
-              child: Text(AriazLocalizations.of(context).downloadingBtnText),
+              child: Text(_l10n.downloadingBtnText),
               style: downloadSwitchBtnStyle(true),
               onPressed: () => _switchDownloadShowType(false)),
           TextButton(
-              child: Text(AriazLocalizations.of(context).completedBtnText),
+              child: Text(_l10n.completedBtnText),
               style: downloadSwitchBtnStyle(false),
               onPressed: () => _switchDownloadShowType(true)),
           // IconButton(
@@ -303,7 +306,7 @@ class _HomeViewState extends State<HomeView> {
               return IconButton(
                   icon: const Icon(Icons.add),
                   iconSize: 32,
-                  tooltip: '添加新任务',
+                  tooltip: _l10n.addNewTaskToolTip,
                   onPressed: Provider.of<AppState>(context).aria2 == null
                       ? null
                       : () => _addNewTask(context));
@@ -380,12 +383,14 @@ class _SpeedControlState extends State<SpeedControlWidgt> {
   /// 验证下载速度是否合法
   speedLimitInputValidator(String number) {
     if (number.isEmpty) {
-      return '请输入速度限制';
+      return homeViewKey.currentState?._l10n.speedLimitInputValidatorText_1;
     }
     if (number.length > 1 && number.startsWith('0')) {
-      return '速度限制不能以0开头';
+      return homeViewKey.currentState?._l10n.speedLimitInputValidatorText_2;
     }
-    return double.tryParse(number) == null ? '请输入合法数字' : null;
+    return double.tryParse(number) == null
+        ? homeViewKey.currentState?._l10n.speedLimitInputValidatorText_3
+        : null;
   }
 
   @override
@@ -413,8 +418,9 @@ class _SpeedControlState extends State<SpeedControlWidgt> {
             validator: (v) => speedLimitInputValidator(v ?? ''),
             decoration: InputDecoration(
                 border: const OutlineInputBorder(),
-                labelText: '最大下载速度',
-                helperText: '设置为0时表示不限速',
+                labelText:
+                    homeViewKey.currentState?._l10n.maxDonwloadSpeedInputLabel,
+                helperText: homeViewKey.currentState?._l10n.maxSpeedInputHelper,
                 contentPadding: const EdgeInsets.all(8),
                 suffix: DropdownButtonHideUnderline(
                     child: DropdownButton(
@@ -441,8 +447,9 @@ class _SpeedControlState extends State<SpeedControlWidgt> {
             validator: (v) => speedLimitInputValidator(v ?? ''),
             decoration: InputDecoration(
                 border: const OutlineInputBorder(),
-                labelText: '最大上传速度',
-                helperText: '设置为0时表示不限速',
+                labelText:
+                    homeViewKey.currentState?._l10n.maxUploadSpeedInputLabel,
+                helperText: homeViewKey.currentState?._l10n.maxSpeedInputHelper,
                 contentPadding: const EdgeInsets.all(8),
                 suffix: DropdownButtonHideUnderline(
                     child: DropdownButton(
@@ -504,7 +511,7 @@ class _BodyWidgetState extends State<BodyWidget> {
                     .color,
                 size: 50.0,
               ),
-              const Text('正在尝试连接到Aria2服务器...')
+              Text(homeViewKey.currentState!._l10n.connecttingTip)
             ],
           ),
         );
@@ -512,13 +519,15 @@ class _BodyWidgetState extends State<BodyWidget> {
         return app.aria2 == null
             ? Center(
                 child: app.selectedAria2ConnectConfig == null
-                    ? const Text('未连接到Aria2服务器')
+                    ? Text(homeViewKey.currentState!._l10n.notConnectTip)
                     : Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          const Text('连接到服务器失败...'),
+                          Text(
+                              homeViewKey.currentState!._l10n.connectFailedTip),
                           TextButton(
-                              child: const Text('点击重试'),
+                              child: Text(homeViewKey
+                                  .currentState!._l10n.reConnectBtnText),
                               onPressed: () {
                                 checkAndUseConfig(
                                     context, app.selectedAria2ConnectConfig!);
@@ -527,7 +536,8 @@ class _BodyWidgetState extends State<BodyWidget> {
                       ))
             : (taskList.isEmpty
                 ? Center(
-                    child: Text('无${widget.showDownloaded ? "已完成" : "下载中"}任务'),
+                    child: Text(
+                        '${homeViewKey.currentState!._l10n.noText}${widget.showDownloaded ? homeViewKey.currentState!._l10n.completeTipText : homeViewKey.currentState!._l10n.downloadingTipText}${homeViewKey.currentState!._l10n.taskText}'),
                   )
                 : ListView(
                     children: taskListTileWidget(context,

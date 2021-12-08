@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2021-12-02T14:53:48.783884",
+  "@@last_modified": "2021-12-08T21:30:00.615197",
   "downloadingBtnText": "下载中",
   "@downloadingBtnText": {
     "description": "Downloading button text",
@@ -10,6 +10,860 @@
   "completedBtnText": "已完成",
   "@completedBtnText": {
     "description": "Completed button text",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "setSpeedLimitTitle": "设置限速",
+  "@setSpeedLimitTitle": {
+    "description": "Set Speed Limit dialog Title",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "speedLimitSetSuccess": "下载限速设置成功",
+  "@speedLimitSetSuccess": {
+    "description": "Speed limit set success tip",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "addNewTaskToolTip": "添加新任务",
+  "@addNewTaskToolTip": {
+    "description": "Add new task icon button toolTip",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "speedLimitInputValidatorText_1": "请输入速度限制",
+  "@speedLimitInputValidatorText_1": {
+    "description": "Speed limit input validatator text",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "speedLimitInputValidatorText_2": "速度限制不能以0开头",
+  "@speedLimitInputValidatorText_2": {
+    "description": "Speed limit input validatator text",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "speedLimitInputValidatorText_3": "请输入合法数字",
+  "@speedLimitInputValidatorText_3": {
+    "description": "Speed limit input validatator text",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "maxDonwloadSpeedInputLabel": "最大下载速度",
+  "@maxDonwloadSpeedInputLabel": {
+    "description": "Max donwload speed input label text",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "maxUploadSpeedInputLabel": "最大上传速度",
+  "@maxUploadSpeedInputLabel": {
+    "description": "Max upload speed input label text",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "maxSpeedInputHelper": "设置为0时表示不限速",
+  "@maxSpeedInputHelper": {
+    "description": "Max speed input helper",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "connecttingTip": "正在尝试连接到Aria2服务器...",
+  "@connecttingTip": {
+    "description": "Connectting aria2 server Tip",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "connectFailedTip": "连接到服务器失败...",
+  "@connectFailedTip": {
+    "description": "Connect Failed Tip",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "notConnectTip": "未连接到Aria2服务器",
+  "@notConnectTip": {
+    "description": "Not connect tip",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "reConnectBtnText": "点击重试",
+  "@reConnectBtnText": {
+    "description": "re-connect button text",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "noText": "无",
+  "@noText": {
+    "description": "\"No\" text",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "downloadingTipText": "下载中 ",
+  "@downloadingTipText": {
+    "description": "\"downloading\" tip text",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "completeTipText": "已完成",
+  "@completeTipText": {
+    "description": "\"complete\" text",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "taskText": "任务",
+  "@taskText": {
+    "description": "\"task\" Text",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "deleteDialogTitle": "删除服务器配置",
+  "@deleteDialogTitle": {
+    "description": "delete dialog title",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "deleteDialogContent": "确定删除当前服务器配置吗？",
+  "@deleteDialogContent": {
+    "description": "delete dialog content",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "applyBtnText": "应用",
+  "@applyBtnText": {
+    "description": "Apply button text",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "confirmBtnText": "确定",
+  "@confirmBtnText": {
+    "description": "Confirm button text",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "cancelBtnText": "取消",
+  "@cancelBtnText": {
+    "description": "Cancel button text",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "connectedText": "已连接到: ",
+  "@connectedText": {
+    "description": "connected text",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "aria2VersionLabel": "aria2版本: ",
+  "@aria2VersionLabel": {
+    "description": "Aria2 version label text",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "editText": "编辑",
+  "@editText": {
+    "description": "\"edit\" Text",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "deleteText": "删除",
+  "@deleteText": {
+    "description": "\"delete\" Text",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "addNewServerConfig": "添加新的服务器地址",
+  "@addNewServerConfig": {
+    "description": "Add new server config text",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "setting": "设置",
+  "@setting": {
+    "description": "\"setting\" Text",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "waiting": "队列中",
+  "@waiting": {
+    "description": "\"waiting\" Text",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "pausing": "正在暂停",
+  "@pausing": {
+    "description": "\"pausing\" Text",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "unparsing": "正在启动",
+  "@unparsing": {
+    "description": "\"unparsing\" Text",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "complete": "已完成",
+  "@complete": {
+    "description": "\"complete\" Text",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "error": "错误",
+  "@error": {
+    "description": "\"error\" Text",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "paused": "已暂停",
+  "@paused": {
+    "description": "\"paused\" Text",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "submit": "提交",
+  "@submit": {
+    "description": "\"submit\" Text",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "choose": "选择",
+  "@choose": {
+    "description": "\"choose\" Text",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "reChoose": "重新选择",
+  "@reChoose": {
+    "description": "\"reChoose\" Text",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "file": "文件",
+  "@file": {
+    "description": "\"file\" Text",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "more": "添加更多",
+  "@more": {
+    "description": "\"more\" Text",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "address": "地址",
+  "@address": {
+    "description": "\"address\" Text",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "taskTypeNameTorrent": "种子下载",
+  "@taskTypeNameTorrent": {
+    "description": "task type name of torrent",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "taskTypeNameMagnet": "磁力链下载",
+  "@taskTypeNameMagnet": {
+    "description": "task type name of magnet",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "taskTypeNameUrl": "网址下载",
+  "@taskTypeNameUrl": {
+    "description": "task type name of url download",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "taskTypeNameMetalink": "元数据下载",
+  "@taskTypeNameMetalink": {
+    "description": "task type name of metalink",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "taskTypeDescTorrent": "读取种子文件下载...",
+  "@taskTypeDescTorrent": {
+    "description": "task type decription of torrent",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "taskTypeDescMagnet": "输入磁力链接下载...",
+  "@taskTypeDescMagnet": {
+    "description": "task type decription of magnet",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "taskTypeDescUrl": "网址下载", "输入Http,Ftp等链接下载...",
+  "@taskTypeDescUrl": {
+    "description": "task type decription of url download",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "taskTypeDescMetalink": "读取Metalink文件下载...",
+  "@taskTypeDescMetalink": {
+    "description": "task type decription of metalink",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "tipOfTorrent": "支持种子文件格式 \".torrent\"",
+  "@tipOfTorrent": {
+    "description": "tip of torrent",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "tipOfMagnet": "支持Metalink文件格式 \".metalink, .meta4\"",
+  "@tipOfMagnet": {
+    "description": "tip of magnet",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "tipOfUrl": "支持协议类型包括 HTTP/FTP/SFTP/BitTorrent",
+  "@tipOfUrl": {
+    "description": "tip of url download",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "tipOfMetalink": "支持\"magnet:?\"磁力链",
+  "@tipOfMetalink": {
+    "description": "tip of metalink",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "magnetText": "磁力链",
+  "@magnetText": {
+    "description": "magnet text",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "colorBlue": "蓝色",
+  "@colorBlue": {
+    "description": "color blue",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "colorRed": "红色",
+  "@colorRed": {
+    "description": "color red",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "colorGreen": "绿色",
+  "@colorGreen": {
+    "description": "color green",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "colorPurple": "紫色",
+  "@colorPurple": {
+    "description": "color purple",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "systemLanguage": "跟随系统",
+  "@systemLanguage": {
+    "description": "system language",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "authFailed": "Aria2身份认证失败!",
+  "@authFailed": {
+    "description": "authentication failed tip",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "serverUnknownError": "Aria2服务器未知错误!",
+  "@serverUnknownError": {
+    "description": "server unknown error tip",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "timeOutError": "连接服务器超时!",
+  "@timeOutError": {
+    "description": "timeOut error tip",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "serverRefusedError": "连接服务器被拒绝，请检查服务器配置...",
+  "@serverRefusedError": {
+    "description": "server refused error tip",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "addText": "添加",
+  "@addText": {
+    "description": "\"Add\" text",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "optionText": "选项",
+  "@optionText": {
+    "description": "\"Option\" text",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "addSuccessTip": "添加任务成功!",
+  "@addSuccessTip": {
+    "description": "Add task success tip",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "checkOptionWarningTip": "请检查任务选项输入!",
+  "@checkOptionWarningTip": {
+    "description": "Check option warning tip",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "checkSourceTip": "请检查下载源是否添加正确!",
+  "@checkSourceTip": {
+    "description": "check task source tip",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "linkInputDialogTitle": "输入链接地址",
+  "@linkInputDialogTitle": {
+    "description": "link input dialog title",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "linkInputLabel": "链接地址",
+  "@linkInputLabel": {
+    "description": "link input label",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "addAndDownload": "添加并开始下载",
+  "@addAndDownload": {
+    "description": "add and download text",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "dirValidatorText_1": "请输入下载目录!",
+  "@dirValidatorText_1": {
+    "description": "dirValidatorText_1",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "dirValidatorText_2": "文件路径必须在包含在全局下载目录",
+  "@dirValidatorText_2": {
+    "description": "dirValidatorText_2",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "downloadPath": "下载路径",
+  "@downloadPath": {
+    "description": "download path",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "speedLimit": "限速",
+  "@speedLimit": {
+    "description": "speed limit",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "allowOverwrite": "允许覆盖历史下载同名文件",
+  "@allowOverwrite": {
+    "description": "allowOverwrite",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "language": "语言",
+  "@language": {
+    "description": "language",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "themeColor": "主题颜色",
+  "@themeColor": {
+    "description": "theme color",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "refreshDelay": "刷新频率",
+  "@refreshDelay": {
+    "description": "refresh delay",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "second": "秒",
+  "@second": {
+    "description": "second",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "changeGlobalOptionSuccessTip": "修改全局配置成功",
+  "@changeGlobalOptionSuccessTip": {
+    "description": "changeGlobalOptionSuccessTip",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "optionChangedTip": "配置已发生改变，点击右侧按钮提交",
+  "@optionChangedTip": {
+    "description": "optionChangedTip",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "dirInputValidatorText": "请输入下载目录",
+  "@dirInputValidatorText": {
+    "description": "dirInputValidatorText",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "dirInputLabel": "默认下载地址",
+  "@dirInputLabel": {
+    "description": "dirInputLabel",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "maxCurrentDownloadValidator_1": "请输入数量!",
+  "@maxCurrentDownloadValidator_1": {
+    "description": "maxCurrentDownloadValidator_1",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "maxCurrentDownloadValidator_2": "下载数不能以0开头!",
+  "@maxCurrentDownloadValidator_2": {
+    "description": "maxCurrentDownloadValidator_2",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "maxCurrentDownloadValidator_3": "请输入合法整数!",
+  "@maxCurrentDownloadValidator_3": {
+    "description": "maxCurrentDownloadValidator_3",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "maxCurrentDownloadValidator_4": "最小同时下载数量需大于等于1!",
+  "@maxCurrentDownloadValidator_4": {
+    "description": "maxCurrentDownloadValidator_4",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "maxCurrentDownload4": "最大同时下载任务数量",
+  "@maxCurrentDownload4": {
+    "description": "maxCurrentDownload4",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "ariaContinue": "断点续传",
+  "@ariaContinue": {
+    "description": "ariaContinue",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "checkIntegrity": "检查完整性",
+  "@checkIntegrity": {
+    "description": "checkIntegrity",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "optimizeConcurrentDownloads": "优化并行下载",
+  "@optimizeConcurrentDownloads": {
+    "description": "optimizeConcurrentDownloads",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "confitExists": "配置名称已存在!",
+  "@confitExists": {
+    "description": "confitExists",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "addConfigSuccessTip": "添加服务配置成功!",
+  "@addConfigSuccessTip": {
+    "description": "addConfigSuccessTip",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "updateConfigSuccessTip": "修改服务配置成功!",
+  "@updateConfigSuccessTip": {
+    "description": "updateConfigSuccessTip",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "configName": "配置名称",
+  "@configName": {
+    "description": "configName",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "configNameValidatorText_1": "配置名称不能为空!",
+  "@configNameValidatorText_1": {
+    "description": "configNameValidatorText_1",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "protocol": "协议类型",
+  "@protocol": {
+    "description": "protocol",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "host": "服务器地址",
+  "@host": {
+    "description": "host",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "hostValidatorText_1": "服务器地址不能为空!",
+  "@hostValidatorText_1": {
+    "description": "hostValidatorText_1",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "port": "端口",
+  "@port": {
+    "description": "port",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "portValidatorText_1": "端口不能为空!",
+  "@portValidatorText_1": {
+    "description": "portValidatorText_1",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "path": "路径",
+  "@path": {
+    "description": "path",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "secret": "验证令牌",
+  "@secret": {
+    "description": "secret",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "enableHttps": "启用HTTPS",
+  "@enableHttps": {
+    "description": "enableHttps",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "appSetting": "APP设置",
+  "@appSetting": {
+    "description": "appSetting",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "aria2Setting": "Aria2全局配置",
+  "@aria2Setting": {
+    "description": "aria2Setting",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "aria2SettingWarning": "请连接到 Aria2 服务器再行配置...",
+  "@aria2SettingWarning": {
+    "description": "aria2SettingWarning",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "taskInfo": "任务信息",
+  "@taskInfo": {
+    "description": "taskInfo",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "fileList": "文件列表",
+  "@fileList": {
+    "description": "fileList",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "peers": "连接节点",
+  "@peers": {
+    "description": "peers",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "taskStatusOfDonloading": "下载中",
+  "@taskStatusOfDonloading": {
+    "description": "taskStatusOfDonloading",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "taskStatusOfComplete": "已完成",
+  "@taskStatusOfComplete": {
+    "description": "taskStatusOfComplete",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "taskStatusOfError": "下载错误",
+  "@taskStatusOfError": {
+    "description": "taskStatusOfError",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "taskStatusOfPaused": "已暂停",
+  "@taskStatusOfPaused": {
+    "description": "taskStatusOfPaused",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "taskStatusOfWaitting": "队列中",
+  "@taskStatusOfWaitting": {
+    "description": "taskStatusOfWaitting",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "taskName": "任务名称: ",
+  "@taskName": {
+    "description": "taskName",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "progress": "已下载: ",
+  "@progress": {
+    "description": "progress",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "status": "任务状态: ",
+  "@status": {
+    "description": "status",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "bitFieldInfo": "区块信息: ",
+  "@bitFieldInfo": {
+    "description": "bitFieldInfo",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "bitField": "区块",
+  "@bitField": {
+    "description": "bitField",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "total": "共",
+  "@total": {
+    "description": "total",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "bit": "字节",
+  "@bit": {
+    "description": "bit",
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}

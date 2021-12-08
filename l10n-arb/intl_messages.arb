@@ -1,15 +1,869 @@
 {
-  "@@last_modified": "2021-12-02T14:53:48.783884",
-  "downloadingBtnText": "Downloading",
+  "@@last_modified": "2021-12-08T22:14:04.779757",
+  "downloadingBtnText": "Download",
   "@downloadingBtnText": {
     "description": "Downloading button text",
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
   },
-  "completedBtnText": "Completed",
+  "completedBtnText": "Complete",
   "@completedBtnText": {
     "description": "Completed button text",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "setSpeedLimitTitle": "Set speed limit",
+  "@setSpeedLimitTitle": {
+    "description": "Set Speed Limit dialog Title",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "speedLimitSetSuccess": "Success to set speed limit",
+  "@speedLimitSetSuccess": {
+    "description": "Speed limit set success tip",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "addNewTaskToolTip": "Add new task",
+  "@addNewTaskToolTip": {
+    "description": "Add new task icon button toolTip",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "speedLimitInputValidatorText_1": "Please input speed limit",
+  "@speedLimitInputValidatorText_1": {
+    "description": "Speed limit input validatator text",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "speedLimitInputValidatorText_2": "Speed limit cannot start with 0",
+  "@speedLimitInputValidatorText_2": {
+    "description": "Speed limit input validatator text",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "speedLimitInputValidatorText_3": "Speed limit must be a number",
+  "@speedLimitInputValidatorText_3": {
+    "description": "Speed limit input validatator text",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "maxDonwloadSpeedInputLabel": "Max over all download speed limit",
+  "@maxDonwloadSpeedInputLabel": {
+    "description": "Max donwload speed input label text",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "maxUploadSpeedInputLabel": "Max over all upload speed limit",
+  "@maxUploadSpeedInputLabel": {
+    "description": "Max upload speed input label text",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "maxSpeedInputHelper": "Set to 0 means no limit",
+  "@maxSpeedInputHelper": {
+    "description": "Max speed input helper",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "connecttingTip": "Trying to connect Aria2 server",
+  "@connecttingTip": {
+    "description": "Connectting aria2 server Tip",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "connectFailedTip": "Failed to connect to Aria2 server...",
+  "@connectFailedTip": {
+    "description": "Connect Failed Tip",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "notConnectTip": "Not connect to a Aria2 server now",
+  "@notConnectTip": {
+    "description": "Not connect tip",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "reConnectBtnText": "Re-connect",
+  "@reConnectBtnText": {
+    "description": "re-connect button text",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "noText": "No",
+  "@noText": {
+    "description": "\"No\" text",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "downloadingTipText": " downloading ",
+  "@downloadingTipText": {
+    "description": "\"downloading\" tip text",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "completeTipText": " completed ",
+  "@completeTipText": {
+    "description": "\"complete\" text",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "taskText": "task",
+  "@taskText": {
+    "description": "\"task\" Text",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "deleteDialogTitle": "Delete server config",
+  "@deleteDialogTitle": {
+    "description": "delete dialog title",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "deleteDialogContent": "Sure to delete current server config ?",
+  "@deleteDialogContent": {
+    "description": "delete dialog content",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "applyBtnText": "Apply",
+  "@applyBtnText": {
+    "description": "Apply button text",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "confirmBtnText": "Confirm",
+  "@confirmBtnText": {
+    "description": "Confirm button text",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "cancelBtnText": "Cancel",
+  "@cancelBtnText": {
+    "description": "Cancel button text",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "connectedText": "Connected to ",
+  "@connectedText": {
+    "description": "connected text",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "aria2VersionLabel": "Aria2 version: ",
+  "@aria2VersionLabel": {
+    "description": "Aria2 version label text",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "editText": "Edit",
+  "@editText": {
+    "description": "\"edit\" Text",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "deleteText": "Delete",
+  "@deleteText": {
+    "description": "\"delete\" Text",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "addNewServerConfig": "Add new server config",
+  "@addNewServerConfig": {
+    "description": "Add new server config text",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "setting": "Setting",
+  "@setting": {
+    "description": "\"setting\" Text",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "waiting": "Waiting",
+  "@waiting": {
+    "description": "\"waiting\" Text",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "pausing": "Pausing",
+  "@pausing": {
+    "description": "\"pausing\" Text",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "unparsing": "Unparsing",
+  "@unparsing": {
+    "description": "\"unparsing\" Text",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "complete": "Complete",
+  "@complete": {
+    "description": "\"complete\" Text",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "error": "Error",
+  "@error": {
+    "description": "\"error\" Text",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "paused": "Paused",
+  "@paused": {
+    "description": "\"paused\" Text",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "submit": "Submit",
+  "@submit": {
+    "description": "\"submit\" Text",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "choose": "Choose ",
+  "@choose": {
+    "description": "\"choose\" Text",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "reChoose": "Re-choose ",
+  "@reChoose": {
+    "description": "\"reChoose\" Text",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "file": " file",
+  "@file": {
+    "description": "\"file\" Text",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "more": "More",
+  "@more": {
+    "description": "\"more\" Text",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "address": " address",
+  "@address": {
+    "description": "\"address\" Text",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "taskTypeNameTorrent": "Torrent",
+  "@taskTypeNameTorrent": {
+    "description": "task type name of torrent",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "taskTypeNameMagnet": "Magnet",
+  "@taskTypeNameMagnet": {
+    "description": "task type name of magnet",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "taskTypeNameUrl": "Url-downlod",
+  "@taskTypeNameUrl": {
+    "description": "task type name of url download",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "taskTypeNameMetalink": "Metalink",
+  "@taskTypeNameMetalink": {
+    "description": "task type name of metalink",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "taskTypeDescTorrent": "Read torrent file to download...",
+  "@taskTypeDescTorrent": {
+    "description": "task type decription of torrent",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "taskTypeDescMagnet": "Input magnet link to dwnload...",
+  "@taskTypeDescMagnet": {
+    "description": "task type decription of magnet",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "taskTypeDescUrl": "Input http,ftp or some other protocol url to download...",
+  "@taskTypeDescUrl": {
+    "description": "task type decription of url download",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "taskTypeDescMetalink": "Read metalink file to download...",
+  "@taskTypeDescMetalink": {
+    "description": "task type decription of metalink",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "tipOfTorrent": "Supprt torren file format: \".torrent\"",
+  "@tipOfTorrent": {
+    "description": "tip of torrent",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "tipOfMagnet": "Support Metalink file format:\".metalink, .meta4\"",
+  "@tipOfMagnet": {
+    "description": "tip of magnet",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "tipOfUrl": "Support protocol: HTTP/FTP/SFTP/BitTorrent",
+  "@tipOfUrl": {
+    "description": "tip of url download",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "tipOfMetalink": "Magnet link start with \"magnet:?\"",
+  "@tipOfMetalink": {
+    "description": "tip of metalink",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "magnetText": "Magnet",
+  "@magnetText": {
+    "description": "magnet text",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "colorBlue": "Blue",
+  "@colorBlue": {
+    "description": "color blue",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "colorRed": "Red",
+  "@colorRed": {
+    "description": "color red",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "colorGreen": "Green",
+  "@colorGreen": {
+    "description": "color green",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "colorPurple": "Purple",
+  "@colorPurple": {
+    "description": "color purple",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "systemLanguage": "Follow System",
+  "@systemLanguage": {
+    "description": "system language",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "authFailed": "Aria2 authentication failed!",
+  "@authFailed": {
+    "description": "authentication failed tip",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "serverUnknownError": "Some aria2 unknown error occured!",
+  "@serverUnknownError": {
+    "description": "server unknown error tip",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "timeOutError": "Connect timeout!",
+  "@timeOutError": {
+    "description": "timeOut error tip",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "serverRefusedError": "Connection refused by server! Please check the server config...",
+  "@serverRefusedError": {
+    "description": "server refused error tip",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "addText": "Add",
+  "@addText": {
+    "description": "\"Add\" text",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "optionText": "Option",
+  "@optionText": {
+    "description": "\"Option\" text",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "addSuccessTip": "Success to add new Task!",
+  "@addSuccessTip": {
+    "description": "Add task success tip",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "checkOptionWarningTip": "Please check task option input!",
+  "@checkOptionWarningTip": {
+    "description": "Check option warning tip",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "checkSourceTip": "Please check task source!",
+  "@checkSourceTip": {
+    "description": "check task source tip",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "linkInputDialogTitle": "Please input link address",
+  "@linkInputDialogTitle": {
+    "description": "link input dialog title",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "linkInputLabel": "Link address",
+  "@linkInputLabel": {
+    "description": "link input label",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "addAndDownload": "Add & Download",
+  "@addAndDownload": {
+    "description": "add and download text",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "dirValidatorText_1": "Please input download path!",
+  "@dirValidatorText_1": {
+    "description": "dirValidatorText_1",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "dirValidatorText_2": "Download result must under global path ",
+  "@dirValidatorText_2": {
+    "description": "dirValidatorText_2",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "downloadPath": "Download path",
+  "@downloadPath": {
+    "description": "download path",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "speedLimit": "Speed limit",
+  "@speedLimit": {
+    "description": "speed limit",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "allowOverwrite": "Allow overwrite download result",
+  "@allowOverwrite": {
+    "description": "allowOverwrite",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "language": "Language",
+  "@language": {
+    "description": "language",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "themeColor": "Theme color",
+  "@themeColor": {
+    "description": "theme color",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "refreshDelay": "Refresh delay",
+  "@refreshDelay": {
+    "description": "refresh delay",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "second": "second",
+  "@second": {
+    "description": "second",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "changeGlobalOptionSuccessTip": "Success to change global option",
+  "@changeGlobalOptionSuccessTip": {
+    "description": "changeGlobalOptionSuccessTip",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "optionChangedTip": "Option changed,please click to commit.",
+  "@optionChangedTip": {
+    "description": "optionChangedTip",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "dirInputValidatorText": "Please input the download path!",
+  "@dirInputValidatorText": {
+    "description": "dirInputValidatorText",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "dirInputLabel": "Default download path",
+  "@dirInputLabel": {
+    "description": "dirInputLabel",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "maxCurrentDownloadValidator_1": "Please input the number!",
+  "@maxCurrentDownloadValidator_1": {
+    "description": "maxCurrentDownloadValidator_1",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "maxCurrentDownloadValidator_2": "Number cannot start with 0!",
+  "@maxCurrentDownloadValidator_2": {
+    "description": "maxCurrentDownloadValidator_2",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "maxCurrentDownloadValidator_3": "Please input legal number!",
+  "@maxCurrentDownloadValidator_3": {
+    "description": "maxCurrentDownloadValidator_3",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "maxCurrentDownloadValidator_4": "Max current download must >1!",
+  "@maxCurrentDownloadValidator_4": {
+    "description": "maxCurrentDownloadValidator_4",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "maxCurrentDownload4": "Max current downloads",
+  "@maxCurrentDownload4": {
+    "description": "maxCurrentDownload4",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "ariaContinue": "Continue the break",
+  "@ariaContinue": {
+    "description": "ariaContinue",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "checkIntegrity": "Check integrity",
+  "@checkIntegrity": {
+    "description": "checkIntegrity",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "optimizeConcurrentDownloads": "Optimize current downloads",
+  "@optimizeConcurrentDownloads": {
+    "description": "optimizeConcurrentDownloads",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "confitExists": "Config name exsits!",
+  "@confitExists": {
+    "description": "confitExists",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "addConfigSuccessTip": "Success to add server config!",
+  "@addConfigSuccessTip": {
+    "description": "addConfigSuccessTip",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "updateConfigSuccessTip": "Success to update server config!",
+  "@updateConfigSuccessTip": {
+    "description": "updateConfigSuccessTip",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "configName": "Name",
+  "@configName": {
+    "description": "configName",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "configNameValidatorText_1": "Config name can not be empty!",
+  "@configNameValidatorText_1": {
+    "description": "configNameValidatorText_1",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "protocol": "Protocol",
+  "@protocol": {
+    "description": "protocol",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "host": "HOST",
+  "@host": {
+    "description": "host",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "hostValidatorText_1": "Host can not be empty!",
+  "@hostValidatorText_1": {
+    "description": "hostValidatorText_1",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "port": "PORT",
+  "@port": {
+    "description": "port",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "portValidatorText_1": "Port can not be empty!",
+  "@portValidatorText_1": {
+    "description": "portValidatorText_1",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "path": "PATH",
+  "@path": {
+    "description": "path",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "secret": "SECRET",
+  "@secret": {
+    "description": "secret",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "enableHttps": "Enable HTTPS",
+  "@enableHttps": {
+    "description": "enableHttps",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "appSetting": "App setting",
+  "@appSetting": {
+    "description": "appSetting",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "aria2Setting": "Aria2 setting",
+  "@aria2Setting": {
+    "description": "aria2Setting",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "aria2SettingWarning": "Please connect to Aria2 server before setting",
+  "@aria2SettingWarning": {
+    "description": "aria2SettingWarning",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "taskInfo": "Info",
+  "@taskInfo": {
+    "description": "taskInfo",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "fileList": "Files",
+  "@fileList": {
+    "description": "fileList",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "peers": "Peers",
+  "@peers": {
+    "description": "peers",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "taskStatusOfDonloading": "Downloading",
+  "@taskStatusOfDonloading": {
+    "description": "taskStatusOfDonloading",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "taskStatusOfComplete": "Complete",
+  "@taskStatusOfComplete": {
+    "description": "taskStatusOfComplete",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "taskStatusOfError": "Error",
+  "@taskStatusOfError": {
+    "description": "taskStatusOfError",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "taskStatusOfPaused": "Paused",
+  "@taskStatusOfPaused": {
+    "description": "taskStatusOfPaused",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "taskStatusOfWaitting": "Waitting",
+  "@taskStatusOfWaitting": {
+    "description": "taskStatusOfWaitting",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "taskName": "Task Name: ",
+  "@taskName": {
+    "description": "taskName",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "progress": "Progress: ",
+  "@progress": {
+    "description": "progress",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "status": "Status: ",
+  "@status": {
+    "description": "status",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "bitFieldInfo": "BitField: ",
+  "@bitFieldInfo": {
+    "description": "bitFieldInfo",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "bitField": "bit fields ",
+  "@bitField": {
+    "description": "bitField",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "total": "Total  ",
+  "@total": {
+    "description": "total",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "bit": "bit  ",
+  "@bit": {
+    "description": "bit",
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
