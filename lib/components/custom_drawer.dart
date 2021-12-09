@@ -145,7 +145,7 @@ Widget customDrawer(BuildContext _parentContext) {
                           itemBuilder: (context) => [
                              PopupMenuItem(
                               value: 'edit',
-                              child: Text(_l10n.aria2VersionLabel),
+                              child: Text(_l10n.editText),
                             ),
                              PopupMenuItem(
                               value: 'delete',

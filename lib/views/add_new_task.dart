@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:aria2/aria2.dart';
+import 'package:aria_z/l10n/localization_intl.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -13,6 +14,8 @@ import '../utils/tools.dart';
 GlobalKey<_NewTaskCreaterState> newTaskCreaterKey = GlobalKey();
 GlobalKey<_NewTaskConfigState> newTaskConfigKey = GlobalKey();
 GlobalKey<_SubmitActionWidgtState> submitActionKey = GlobalKey();
+
+late AriazLocalizations _l10n;
 
 final GlobalKey optionFormKey = GlobalKey<FormState>();
 
@@ -40,14 +43,15 @@ class _TaskConfig {
 }
 
 class AddNewAria2Task extends StatelessWidget {
-  static const List<Tab> tabs = <Tab>[
-    Tab(text: '添加'),
-    Tab(text: '选项'),
-  ];
   const AddNewAria2Task({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    _l10n = AriazLocalizations.of(context);
+    List<Tab> tabs = <Tab>[
+      Tab(text: _l10n.addText),
+      Tab(text: _l10n.optionText),
+    ];
     Aria2TaskType taskType =
         ModalRoute.of(context)?.settings.arguments as Aria2TaskType;
     return DefaultTabController(
@@ -64,8 +68,9 @@ class AddNewAria2Task extends StatelessWidget {
             });
             return Scaffold(
               appBar: AppBar(
-                title: Text('添加${taskType.name}任务'),
-                bottom: const TabBar(tabs: tabs),
+                title:
+                    Text('${_l10n.addText}${taskType.name}${_l10n.taskText}'),
+                bottom: TabBar(tabs: tabs),
                 actions: [
                   SubmitActionWidgt(key: submitActionKey, taskType: taskType)
                 ],
@@ -105,14 +110,14 @@ class _SubmitActionWidgtState extends State<SubmitActionWidgt> {
                 .addNewTask(
                     NewTaskOption(widget.taskType.taskType, source, option)),
             (data) {
-          showCustomSnackBar(context, 1, const Text('添加任务成功'));
+          showCustomSnackBar(context, 1, Text(_l10n.addSuccessTip));
           Navigator.pop(context);
         });
       } else {
-        showCustomSnackBar(context, 2, const Text('请检查任务选项输入！'));
+        showCustomSnackBar(context, 2, Text(_l10n.checkOptionWarningTip));
       }
     } else {
-      showCustomSnackBar(context, 2, const Text('请检查下载源是否添加正确！'));
+      showCustomSnackBar(context, 2, Text(_l10n.checkSourceTip));
     }
   }
 
@@ -120,7 +125,7 @@ class _SubmitActionWidgtState extends State<SubmitActionWidgt> {
   Widget build(BuildContext context) {
     return IconButton(
         icon: const Icon(Icons.done),
-        tooltip: '提交',
+        tooltip: _l10n.submit,
         onPressed: () => _submitNewTask(context));
   }
 }
@@ -176,7 +181,7 @@ class _NewTaskCreaterState extends State<NewTaskCreater>
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('输入链接地址'),
+          title: Text(_l10n.linkInputDialogTitle),
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
@@ -185,17 +190,17 @@ class _NewTaskCreaterState extends State<NewTaskCreater>
                   maxLines: 4,
                   onChanged: (v) => inputUrl = v,
                   validator: (v) => linkValidator(),
-                  decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: '链接地址',
-                      contentPadding: EdgeInsets.all(8)),
+                  decoration: InputDecoration(
+                      border: const OutlineInputBorder(),
+                      labelText: _l10n.linkInputLabel,
+                      contentPadding: const EdgeInsets.all(8)),
                 )
               ],
             ),
           ),
           actions: <Widget>[
             TextButton(
-              child: const Text('添加并开始下载'),
+              child: Text(_l10n.addAndDownload),
               onPressed: () {
                 setState(() {
                   widget.taskType.taskType == TaskType.magnet
@@ -207,7 +212,7 @@ class _NewTaskCreaterState extends State<NewTaskCreater>
               },
             ),
             TextButton(
-              child: const Text('添加'),
+              child: Text(_l10n.addText),
               onPressed: () {
                 setState(() {
                   widget.taskType.taskType == TaskType.magnet
@@ -251,15 +256,16 @@ class _NewTaskCreaterState extends State<NewTaskCreater>
             ? 'Torrent'
             : 'MetaLink';
         String fileChooseTip = widget.taskType.taskType == TaskType.torrent
-            ? '支持种子文件格式 ".torrent" '
-            : '支持Metalink文件格式 ".metalink, .meta4"';
+            ? _l10n.tipOfTorrent
+            : _l10n.tipOfMetalink;
         w = Column(
             mainAxisAlignment: files.isEmpty
                 ? MainAxisAlignment.center
                 : MainAxisAlignment.start,
             children: [
               ElevatedButton(
-                child: Text('${files.isNotEmpty ? "重新" : ""}选择$btnText文件'),
+                child: Text(
+                    '${files.isNotEmpty ? _l10n.reChoose : ""}${_l10n.choose}$btnText${_l10n.file}'),
                 onPressed: readDownloadSourceFileToBase64,
               ),
               files.isEmpty ? Text(fileChooseTip) : const SizedBox(height: 0),
@@ -285,7 +291,7 @@ class _NewTaskCreaterState extends State<NewTaskCreater>
                       onPressed: () =>
                           readDownloadSourceFileToBase64(addMore: true),
                       icon: const Icon(Icons.add),
-                      label: const Text('添加更多'))
+                      label: Text(_l10n.more))
                   : const SizedBox(height: 0),
             ]);
         break;
@@ -295,17 +301,17 @@ class _NewTaskCreaterState extends State<NewTaskCreater>
             ? magnetLinks
             : downloadUrls;
         String btnText =
-            widget.taskType.taskType == TaskType.url ? 'URL' : '磁力链';
+            widget.taskType.taskType == TaskType.url ? 'URL' : _l10n.magnetText;
         String fileChooseTip = widget.taskType.taskType == TaskType.url
-            ? '支持协议类型包括 HTTP/FTP/SFTP/BitTorrent'
-            : '支持"magnet:?"磁力链';
+            ? _l10n.tipOfUrl
+            : _l10n.tipOfMagnet;
         w = Column(
             mainAxisAlignment: links.isEmpty
                 ? MainAxisAlignment.center
                 : MainAxisAlignment.start,
             children: <Widget>[
               ElevatedButton(
-                child: Text('添加$btnText地址'),
+                child: Text('${_l10n.addText}$btnText${_l10n.address}'),
                 onPressed: _showInputLink,
               ),
               links.isEmpty ? Text(fileChooseTip) : const SizedBox(height: 0),
@@ -402,23 +408,25 @@ class _NewTaskConfigState extends State<NewTaskConfig>
   /// 验证下载路径是否合法
   dirValidator(String dir) {
     if (dir.isEmpty) {
-      return '请输入下载目录';
+      return _l10n.dirInputValidatorText;
     }
     if (dir.startsWith(aria2States.globalOption!.dir!)) {
       return null;
     }
-    return '文件必须在保存在全局下载目录"${aria2States.globalOption!.dir!}"下';
+    return '${_l10n.dirValidatorText_2}"${aria2States.globalOption!.dir!}"';
   }
 
   /// 验证下载速度是否合法
   speedLimitInputValidator(String number) {
     if (number.isEmpty) {
-      return '请输入速度限制';
+      return _l10n.speedLimitInputValidatorText_1;
     }
     if (number.length > 1 && number.startsWith('0')) {
-      return '速度限制不能以0开头';
+      return _l10n.speedLimitInputValidatorText_2;
     }
-    return double.tryParse(number) == null ? '请输入合法数字' : null;
+    return double.tryParse(number) == null
+        ? _l10n.speedLimitInputValidatorText_3
+        : null;
   }
 
   @override
@@ -439,10 +447,10 @@ class _NewTaskConfigState extends State<NewTaskConfig>
                             text: taskConfig.downloadPath),
                         onChanged: (v) => taskConfig.downloadPath = v,
                         validator: (v) => dirValidator(v ?? ''),
-                        decoration: const InputDecoration(
-                            border: OutlineInputBorder(),
-                            labelText: '下载路径',
-                            contentPadding: EdgeInsets.all(8)),
+                        decoration: InputDecoration(
+                            border: const OutlineInputBorder(),
+                            labelText: _l10n.downloadPath,
+                            contentPadding: const EdgeInsets.all(8)),
                       )
                     : const SizedBox(),
                 const SizedBox(height: 10),
@@ -452,8 +460,8 @@ class _NewTaskConfigState extends State<NewTaskConfig>
                   onChanged: (v) => taskConfig.speedLimit.bit = v,
                   validator: (v) => speedLimitInputValidator(v ?? ''),
                   decoration: InputDecoration(
-                      border: const OutlineInputBorder(),
-                      labelText: '限速',
+                      border:const OutlineInputBorder(),
+                      labelText: _l10n.speedLimit,
                       contentPadding: const EdgeInsets.all(8),
                       suffix: DropdownButtonHideUnderline(
                           child: DropdownButton(
@@ -477,7 +485,7 @@ class _NewTaskConfigState extends State<NewTaskConfig>
                       ))),
                 ),
                 SwitchListTile(
-                    title: const Text("允许覆盖历史下载同名文件"),
+                    title: Text(_l10n.allowOverwrite),
                     value: taskConfig.allowOverwrite,
                     onChanged: (newVal) {
                       setState(() {

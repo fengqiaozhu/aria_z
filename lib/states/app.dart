@@ -1,4 +1,5 @@
 // ignore_for_file: avoid_init_to_null
+import 'package:aria_z/l10n/localization_intl.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:hive_flutter/adapters.dart';
@@ -88,6 +89,8 @@ class LocaleItem {
 }
 
 class AppState extends ChangeNotifier {
+  AriazLocalizations _l10n = AriazLocalizations();
+
   AppState(this.aria2ConnectConfigBox, this.prefs);
 
   /// hiveBox容器
@@ -153,23 +156,25 @@ class AppState extends ChangeNotifier {
   }
 
   List<Aria2TaskType> get aria2TaskTypes => [
-        Aria2TaskType(
-            "种子下载", "读取种子文件下载...", Icons.file_present, TaskType.torrent),
-        Aria2TaskType("磁力链下载", "输入磁力链接下载...", Icons.link, TaskType.magnet),
-        Aria2TaskType("网址下载", "输入Http,Ftp等链接下载...", Icons.web, TaskType.url),
-        Aria2TaskType(
-            "元数据下载", "输入Metalink下载...", Icons.all_inclusive, TaskType.metaLink),
+        Aria2TaskType(_l10n.taskTypeNameTorrent, _l10n.taskTypeDescTorrent,
+            Icons.file_present, TaskType.torrent),
+        Aria2TaskType(_l10n.taskTypeNameMagnet, _l10n.taskTypeDescMagnet,
+            Icons.link, TaskType.magnet),
+        Aria2TaskType(_l10n.taskTypeNameUrl, _l10n.taskTypeDescUrl, Icons.web,
+            TaskType.url),
+        Aria2TaskType(_l10n.taskTypeNameMetalink, _l10n.taskTypeDescMetalink,
+            Icons.all_inclusive, TaskType.metaLink),
       ];
 
   List<CustomMateriaColor> get appThemeColors => [
-        CustomMateriaColor('blue', Colors.blue, "蓝色"),
-        CustomMateriaColor('red', Colors.red, "红色"),
-        CustomMateriaColor('green', Colors.green, "绿色"),
-        CustomMateriaColor('purple', Colors.purple, "紫色"),
+        CustomMateriaColor('blue', Colors.blue, _l10n.colorBlue),
+        CustomMateriaColor('red', Colors.red, _l10n.colorRed),
+        CustomMateriaColor('green', Colors.green, _l10n.colorGreen),
+        CustomMateriaColor('purple', Colors.purple, _l10n.colorPurple),
       ];
 
   List<LocaleItem> get localeItems => [
-        LocaleItem(null, "系统语言"),
+        LocaleItem(null, _l10n.systemLanguage),
         LocaleItem(const Locale('en', 'US'), 'English'),
         LocaleItem(
             const Locale.fromSubtags(
@@ -180,6 +185,10 @@ class AppState extends ChangeNotifier {
 
   void bindAria2States(Aria2States state) {
     states = state;
+  }
+
+  void bindL10n(AriazLocalizations l10n) {
+    _l10n = l10n;
   }
 
   ///连接到aria2服务器
@@ -223,10 +232,11 @@ class AppState extends ChangeNotifier {
         '${config.protocol}://${config.host}:${config.port}${config.path}',
         config.type,
         config.secret,
-        states);
+        states,
+        _l10n);
     Aria2Response<Aria2Client> checkResult =
         await __client.checkServerConnection();
-    checkingConfig = false;    
+    checkingConfig = false;
     notifyListeners();
     return checkResult;
   }

@@ -248,9 +248,9 @@ class AriazLocalizations {
       Intl.message('Language', name: 'language', desc: 'language');
 
   String get themeColor =>
-      Intl.message('Theme color', name: 'themeColor', desc: 'theme color');
+      Intl.message('Theme', name: 'themeColor', desc: 'theme color');
 
-  String get refreshDelay => Intl.message('Refresh delay',
+  String get refreshDelay => Intl.message('Refresh',
       name: 'refreshDelay', desc: 'refresh delay');
 
   String get second => Intl.message('second', name: 'second', desc: 'second');

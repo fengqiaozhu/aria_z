@@ -1,11 +1,14 @@
 // ignore_for_file: must_be_immutable
 
+import 'package:aria_z/l10n/localization_intl.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 import '../components/custom_snack_bar.dart';
 import '../states/app.dart';
+
+late AriazLocalizations _l10n;
 
 class Aria2ConnectConfigArguments {
   final Aria2ConnectConfig config;
@@ -19,6 +22,7 @@ class Aria2ServerEditor extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    _l10n = AriazLocalizations.of(context);
     final oldConfig = ModalRoute.of(context)?.settings.arguments
         as Aria2ConnectConfigArguments?;
 
@@ -28,11 +32,11 @@ class Aria2ServerEditor extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('添加新的服务器配置'),
+        title: Text(_l10n.addNewServerConfig),
         actions: [
           IconButton(
               icon: const Icon(Icons.done_all),
-              tooltip: '添加新的服务器配置',
+              tooltip: _l10n.addNewServerConfig,
               onPressed: () => _submitNewServerConfig(context))
         ],
       ),
@@ -110,13 +114,13 @@ class BodyWidgetState extends State<BodyWidget> {
         if (isNotExist) {
           checkAndUseConfig(context, newConfig);
         } else {
-          showCustomSnackBar(context, 2, const Text('配置名称已存在!'));
+          showCustomSnackBar(context, 2, Text(_l10n.confitExists));
         }
-        msg = '添加服务配置成功';
+        msg = _l10n.addConfigSuccessTip;
       } else {
         app.updateAria2ConnectConfig(newConfig, oldIndex!);
         checkAndUseConfig(context, newConfig);
-        msg = '修改服务配置成功';
+        msg = _l10n.updateConfigSuccessTip;
       }
       Navigator.pop(context, serverConfig);
       showCustomSnackBar(context, 1, Text(msg));
@@ -136,12 +140,14 @@ class BodyWidgetState extends State<BodyWidget> {
                 TextFormField(
                   autofocus: true,
                   controller: TextEditingController(text: configName),
-                  decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: '配置名称',
-                      contentPadding: EdgeInsets.all(8)),
+                  decoration: InputDecoration(
+                      border: const OutlineInputBorder(),
+                      labelText: _l10n.configName,
+                      contentPadding: const EdgeInsets.all(8)),
                   validator: (v) {
-                    return v!.trim().isNotEmpty ? null : "配置名称不能为空";
+                    return v!.trim().isNotEmpty
+                        ? null
+                        : _l10n.configNameValidatorText_1;
                   },
                   onChanged: (v) {
                     configName = v;
@@ -150,10 +156,13 @@ class BodyWidgetState extends State<BodyWidget> {
                 const SizedBox(height: 18),
                 Row(
                   children: [
-                    const Text("协议类型"),
+                    Text(_l10n.protocol),
                     const SizedBox(width: 18),
                     ToggleSwitch(
-                      activeBgColor: [Theme.of(context).colorScheme.primary,Theme.of(context).colorScheme.secondary],
+                      activeBgColor: [
+                        Theme.of(context).colorScheme.primary,
+                        Theme.of(context).colorScheme.secondary
+                      ],
                       minWidth: 100,
                       initialLabelIndex: 0,
                       totalSwitches: 2,
@@ -167,12 +176,14 @@ class BodyWidgetState extends State<BodyWidget> {
                 const SizedBox(height: 18),
                 TextFormField(
                   controller: TextEditingController(text: host),
-                  decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: '服务器地址',
-                      contentPadding: EdgeInsets.all(8)),
+                  decoration: InputDecoration(
+                      border: const OutlineInputBorder(),
+                      labelText: _l10n.host,
+                      contentPadding: const EdgeInsets.all(8)),
                   validator: (v) {
-                    return v!.trim().isNotEmpty ? null : "服务器地址不能为空";
+                    return v!.trim().isNotEmpty
+                        ? null
+                        : _l10n.hostValidatorText_1;
                   },
                   onChanged: (v) {
                     host = v;
@@ -186,12 +197,14 @@ class BodyWidgetState extends State<BodyWidget> {
                         flex: 1,
                         child: TextFormField(
                           controller: TextEditingController(text: port),
-                          decoration: const InputDecoration(
-                              border: OutlineInputBorder(),
-                              labelText: '端口',
-                              contentPadding: EdgeInsets.all(8)),
+                          decoration: InputDecoration(
+                              border: const OutlineInputBorder(),
+                              labelText: _l10n.port,
+                              contentPadding: const EdgeInsets.all(8)),
                           validator: (v) {
-                            return v!.trim().isNotEmpty ? null : "端口不能为空";
+                            return v!.trim().isNotEmpty
+                                ? null
+                                : _l10n.portValidatorText_1;
                           },
                           onChanged: (v) {
                             port = v;
@@ -202,10 +215,10 @@ class BodyWidgetState extends State<BodyWidget> {
                         flex: 3,
                         child: TextFormField(
                           controller: TextEditingController(text: path),
-                          decoration: const InputDecoration(
-                            border: OutlineInputBorder(),
-                            labelText: '路径',
-                            contentPadding: EdgeInsets.all(8),
+                          decoration: InputDecoration(
+                            border: const OutlineInputBorder(),
+                            labelText: _l10n.path,
+                            contentPadding: const EdgeInsets.all(8),
                           ),
                           onChanged: (v) {
                             path = v;
@@ -216,10 +229,10 @@ class BodyWidgetState extends State<BodyWidget> {
                 const SizedBox(height: 18),
                 TextFormField(
                     controller: TextEditingController(text: secret),
-                    decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
-                        labelText: '验证令牌',
-                        contentPadding: EdgeInsets.all(8)),
+                    decoration: InputDecoration(
+                        border: const OutlineInputBorder(),
+                        labelText: _l10n.secret,
+                        contentPadding: const EdgeInsets.all(8)),
                     onChanged: (v) {
                       secret = v;
                     }),
@@ -233,7 +246,7 @@ class BodyWidgetState extends State<BodyWidget> {
                             enableHttps = val ?? false;
                           });
                         }),
-                    const Text('启用HTTPS')
+                    Text(_l10n.enableHttps),
                   ],
                 )
               ],

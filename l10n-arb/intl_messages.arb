@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2021-12-08T22:14:04.779757",
+  "@@last_modified": "2021-12-09T11:54:31.277582",
   "downloadingBtnText": "Download",
   "@downloadingBtnText": {
     "description": "Downloading button text",
@@ -168,7 +168,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "connectedText": "Connected to ",
+  "connectedText": "Connected to: ",
   "@connectedText": {
     "description": "connected text",
     "type": "text",
@@ -434,7 +434,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "timeOutError": "Connect timeout!",
+  "timeOutError": "Connection timeout!",
   "@timeOutError": {
     "description": "timeOut error tip",
     "type": "text",
@@ -546,14 +546,14 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "themeColor": "Theme color",
+  "themeColor": "Theme",
   "@themeColor": {
     "description": "theme color",
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
   },
-  "refreshDelay": "Refresh delay",
+  "refreshDelay": "Refresh",
   "@refreshDelay": {
     "description": "refresh delay",
     "type": "text",

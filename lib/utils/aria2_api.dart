@@ -2,6 +2,7 @@
 
 import 'dart:async';
 import 'package:aria2/aria2.dart';
+import 'package:aria_z/l10n/localization_intl.dart';
 import '../states/aria2.dart';
 import 'package:dio/dio.dart';
 import 'dart:convert';
@@ -34,7 +35,9 @@ class Aria2Client extends Aria2c {
   late Timer? periodicTimer = null;
   late Timer? periodicTimerInner = null;
 
-  Aria2Client(rpcUrl, protocol, secret, this.state)
+  final AriazLocalizations _l10n;
+
+  Aria2Client(rpcUrl, protocol, secret, this.state,this._l10n)
       : super(rpcUrl, protocol, secret);
 
   getInfosInterval(int timeIntervalSecend) {
@@ -255,7 +258,7 @@ class Aria2Client extends Aria2c {
             switch (__errorCode) {
               case 1:
                 errorType = Aria2ResponseErrorType.unauthorized;
-                msg = 'Aria2身份认证失败!';
+                msg = _l10n.authFailed;
                 break;
               default:
                 errorType = Aria2ResponseErrorType.other;
@@ -264,13 +267,13 @@ class Aria2Client extends Aria2c {
             }
           } else {
             errorType = Aria2ResponseErrorType.other;
-            msg = 'Aria2服务器未知错误';
+            msg = _l10n.serverUnknownError;
           }
           break;
         case DioErrorType.connectTimeout:
         case DioErrorType.sendTimeout:
           errorType = Aria2ResponseErrorType.timeout;
-          msg = '连接服务器超时';
+          msg = _l10n.timeOutError;
           break;
         case DioErrorType.other:
           var __e = e.error;
@@ -279,7 +282,7 @@ class Aria2Client extends Aria2c {
             switch (__e.osError.errorCode) {
               case 61:
                 errorType = Aria2ResponseErrorType.connectionRefused;
-                msg = '连接服务器被拒绝，请检查服务器配置';
+                msg = _l10n.serverRefusedError;
                 break;
               default:
                 errorType = Aria2ResponseErrorType.other;

@@ -1,5 +1,6 @@
 import 'package:aria2/models/index.dart';
 import 'package:aria_z/components/custom_snack_bar.dart';
+import 'package:aria_z/l10n/localization_intl.dart';
 import 'package:aria_z/states/app.dart';
 import 'package:aria_z/states/aria2.dart';
 import 'package:flutter/material.dart';
@@ -17,6 +18,7 @@ class _Aria2GlobalOptionsStates extends State<Aria2GlobalOptionsWidgets>
   static Aria2Option _newOption = Aria2Option();
 
   late bool _optionChanged;
+  late AriazLocalizations _l10n;
 
   _checkOptionChange(Map<String, dynamic> _ooMap) {
     Map<String, dynamic> _noMap = _newOption.toJson();
@@ -51,7 +53,7 @@ class _Aria2GlobalOptionsStates extends State<Aria2GlobalOptionsWidgets>
               .aria2!
               .getAria2GlobalOption(),
           null);
-      showCustomSnackBar(context, 1, const Text('修改全局配置成功'));
+      showCustomSnackBar(context, 1, Text(_l10n.changeGlobalOptionSuccessTip));
     });
 
     _optionChanged = false;
@@ -66,8 +68,10 @@ class _Aria2GlobalOptionsStates extends State<Aria2GlobalOptionsWidgets>
 
   @override
   Widget build(BuildContext context) {
-    Aria2Option _oldOption = Provider.of<Aria2States>(context).globalOption!;
     super.build(context);
+
+    _l10n = AriazLocalizations.of(context);
+    Aria2Option _oldOption = Provider.of<Aria2States>(context).globalOption!;
 
     return Stack(
       children: [
@@ -79,11 +83,11 @@ class _Aria2GlobalOptionsStates extends State<Aria2GlobalOptionsWidgets>
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text('配置已发生改变，点击右侧按钮提交'),
+                    Text(_l10n.optionChangedTip),
                     TextButton.icon(
                         onPressed: _submitOptionChange,
                         icon: const Icon(Icons.send),
-                        label: const Text('提交')),
+                        label: Text(_l10n.submit)),
                   ],
                 ),
               )),
@@ -100,11 +104,13 @@ class _Aria2GlobalOptionsStates extends State<Aria2GlobalOptionsWidgets>
                       _newOption.dir = v;
                       _checkOptionChange(_oldOption.toJson());
                     },
-                    validator: (v) => v == null || v.isEmpty ? '请输入下载目录' : null,
-                    decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
-                        labelText: '默认下载地址',
-                        contentPadding: EdgeInsets.all(8)),
+                    validator: (v) => v == null || v.isEmpty
+                        ? _l10n.dirInputValidatorText
+                        : null,
+                    decoration: InputDecoration(
+                        border: const OutlineInputBorder(),
+                        labelText: _l10n.dirInputLabel,
+                        contentPadding: const EdgeInsets.all(8)),
                   ),
                   const SizedBox(height: 10),
                   TextFormField(
@@ -116,29 +122,29 @@ class _Aria2GlobalOptionsStates extends State<Aria2GlobalOptionsWidgets>
                     validator: (v) {
                       v = v ?? '';
                       if (v.isEmpty) {
-                        return '请输入数量';
+                        return _l10n.maxCurrentDownloadValidator_1;
                       }
                       if (v.length > 1 && v.startsWith('0')) {
-                        return '下载数不能以0开头';
+                        return _l10n.maxCurrentDownloadValidator_2;
                       }
 
                       if (int.tryParse(v) == null) {
-                        return '请输入合法整数';
+                        return _l10n.maxCurrentDownloadValidator_3;
                       }
 
                       if (int.parse(v) < 0) {
-                        return '最小同时下载数量需大于等于1';
+                        return _l10n.maxCurrentDownloadValidator_4;
                       }
                     },
-                    decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
-                        labelText: '最大同时下载任务数量 ',
-                        contentPadding: EdgeInsets.all(8)),
+                    decoration: InputDecoration(
+                        border: const OutlineInputBorder(),
+                        labelText: _l10n.maxCurrentDownload4,
+                        contentPadding: const EdgeInsets.all(8)),
                   ),
                   const SizedBox(height: 10),
                   SwitchListTile(
                       contentPadding: EdgeInsets.zero,
-                      title: const Text("断点续传"),
+                      title: Text(_l10n.ariaContinue),
                       value: _newOption.continue_ == null
                           ? _oldOption.continue_!
                           : _newOption.continue_!,
@@ -151,7 +157,7 @@ class _Aria2GlobalOptionsStates extends State<Aria2GlobalOptionsWidgets>
                   const SizedBox(height: 10),
                   SwitchListTile(
                       contentPadding: EdgeInsets.zero,
-                      title: const Text("检查完整性"),
+                      title: Text(_l10n.checkIntegrity),
                       value: _newOption.checkIntegrity == null
                           ? _oldOption.checkIntegrity!
                           : _newOption.checkIntegrity!,
@@ -164,7 +170,7 @@ class _Aria2GlobalOptionsStates extends State<Aria2GlobalOptionsWidgets>
                   const SizedBox(height: 10),
                   SwitchListTile(
                       contentPadding: EdgeInsets.zero,
-                      title: const Text("优化并行下载"),
+                      title: Text(_l10n.optimizeConcurrentDownloads),
                       value: _newOption.optimizeConcurrentDownloads == null
                           ? _oldOption.optimizeConcurrentDownloads!
                           : _newOption.optimizeConcurrentDownloads!,

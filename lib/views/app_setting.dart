@@ -1,3 +1,4 @@
+import 'package:aria_z/l10n/localization_intl.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../states/app.dart';
@@ -37,6 +38,7 @@ class _AppSettingsStates extends State<AppSettingsWidgets>
   @override
   Widget build(BuildContext context) {
     super.build(context);
+    AriazLocalizations _l10n =  AriazLocalizations.of(context);
     TextStyle _labelTextStyle =
         const TextStyle(fontSize: 17, fontWeight: FontWeight.bold);
     AppState appState = Provider.of<AppState>(context);
@@ -55,7 +57,7 @@ class _AppSettingsStates extends State<AppSettingsWidgets>
                       Expanded(
                         flex: 1,
                         child: Text(
-                          '语言选择',
+                          _l10n.language,
                           style: _labelTextStyle,
                         ),
                       ),
@@ -65,7 +67,6 @@ class _AppSettingsStates extends State<AppSettingsWidgets>
                           child: DropdownButton<String>(
                             isExpanded: true,
                             value: appState.selectedLocale?.toLanguageTag(),
-                            hint: const Text('选择语言'),
                             borderRadius:
                                 const BorderRadius.all(Radius.circular(8)),
                             onChanged: (String? newValue) {
@@ -88,7 +89,7 @@ class _AppSettingsStates extends State<AppSettingsWidgets>
                     children: [
                       Expanded(
                         flex: 1,
-                        child: Text('主题颜色', style: _labelTextStyle),
+                        child: Text(_l10n.themeColor, style: _labelTextStyle),
                       ),
                       Expanded(
                         flex: 3,
@@ -98,7 +99,6 @@ class _AppSettingsStates extends State<AppSettingsWidgets>
                             value: appState.appUsingColorName,
                             borderRadius:
                                 const BorderRadius.all(Radius.circular(8)),
-                            hint: const Text('选择主题'),
                             onChanged: (String? newValue) {
                               setState(() {
                                 appState.changeTheme(appState.appThemeColors
@@ -143,7 +143,7 @@ class _AppSettingsStates extends State<AppSettingsWidgets>
                   children: [
                     Expanded(
                       flex: 1,
-                      child: Text('刷新频率', style: _labelTextStyle),
+                      child: Text(_l10n.refreshDelay, style: _labelTextStyle),
                     ),
                     Expanded(
                       flex: 3,
@@ -153,7 +153,6 @@ class _AppSettingsStates extends State<AppSettingsWidgets>
                               const BorderRadius.all(Radius.circular(8)),
                           isExpanded: true,
                           value: appState.intervalSecond.toString(),
-                          hint: const Text('时间间隔'),
                           onChanged: (String? newValue) {
                             if (newValue != null) {
                               appState.updateIntervalSecond(newValue);
@@ -163,7 +162,7 @@ class _AppSettingsStates extends State<AppSettingsWidgets>
                               .map<DropdownMenuItem<String>>((String value) {
                             return DropdownMenuItem<String>(
                               value: value,
-                              child: Text('$value 秒'),
+                              child: Text('$value ${_l10n.second}'),
                             );
                           }).toList(),
                         ),

@@ -196,7 +196,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "addNewServerConfig": "添加新的服务器地址",
+  "addNewServerConfig": "添加新的服务器配置",
   "@addNewServerConfig": {
     "description": "Add new server config text",
     "type": "text",
@@ -336,7 +336,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "taskTypeDescUrl": "网址下载", "输入Http,Ftp等链接下载...",
+  "taskTypeDescUrl": "输入Http,Ftp等链接下载...",
   "@taskTypeDescUrl": {
     "description": "task type decription of url download",
     "type": "text",
@@ -847,7 +847,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "bitField": "区块",
+  "bitField": "个区块",
   "@bitField": {
     "description": "bitField",
     "type": "text",

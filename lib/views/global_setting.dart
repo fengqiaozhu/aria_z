@@ -1,6 +1,7 @@
 // ignore_for_file: must_be_immutable
 
 import 'package:aria2/aria2.dart' show Aria2Option;
+import 'package:aria_z/l10n/localization_intl.dart';
 import 'package:aria_z/states/aria2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -11,13 +12,14 @@ import '../components/custom_snack_bar.dart';
 
 class GlobalSetting extends StatelessWidget {
   const GlobalSetting({Key? key}) : super(key: key);
-
-  static const List<Tab> tabs = <Tab>[
-    Tab(text: 'APP设置'),
-    Tab(text: 'Aria2全局配置'),
-  ];
+  
   @override
   Widget build(BuildContext context) {
+    AriazLocalizations _l10n = AriazLocalizations.of(context);
+    final List<Tab> tabs = <Tab>[
+    Tab(text: _l10n.appSetting),
+    Tab(text:  _l10n.aria2Setting),
+  ];
     Aria2Option? _globalOption = Provider.of<Aria2States>(context).globalOption;
     return DefaultTabController(
         length: tabs.length,
@@ -31,13 +33,13 @@ class GlobalSetting extends StatelessWidget {
                   _globalOption == null) {
                 tabController.index = 0;
                 showCustomSnackBar(
-                    context, 3, const Text('请连接到 Aria2 服务器再行配置...'));
+                    context, 3,  Text(_l10n.aria2SettingWarning));
               }
             });
             return Scaffold(
               appBar: AppBar(
-                title: const Text('设置'),
-                bottom: const TabBar(tabs: tabs),
+                title:  Text(_l10n.setting),
+                bottom: TabBar(tabs: tabs),
               ),
               body: TabBarView(
                   physics: _globalOption == null

@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:aria2/models/index.dart';
 import 'package:aria_z/components/custom_snack_bar.dart';
 import 'package:aria_z/components/speed_shower.dart';
+import 'package:aria_z/l10n/localization_intl.dart';
 import 'package:aria_z/states/app.dart';
 import 'package:aria_z/states/aria2.dart';
 import 'package:flutter/material.dart';
@@ -13,11 +14,7 @@ import '../utils/tools.dart';
 
 GlobalKey<_TabViewsBodyWidgtState> _tabViewBodyKey = GlobalKey();
 
-const List<Tab> tabs = <Tab>[
-  Tab(text: '任务信息'),
-  Tab(text: '文件列表'),
-  Tab(text: '连接节点'),
-];
+late AriazLocalizations _l10n;
 
 // ignore: must_be_immutable
 class TaskDetail extends StatelessWidget {
@@ -26,6 +23,12 @@ class TaskDetail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    _l10n = AriazLocalizations.of(context);
+    final List<Tab> tabs = <Tab>[
+      Tab(text: _l10n.taskInfo),
+      Tab(text: _l10n.fileList),
+      Tab(text: _l10n.peers),
+    ];
     List args = ModalRoute.of(context)?.settings.arguments as List;
     String _gid = args[0];
     String _taskName = args[1];
@@ -43,7 +46,7 @@ class TaskDetail extends StatelessWidget {
         return Scaffold(
             appBar: AppBar(
               title: Text(_taskName),
-              bottom: const TabBar(tabs: tabs),
+              bottom: TabBar(tabs: tabs),
             ),
             body: TabViewsBodyWidgt(
               gid: _gid,
@@ -127,22 +130,22 @@ class _TaskInfoState extends State<TaskInfo> {
     Color statColor = Theme.of(context).colorScheme.primary;
     switch (stat) {
       case 'active':
-        statLabel = '下载中';
+        statLabel = _l10n.taskStatusOfDonloading;
         break;
       case 'watting':
-        statLabel = '队列中';
+        statLabel = _l10n.taskStatusOfWaitting;
         statColor = Colors.grey;
         break;
       case 'complete':
-        statLabel = '已完成';
+        statLabel = _l10n.taskStatusOfComplete;
         statColor = Colors.green;
         break;
       case 'error':
-        statLabel = '下载错误';
+        statLabel = _l10n.taskStatusOfError;
         statColor = Colors.red;
         break;
       case 'paused':
-        statLabel = '已暂停';
+        statLabel = _l10n.taskStatusOfPaused;
         statColor = Colors.orange;
         break;
     }
@@ -203,7 +206,7 @@ class _TaskInfoState extends State<TaskInfo> {
         Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            itemTitle("任务名称："),
+            itemTitle(_l10n.taskName),
             itemText(_tabViewBodyKey.currentState?.taskName ?? '')
           ],
         ),
@@ -211,7 +214,7 @@ class _TaskInfoState extends State<TaskInfo> {
         Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            itemTitle("已下载："),
+            itemTitle(_l10n.progress),
             itemText(
                 "${formatFileSize(widget.info.completedLength ?? 0)}/${formatFileSize(widget.info.totalLength ?? 0)}")
           ],
@@ -220,7 +223,7 @@ class _TaskInfoState extends State<TaskInfo> {
         Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            itemTitle("任务状态："),
+            itemTitle(_l10n.status),
             _taskStatusWidgt(widget.info.status ?? '')
           ],
         ),
@@ -228,7 +231,7 @@ class _TaskInfoState extends State<TaskInfo> {
         Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            itemTitle("下载目录："),
+            itemTitle("${_l10n.downloadPath}: "),
             itemText(widget.info.dir ?? '')
           ],
         ),
@@ -237,9 +240,9 @@ class _TaskInfoState extends State<TaskInfo> {
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              itemTitle("区块信息："),
+              itemTitle(_l10n.bitFieldInfo),
               itemText(
-                  '共 ${widget.info.numPieces ?? 0} 个区块，${widget.info.pieceLength ?? 0} 字节'),
+                  '${_l10n.total} ${widget.info.numPieces ?? 0} ${_l10n.bitField}，${widget.info.pieceLength ?? 0} ${_l10n.bit}'),
             ],
           ),
           const SizedBox(height: 8),

@@ -23,6 +23,9 @@ import 'l10n/localization_intl.dart';
 final GlobalKey speedLimitFormKey = GlobalKey<FormState>();
 GlobalKey<_SpeedControlState> speedControlKey = GlobalKey();
 GlobalKey<_HomeViewState> homeViewKey = GlobalKey();
+late AriazLocalizations _l10n;
+late AppState app;
+bool stateInited = false;
 
 void main(List<String> args) async {
   await Hive.initFlutter();
@@ -72,6 +75,14 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (!stateInited) {
+      _l10n = AriazLocalizations.of(context);
+      app = Provider.of<AppState>(context, listen: false);
+      app.bindAria2States(Provider.of<Aria2States>(context, listen: false));
+      app.bindL10n(_l10n);
+      stateInited = true;
+    }
+
     return GestureDetector(
       onTap: () {
         FocusScopeNode currentFocus = FocusScope.of(context);
@@ -123,8 +134,6 @@ class HomeView extends StatefulWidget {
 
 class _HomeViewState extends State<HomeView> {
   late bool showDownloaded;
-  late AppState app;
-  late AriazLocalizations _l10n;
 
   void _switchDownloadShowType(bool newType) async {
     if (this.showDownloaded != newType) {
@@ -220,15 +229,12 @@ class _HomeViewState extends State<HomeView> {
   void initState() {
     super.initState();
     showDownloaded = false;
-    app = Provider.of<AppState>(context, listen: false);
-    app.bindAria2States(Provider.of<Aria2States>(context, listen: false));
   }
 
   @override
   Widget build(BuildContext context) {
     Aria2States _as = Provider.of<Aria2States>(context);
     BitUnit dlSpeedWithUnit = bitToUnit(_as.globalStatus?.downloadSpeed ?? 0);
-    _l10n = AriazLocalizations.of(context);
     return Scaffold(
       appBar: AppBar(
         leadingWidth: 48,
@@ -383,13 +389,13 @@ class _SpeedControlState extends State<SpeedControlWidgt> {
   /// 验证下载速度是否合法
   speedLimitInputValidator(String number) {
     if (number.isEmpty) {
-      return homeViewKey.currentState?._l10n.speedLimitInputValidatorText_1;
+      return _l10n.speedLimitInputValidatorText_1;
     }
     if (number.length > 1 && number.startsWith('0')) {
-      return homeViewKey.currentState?._l10n.speedLimitInputValidatorText_2;
+      return _l10n.speedLimitInputValidatorText_2;
     }
     return double.tryParse(number) == null
-        ? homeViewKey.currentState?._l10n.speedLimitInputValidatorText_3
+        ? _l10n.speedLimitInputValidatorText_3
         : null;
   }
 
@@ -418,9 +424,8 @@ class _SpeedControlState extends State<SpeedControlWidgt> {
             validator: (v) => speedLimitInputValidator(v ?? ''),
             decoration: InputDecoration(
                 border: const OutlineInputBorder(),
-                labelText:
-                    homeViewKey.currentState?._l10n.maxDonwloadSpeedInputLabel,
-                helperText: homeViewKey.currentState?._l10n.maxSpeedInputHelper,
+                labelText: _l10n.maxDonwloadSpeedInputLabel,
+                helperText: _l10n.maxSpeedInputHelper,
                 contentPadding: const EdgeInsets.all(8),
                 suffix: DropdownButtonHideUnderline(
                     child: DropdownButton(
@@ -447,9 +452,8 @@ class _SpeedControlState extends State<SpeedControlWidgt> {
             validator: (v) => speedLimitInputValidator(v ?? ''),
             decoration: InputDecoration(
                 border: const OutlineInputBorder(),
-                labelText:
-                    homeViewKey.currentState?._l10n.maxUploadSpeedInputLabel,
-                helperText: homeViewKey.currentState?._l10n.maxSpeedInputHelper,
+                labelText: _l10n.maxUploadSpeedInputLabel,
+                helperText: _l10n.maxSpeedInputHelper,
                 contentPadding: const EdgeInsets.all(8),
                 suffix: DropdownButtonHideUnderline(
                     child: DropdownButton(
@@ -511,7 +515,7 @@ class _BodyWidgetState extends State<BodyWidget> {
                     .color,
                 size: 50.0,
               ),
-              Text(homeViewKey.currentState!._l10n.connecttingTip)
+              Text(_l10n.connecttingTip)
             ],
           ),
         );
@@ -519,15 +523,13 @@ class _BodyWidgetState extends State<BodyWidget> {
         return app.aria2 == null
             ? Center(
                 child: app.selectedAria2ConnectConfig == null
-                    ? Text(homeViewKey.currentState!._l10n.notConnectTip)
+                    ? Text(_l10n.notConnectTip)
                     : Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text(
-                              homeViewKey.currentState!._l10n.connectFailedTip),
+                          Text(_l10n.connectFailedTip),
                           TextButton(
-                              child: Text(homeViewKey
-                                  .currentState!._l10n.reConnectBtnText),
+                              child: Text(_l10n.reConnectBtnText),
                               onPressed: () {
                                 checkAndUseConfig(
                                     context, app.selectedAria2ConnectConfig!);
@@ -537,7 +539,7 @@ class _BodyWidgetState extends State<BodyWidget> {
             : (taskList.isEmpty
                 ? Center(
                     child: Text(
-                        '${homeViewKey.currentState!._l10n.noText}${widget.showDownloaded ? homeViewKey.currentState!._l10n.completeTipText : homeViewKey.currentState!._l10n.downloadingTipText}${homeViewKey.currentState!._l10n.taskText}'),
+                        '${_l10n.noText}${widget.showDownloaded ? _l10n.completeTipText : _l10n.downloadingTipText}${_l10n.taskText}'),
                   )
                 : ListView(
                     children: taskListTileWidget(context,
