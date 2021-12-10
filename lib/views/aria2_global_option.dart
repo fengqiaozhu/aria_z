@@ -101,7 +101,7 @@ class _Aria2GlobalOptionsStates extends State<Aria2GlobalOptionsWidgets>
                   TextFormField(
                     initialValue: _oldOption.dir,
                     onChanged: (v) {
-                      _newOption.dir = v;
+                      _newOption.dir = v.trim();
                       _checkOptionChange(_oldOption.toJson());
                     },
                     validator: (v) => v == null || v.isEmpty
@@ -116,7 +116,7 @@ class _Aria2GlobalOptionsStates extends State<Aria2GlobalOptionsWidgets>
                   TextFormField(
                     initialValue: _oldOption.maxConcurrentDownloads?.toString(),
                     onChanged: (v) {
-                      _newOption.maxConcurrentDownloads = int.parse(v);
+                      _newOption.maxConcurrentDownloads = int.parse(v.trim());
                       _checkOptionChange(_oldOption.toJson());
                     },
                     validator: (v) {

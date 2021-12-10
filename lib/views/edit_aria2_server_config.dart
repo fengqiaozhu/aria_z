@@ -80,9 +80,12 @@ class BodyWidgetState extends State<BodyWidget> {
   bool enableHttps = false;
   int? oldIndex;
 
+  late bool _secretVisible;
+
   @override
   void initState() {
     super.initState();
+    _secretVisible = false;
     Aria2ConnectConfigArguments? oldConfig = widget.oldConfig;
     if (oldConfig != null) {
       Aria2ConnectConfig oc = oldConfig.config;
@@ -161,7 +164,7 @@ class BodyWidgetState extends State<BodyWidget> {
                         : _l10n.configNameValidatorText_1;
                   },
                   onChanged: (v) {
-                    configName = v;
+                    configName = v.trim();
                   },
                 ),
                 const SizedBox(height: 18),
@@ -197,7 +200,7 @@ class BodyWidgetState extends State<BodyWidget> {
                         : _l10n.hostValidatorText_1;
                   },
                   onChanged: (v) {
-                    host = v;
+                    host = v.trim();
                   },
                 ),
                 const SizedBox(height: 18),
@@ -218,7 +221,7 @@ class BodyWidgetState extends State<BodyWidget> {
                                 : _l10n.portValidatorText_1;
                           },
                           onChanged: (v) {
-                            port = v;
+                            port = v.trim();
                           },
                         )),
                     const SizedBox(width: 8),
@@ -232,7 +235,7 @@ class BodyWidgetState extends State<BodyWidget> {
                             contentPadding: const EdgeInsets.all(8),
                           ),
                           onChanged: (v) {
-                            path = v;
+                            path = v.trim();
                           },
                         ))
                   ],
@@ -240,12 +243,26 @@ class BodyWidgetState extends State<BodyWidget> {
                 const SizedBox(height: 18),
                 TextFormField(
                     controller: TextEditingController(text: secret),
+                    obscureText: !_secretVisible,
                     decoration: InputDecoration(
                         border: const OutlineInputBorder(),
                         labelText: _l10n.secret,
-                        contentPadding: const EdgeInsets.all(8)),
+                        contentPadding: const EdgeInsets.all(8),
+                        suffixIcon: IconButton(
+                          icon: Icon(
+                            _secretVisible
+                                ? Icons.visibility_off
+                                : Icons.visibility,
+                            color: Theme.of(context).colorScheme.secondary,
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              _secretVisible = !_secretVisible;
+                            });
+                          },
+                        )),
                     onChanged: (v) {
-                      secret = v;
+                      secret = v.trim();
                     }),
                 const SizedBox(height: 18),
                 Row(
