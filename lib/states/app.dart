@@ -100,7 +100,7 @@ class AppState extends ChangeNotifier {
   SharedPreferences prefs;
 
   /// 选择连接的服务器配置
-  late Aria2ConnectConfig? _selectedAria2ConnectConfig = null;
+  Aria2ConnectConfig? _selectedAria2ConnectConfig = null;
 
   /// aria2连接实例化
   Aria2Client? _client = null;
@@ -110,6 +110,9 @@ class AppState extends ChangeNotifier {
 
   /// 是否正在检查服务器配置
   bool checkingConfig = false;
+
+  /// 是否正在连接服务器
+  bool connectingServer = false;
 
   //getters
   /// 本地化
@@ -143,8 +146,22 @@ class AppState extends ChangeNotifier {
 
   Aria2Client? get aria2 => _client;
 
-  Aria2ConnectConfig? get selectedAria2ConnectConfig =>
-      _selectedAria2ConnectConfig;
+  Aria2ConnectConfig? get selectedAria2ConnectConfig {
+    Map<String, dynamic>? _config =
+        prefs.getString('lastConnectedAria2ConfigName')?.isNotEmpty == true
+            ? Map<String, dynamic>.from(aria2ConnectConfigBox
+                .toMap()
+                .values
+                .firstWhere((element) =>
+                    element['configName'] ==
+                    prefs.getString('lastConnectedAria2ConfigName')))
+            : null;
+
+    return _selectedAria2ConnectConfig ??
+        (_config?.isNotEmpty == true
+            ? Aria2ConnectConfig.fromJson(_config!)
+            : null);
+  }
 
   List<Aria2ConnectConfig> get aria2ConnectConfigs {
     // aria2ConnectConfigBox.deleteAt(0);
@@ -193,12 +210,18 @@ class AppState extends ChangeNotifier {
 
   ///连接到aria2服务器
   connectToAria2Server(Aria2Client? newClient) async {
+    updateConnectingStatus(true);
     _client = newClient;
     if (_client != null) {
       _client?.getAria2GlobalOption();
       _client?.getVersionInfo();
-      _client?.getInfosInterval(intervalSecond);
+      _client?.getInfosInterval(intervalSecond, this);
     }
+    notifyListeners();
+  }
+
+  updateConnectingStatus(bool status) {
+    connectingServer = status;
     notifyListeners();
   }
 
@@ -226,6 +249,7 @@ class AppState extends ChangeNotifier {
   Future<Aria2Response<Aria2Client>> checkAria2ConnectConfig(
       Aria2ConnectConfig config) async {
     _selectedAria2ConnectConfig = config;
+    prefs.setString('lastConnectedAria2ConfigName', config.configName);
     checkingConfig = true;
     notifyListeners();
     Aria2Client __client = Aria2Client(
@@ -246,8 +270,8 @@ class AppState extends ChangeNotifier {
     aria2ConnectConfigBox.toMap().forEach((key, value) {
       if (value['configName'] == config.configName) {
         if (config.configName == selectedAria2ConnectConfig?.configName) {
-          _client?.clearGIInterval();
-          _client = null;
+          clearCurrentServerAllState();
+          // _client = null;
         }
         aria2ConnectConfigBox.delete(key);
       }
@@ -270,7 +294,7 @@ class AppState extends ChangeNotifier {
   void updateIntervalSecond(String second) {
     int _intervalSecond = int.parse(second);
     _client?.clearGIInterval();
-    _client?.getInfosInterval(_intervalSecond);
+    _client?.getInfosInterval(_intervalSecond, this);
     prefs.setInt('intervalSecond', _intervalSecond);
     notifyListeners();
   }

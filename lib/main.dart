@@ -23,6 +23,7 @@ import 'l10n/localization_intl.dart';
 final GlobalKey speedLimitFormKey = GlobalKey<FormState>();
 GlobalKey<_SpeedControlState> speedControlKey = GlobalKey();
 GlobalKey<_HomeViewState> homeViewKey = GlobalKey();
+
 late AriazLocalizations _l10n;
 late AppState app;
 bool stateInited = false;
@@ -134,15 +135,23 @@ class HomeView extends StatefulWidget {
 
 class _HomeViewState extends State<HomeView> {
   late bool showDownloaded;
-
+  late bool gettingCompleted;
   void _switchDownloadShowType(bool newType) async {
-    if (this.showDownloaded != newType) {
+    if (showDownloaded != newType) {
       setState(() {
-        this.showDownloaded = !this.showDownloaded;
+        showDownloaded = !showDownloaded;
+        gettingCompleted = false;
       });
-      if (this.showDownloaded && app.aria2 != null) {
+      if (showDownloaded && app.aria2 != null) {
+        setState(() {
+          gettingCompleted = true;
+        });
         handleAria2ApiResponse(
-            context, await app.aria2!.getCompletedTasks(0, 50), null);
+            context, await app.aria2!.getCompletedTasks(0, 200), (_) {
+          setState(() {
+            gettingCompleted = false;
+          });
+        });
       }
     }
   }
@@ -229,6 +238,12 @@ class _HomeViewState extends State<HomeView> {
   void initState() {
     super.initState();
     showDownloaded = false;
+    gettingCompleted = false;
+    WidgetsBinding.instance?.addPostFrameCallback((_) {
+      if (app.selectedAria2ConnectConfig != null) {
+        checkAndUseConfig(context, app.selectedAria2ConnectConfig!);
+      }
+    });
   }
 
   @override
@@ -516,6 +531,22 @@ class _BodyWidgetState extends State<BodyWidget> {
                 size: 50.0,
               ),
               Text(_l10n.connecttingTip)
+            ],
+          ),
+        );
+      } else if (app.connectingServer ||
+          homeViewKey.currentState!.gettingCompleted) {
+        return Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SpinKitDoubleBounce(
+                color: app.appThemeColors
+                    .where((_color) => _color.name == app.appUsingColorName)
+                    .first
+                    .color,
+                size: 50.0,
+              ),
             ],
           ),
         );

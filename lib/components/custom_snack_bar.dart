@@ -44,7 +44,11 @@ checkAndUseConfig(BuildContext context, Aria2ConnectConfig config) async {
 handleAria2ApiResponse<T>(BuildContext context, Aria2Response<T> requestResult,
     Function(T)? handler) {
   if (requestResult.status == Aria2ResponseStatus.error) {
-    showCustomSnackBar(context, 2, Text(requestResult.message));
+    // 判断返回错误是否指定错误类型，如果未指定，责不予处理
+    if(requestResult.error!=null){
+      showCustomSnackBar(context, 2, Text(requestResult.message));
+    }
+    return;
   }
   if (handler != null) {
     handler(requestResult.data as T);
