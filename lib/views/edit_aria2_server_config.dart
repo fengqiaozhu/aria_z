@@ -28,7 +28,7 @@ class Aria2ServerEditor extends StatelessWidget {
     var args = ModalRoute.of(context)?.settings.arguments;
     if (args != null) {
       args = args as List<dynamic>;
-      oldConfig = args[0] as Aria2ConnectConfigArguments;
+      oldConfig = args[0] as Aria2ConnectConfigArguments?;
       homePageContext = args[1] as BuildContext;
     }
 
