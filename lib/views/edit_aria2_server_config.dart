@@ -22,9 +22,15 @@ class Aria2ServerEditor extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Aria2ConnectConfigArguments? oldConfig;
+    BuildContext? homePageContext;
     _l10n = AriazLocalizations.of(context);
-    final oldConfig = ModalRoute.of(context)?.settings.arguments
-        as Aria2ConnectConfigArguments?;
+    var args = ModalRoute.of(context)?.settings.arguments;
+    if (args != null) {
+      args = args as List<dynamic>;
+      oldConfig = args[0] as Aria2ConnectConfigArguments;
+      homePageContext = args[1] as BuildContext;
+    }
 
     void _submitNewServerConfig(context) {
       bodyKey.currentState?.submitServerConfig();
@@ -44,6 +50,7 @@ class Aria2ServerEditor extends StatelessWidget {
           child: BodyWidget(
         key: bodyKey,
         oldConfig: oldConfig,
+        homePageContext: homePageContext,
       )),
     );
   }
@@ -52,7 +59,10 @@ class Aria2ServerEditor extends StatelessWidget {
 class BodyWidget extends StatefulWidget {
   final Aria2ConnectConfigArguments? oldConfig;
 
-  const BodyWidget({Key? key, this.oldConfig}) : super(key: key);
+  final BuildContext? homePageContext;
+
+  const BodyWidget({Key? key, this.oldConfig, this.homePageContext})
+      : super(key: key);
 
   @override
   State<StatefulWidget> createState() => BodyWidgetState();
@@ -79,7 +89,7 @@ class BodyWidgetState extends State<BodyWidget> {
       host = oc.host;
       port = oc.port;
       path = oc.path;
-      protocol = oc.protocol;
+      protocol = oc.type;
       secret = oc.secret;
       configName = oc.configName;
       enableHttps = oc.protocol == 'https' || oc.protocol == 'wss';
@@ -112,18 +122,19 @@ class BodyWidgetState extends State<BodyWidget> {
       if (oldIndex == null) {
         bool isNotExist = app.addAria2ConnectConfig(newConfig);
         if (isNotExist) {
-          checkAndUseConfig(context, newConfig);
+          checkAndUseConfig(widget.homePageContext!, newConfig);
         } else {
           showCustomSnackBar(context, 2, Text(_l10n.confitExists));
+          return;
         }
         msg = _l10n.addConfigSuccessTip;
       } else {
         app.updateAria2ConnectConfig(newConfig, oldIndex!);
-        checkAndUseConfig(context, newConfig);
+        checkAndUseConfig(widget.homePageContext!, newConfig);
         msg = _l10n.updateConfigSuccessTip;
       }
+      showCustomSnackBar(context, 1, Text(msg), durationSecond: 1);
       Navigator.pop(context, serverConfig);
-      showCustomSnackBar(context, 1, Text(msg));
     }
   }
 

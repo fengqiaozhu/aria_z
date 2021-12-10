@@ -21,8 +21,8 @@ Widget customDrawer(BuildContext _parentContext) {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title:  Text(_l10n.deleteDialogTitle),
-          content:  Text(_l10n.deleteDialogContent),
+          title: Text(_l10n.deleteDialogTitle),
+          content: Text(_l10n.deleteDialogContent),
           actions: <Widget>[
             TextButton(
               child: Text(_l10n.cancelBtnText),
@@ -143,11 +143,11 @@ Widget customDrawer(BuildContext _parentContext) {
                         trailing: PopupMenuButton(
                           child: const Icon(Icons.more_vert),
                           itemBuilder: (context) => [
-                             PopupMenuItem(
+                            PopupMenuItem(
                               value: 'edit',
                               child: Text(_l10n.editText),
                             ),
-                             PopupMenuItem(
+                            PopupMenuItem(
                               value: 'delete',
                               child: Text(_l10n.deleteText),
                             ),
@@ -156,8 +156,10 @@ Widget customDrawer(BuildContext _parentContext) {
                             if (value == 'edit') {
                               Navigator.of(context).popAndPushNamed(
                                   "/update_aria2_server",
-                                  arguments:
-                                      Aria2ConnectConfigArguments(acc, idx));
+                                  arguments: [
+                                    Aria2ConnectConfigArguments(acc, idx),
+                                    _parentContext
+                                  ]);
                               // Navigator.of(context).pushNamed('/editServer',arguments: acc);
                             } else if (value == 'delete') {
                               _deleteServerConfig(context, acc);
@@ -184,15 +186,16 @@ Widget customDrawer(BuildContext _parentContext) {
                 return ListTile(
                     minLeadingWidth: 10,
                     leading: const Icon(Icons.add),
-                    title:  Text(_l10n.addNewServerConfig),
-                    onTap: () => Navigator.of(context)
-                        .popAndPushNamed("/add_new_aria2_server"));
+                    title: Text(_l10n.addNewServerConfig),
+                    onTap: () => Navigator.of(context).popAndPushNamed(
+                        "/add_new_aria2_server",
+                        arguments: [null, _parentContext]));
               }),
               Builder(builder: (context) {
                 return ListTile(
                   minLeadingWidth: 10,
                   leading: const Icon(Icons.settings),
-                  title:  Text(_l10n.setting),
+                  title: Text(_l10n.setting),
                   onTap: () =>
                       Navigator.of(context).popAndPushNamed("/global_setting"),
                 );
