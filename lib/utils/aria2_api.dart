@@ -3,6 +3,7 @@
 import 'dart:async';
 import 'package:aria2/aria2.dart';
 import 'package:aria_z/l10n/localization_intl.dart';
+import 'package:aria_z/states/app.dart' show AppState;
 import '../states/aria2.dart';
 import 'package:dio/dio.dart';
 import 'dart:convert';
@@ -40,8 +41,9 @@ class Aria2Client extends Aria2c {
   Aria2Client(rpcUrl, protocol, secret, this.state,this._l10n)
       : super(rpcUrl, protocol, secret);
 
-  getInfosInterval(int timeIntervalSecend) {
-    getInfos();
+  getInfosInterval(int timeIntervalSecend, AppState app) async {
+    await getInfos();
+    app.updateConnectingStatus(false);
     Duration timeout = Duration(seconds: timeIntervalSecend);
     periodicTimer = Timer.periodic(timeout, (timer) async {
       periodicTimerInner = timer;
@@ -247,23 +249,24 @@ class Aria2Client extends Aria2c {
           message: 'OK');
     } on DioError catch (e) {
       String msg;
-      Aria2ResponseErrorType errorType;
+      Aria2ResponseErrorType? errorType;
 
       switch (e.type) {
         case DioErrorType.response:
           String? dt = e.response?.data;
           if (dt != null && dt.isNotEmpty) {
             Map<String, dynamic> aria2Error = jsonDecode(dt);
-            int __errorCode = aria2Error['error']['code'];
-            switch (__errorCode) {
-              case 1:
-                errorType = Aria2ResponseErrorType.unauthorized;
-                msg = _l10n.authFailed;
+            String __errormessage = aria2Error['error']['message'];
+            if(__errormessage.contains('No peer data is available for GID')){
+                errorType = null;
+                msg = '';
                 break;
-              default:
-                errorType = Aria2ResponseErrorType.other;
+            }else if(__errormessage.contains('Unauthorized')){
+              errorType = Aria2ResponseErrorType.unauthorized;
+              msg = _l10n.authFailed;
+            }else{
+               errorType = Aria2ResponseErrorType.other;
                 msg = aria2Error['error']['message'];
-                break;
             }
           } else {
             errorType = Aria2ResponseErrorType.other;
