@@ -148,6 +148,10 @@ class _TaskInfoState extends State<TaskInfo> {
         statLabel = _l10n.taskStatusOfPaused;
         statColor = Colors.orange;
         break;
+      case 'pausing':
+        statLabel = _l10n.pausing;
+        statColor = Colors.lightBlue;
+        break;
     }
     return Container(
       padding: const EdgeInsets.fromLTRB(5, 2, 5, 2),
@@ -157,7 +161,8 @@ class _TaskInfoState extends State<TaskInfo> {
       ),
       child: Text(
         statLabel,
-        style: const TextStyle(fontSize: 12),
+        style: TextStyle(
+            fontSize: 12, color: Theme.of(context).colorScheme.onBackground),
       ),
     );
   }
@@ -323,7 +328,7 @@ class _PeerListWidgtState extends State<PeerListWidgt> {
   Widget build(BuildContext context) {
     return SizedBox(
         height: MediaQuery.of(context).size.height * 0.5,
-        child: _peersWidget());
+        child: _peers.isEmpty?Center(child: Text('${_l10n.noText} ${_l10n.peers}'),):_peersWidget());
   }
 }
 
