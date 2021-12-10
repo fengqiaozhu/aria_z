@@ -65,6 +65,10 @@ class Aria2States extends ChangeNotifier {
     notifyListeners();
   }
 
+  removeCompletedTaskFromLocalList(String gid) {
+    completedTasks.removeWhere((element) => element.gid == gid);
+  }
+
   updateGlobalStatus(Aria2GlobalStat stat) {
     globalStatus = stat;
     notifyListeners();

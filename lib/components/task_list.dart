@@ -1,4 +1,5 @@
 import 'package:aria2/models/aria2Task.dart';
+import 'package:aria_z/components/custom_snack_bar.dart';
 import 'package:aria_z/components/speed_shower.dart';
 import 'package:aria_z/l10n/localization_intl.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +11,7 @@ import '../utils/tools.dart';
 
 List<Widget> taskListTileWidget(BuildContext context, AppState app,
     Aria2States aria2States, List<Aria2Task> taskList) {
-      AriazLocalizations _l10n = AriazLocalizations.of(context);
+  AriazLocalizations _l10n = AriazLocalizations.of(context);
   Widget trailingOption(String gid, String status) {
     late Widget w = Text(status);
     switch (status) {
@@ -36,16 +37,16 @@ List<Widget> taskListTileWidget(BuildContext context, AppState app,
         );
         break;
       case 'waiting':
-        w =  Text(_l10n.waiting);
+        w = Text(_l10n.waiting);
         break;
       case 'pausing':
-        w =  Text(_l10n.pausing);
+        w = Text(_l10n.pausing);
         break;
       case 'unparsing':
-        w =  Text(_l10n.unparsing);
+        w = Text(_l10n.unparsing);
         break;
       case 'complete':
-        w =  Text(_l10n.complete);
+        w = Text(_l10n.complete);
         break;
     }
     return w;
@@ -85,8 +86,18 @@ List<Widget> taskListTileWidget(BuildContext context, AppState app,
                   motion: const ScrollMotion(),
                   children: [
                     SlidableAction(
-                      onPressed: (BuildContext context) =>
-                          app.aria2?.removeTask(task.gid!),
+                      onPressed: (BuildContext context) async {
+                        handleAria2ApiResponse<String>(
+                            context,
+                            await app.aria2!
+                                .removeTask(task.gid!, task.status!), (res) {
+                          if (res == 'OK') {
+                            aria2States
+                                .removeCompletedTaskFromLocalList(task.gid!);
+                          }
+                          // showCustomSnackBar(context, 1, Text(res));
+                        });
+                      },
                       backgroundColor: const Color(0xFFFE4A49),
                       foregroundColor: Colors.white,
                       icon: Icons.delete,
@@ -128,20 +139,24 @@ List<Widget> taskListTileWidget(BuildContext context, AppState app,
                     )),
                     Expanded(
                         flex: 1,
-                        child: task.status == 'paused'
-                            ? Text(_l10n.paused)
-                            : DefaultTextStyle(
-                                textAlign: TextAlign.end,
-                                style: TextStyle(
-                                    color:
-                                        Theme.of(context).colorScheme.onSurface,
-                                    fontSize: 14,
-                                    fontFamily: 'Coda'),
-                                child: SpeedShower(
-                                    downloadSpeed: task.downloadSpeed,
-                                    uploadSpeed: _taskType != TaskType.torrent
-                                        ? null
-                                        : task.uploadSpeed)))
+                        child: Container(
+                          alignment: Alignment.centerRight,
+                          child: task.status == 'paused'
+                              ? Text(_l10n.paused)
+                              : DefaultTextStyle(
+                                  textAlign: TextAlign.end,
+                                  style: TextStyle(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onSurface,
+                                      fontSize: 14,
+                                      fontFamily: 'Coda'),
+                                  child: SpeedShower(
+                                      downloadSpeed: task.downloadSpeed,
+                                      uploadSpeed: _taskType != TaskType.torrent
+                                          ? null
+                                          : task.uploadSpeed)),
+                        ))
                   ],
                 )),
             LinearProgressIndicator(

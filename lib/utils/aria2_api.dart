@@ -38,7 +38,7 @@ class Aria2Client extends Aria2c {
 
   final AriazLocalizations _l10n;
 
-  Aria2Client(rpcUrl, protocol, secret, this.state,this._l10n)
+  Aria2Client(rpcUrl, protocol, secret, this.state, this._l10n)
       : super(rpcUrl, protocol, secret);
 
   getInfosInterval(int timeIntervalSecend, AppState app) async {
@@ -167,10 +167,9 @@ class Aria2Client extends Aria2c {
       Map<String, dynamic> option = taskOption.option.toJson();
       switch (taskOption.taskType) {
         case TaskType.torrent:
-          await multicall(taskOption.params.map((p) {
+          return await multicall(taskOption.params.map((p) {
             return Method('aria2.addTorrent', [p, [], option]);
           }).toList());
-          break;
         case TaskType.metaLink:
           await multicall(taskOption.params.map((p) {
             return Method('aria2.addMetalink', [p, option]);
@@ -204,7 +203,8 @@ class Aria2Client extends Aria2c {
     });
   }
 
-  Future<Aria2Response<String>> updateTheGlobalOption(Aria2Option option) async {
+  Future<Aria2Response<String>> updateTheGlobalOption(
+      Aria2Option option) async {
     return _try2Request(() async {
       return await changeGlobalOption(option);
     });
@@ -220,9 +220,17 @@ class Aria2Client extends Aria2c {
   /// 删除任务
   /// [gid] 任务gid
 
-  Future<Aria2Response> removeTask(String gid) async {
+  Future<Aria2Response<String>> removeTask(
+      String gid, String taskStatus) async {
     return _try2Request(() async {
-      await remove(gid);
+      switch (taskStatus) {
+        case 'complete':
+        case 'error':
+        case 'removed':
+          return await removeDownloadResult(gid);
+        default:
+          return await forceRemove(gid);
+      }
     });
   }
 
@@ -257,16 +265,16 @@ class Aria2Client extends Aria2c {
           if (dt != null && dt.isNotEmpty) {
             Map<String, dynamic> aria2Error = jsonDecode(dt);
             String __errormessage = aria2Error['error']['message'];
-            if(__errormessage.contains('No peer data is available for GID')){
-                errorType = null;
-                msg = '';
-                break;
-            }else if(__errormessage.contains('Unauthorized')){
+            if (__errormessage.contains('No peer data is available for GID')) {
+              errorType = null;
+              msg = '';
+              break;
+            } else if (__errormessage.contains('Unauthorized')) {
               errorType = Aria2ResponseErrorType.unauthorized;
               msg = _l10n.authFailed;
-            }else{
-               errorType = Aria2ResponseErrorType.other;
-                msg = aria2Error['error']['message'];
+            } else {
+              errorType = Aria2ResponseErrorType.other;
+              msg = aria2Error['error']['message'];
             }
           } else {
             errorType = Aria2ResponseErrorType.other;
