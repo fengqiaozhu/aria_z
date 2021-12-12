@@ -229,6 +229,7 @@ class AppState extends ChangeNotifier {
   clearCurrentServerAllState() {
     _client?.clearGIInterval();
     states.clearStates();
+    _client = null;
   }
 
   /// 添加连接配置

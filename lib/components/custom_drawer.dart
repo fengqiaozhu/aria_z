@@ -76,12 +76,12 @@ Widget customDrawer(BuildContext _parentContext) {
                                 const SizedBox(height: 4),
                                 Text(
                                     app.item2 != null
-                                        ? "${_l10n.connectedText}: ${app.item2?.host}:${app.item2?.port}"
+                                        ? "${_l10n.connectedText} ${app.item2?.host}:${app.item2?.port}"
                                         : _l10n.notConnectTip,
                                     style: const TextStyle()),
                                 serverInfo.item2 != null
                                     ? Text(
-                                        "${_l10n.aria2VersionLabel}: ${serverInfo.item2?.version ?? ''}",
+                                        "${_l10n.aria2VersionLabel} ${serverInfo.item2?.version ?? ''}",
                                         style: const TextStyle())
                                     : const SizedBox(),
                                 serverInfo.item1 == null
