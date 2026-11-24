@@ -172,7 +172,9 @@ class _NewTaskCreaterState extends State<NewTaskCreater>
   }
 
   /// 链接地址校验
-  String? linkValidator() {}
+  String? linkValidator() {
+    return null;
+  }
 
   /// 弹出链接输入dialog模态框
   void _showInputLink() {
@@ -240,6 +242,7 @@ class _NewTaskCreaterState extends State<NewTaskCreater>
       case TaskType.magnet:
         return magnetLinks;
     }
+    return null;
   }
 
   ///根据新任务的类型显示不同的添加控件
